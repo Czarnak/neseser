@@ -123,13 +123,4 @@ export class ProjectManager {
 		});
 	}
 
-	async setTaskDue(path: string, due: string | undefined): Promise<void> {
-		await this.vault.updateFrontmatter(path, (fm) => {
-			if (due) {
-				fm['due'] = due;
-			} else {
-				delete fm['due'];
-			}
-		});
-	}
 }
