@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf } from 'obsidian';
+import { ItemView, Notice, WorkspaceLeaf } from 'obsidian';
 import { Root, createRoot } from 'react-dom/client';
 import { Task } from '../core/models';
 import type { ProjectManager } from '../core/project-manager';
@@ -39,9 +39,13 @@ export class TaskListView extends ItemView {
 				index={this.index}
 				callbacks={{
 					onToggleTask: (task: Task) => {
-						void (task.status === 'done'
-							? this.manager.updateTaskStatus(task.path, 'todo')
-							: this.manager.completeTask(task.path));
+						const update =
+							task.status === 'done'
+								? this.manager.updateTaskStatus(task.path, 'todo')
+								: this.manager.completeTask(task.path);
+						update.catch((error: unknown) => {
+							new Notice(`Could not update task: ${error instanceof Error ? error.message : String(error)}`);
+						});
 					},
 					onOpenTask: (task: Task) => {
 						void this.app.workspace.openLinkText(task.path, '', false);

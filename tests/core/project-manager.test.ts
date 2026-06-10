@@ -102,6 +102,16 @@ describe('ProjectManager', () => {
 			expect(content).toContain('parent: "[[Build parser]]"');
 		});
 
+		test('quotes frontmatter values containing colon-space to keep YAML valid', async () => {
+			const { path } = await manager.createTask({
+				projectName: 'Alpha',
+				title: 'T',
+				reminder: 'at 9: 00',
+			});
+
+			expect(vault.notes.get(path)).toContain('reminder: "at 9: 00"');
+		});
+
 		test('rejects duplicate task title in same project', async () => {
 			await manager.createTask({ projectName: 'Alpha', title: 'T' });
 

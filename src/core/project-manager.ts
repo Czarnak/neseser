@@ -35,7 +35,7 @@ function sanitizeName(raw: string): string {
 
 /** YAML needs quotes around values like wikilinks; bare enum/date tokens stay unquoted. */
 function yamlValue(value: string): string {
-	if (/^[A-Za-z0-9][A-Za-z0-9 _\-.:]*$/.test(value)) return value;
+	if (/^[A-Za-z0-9][A-Za-z0-9 _\-.:]*$/.test(value) && !/:\s/.test(value)) return value;
 	return `"${value.replace(/"/g, '\\"')}"`;
 }
 
