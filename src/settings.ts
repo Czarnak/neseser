@@ -9,6 +9,8 @@ export interface NeseserSettings {
 	ticktickAccessToken: string;
 	/** epoch ms; 0 = not connected */
 	ticktickTokenExpiresAt: number;
+	/** automatic two-way sync cadence; 0 disables */
+	syncIntervalMinutes: number;
 }
 
 export const DEFAULT_SETTINGS: NeseserSettings = {
@@ -18,6 +20,7 @@ export const DEFAULT_SETTINGS: NeseserSettings = {
 	ticktickPort: 42813,
 	ticktickAccessToken: '',
 	ticktickTokenExpiresAt: 0,
+	syncIntervalMinutes: 5,
 };
 
 export function isTickTickConnected(settings: NeseserSettings): boolean {
@@ -80,6 +83,20 @@ export class NeseserSettingTab extends PluginSettingTab {
 					if (Number.isInteger(port) && port > 0 && port < 65536) {
 						this.plugin.settings.ticktickPort = port;
 						await this.plugin.saveSettings();
+					}
+				}),
+			);
+
+		new Setting(this.containerEl)
+			.setName('Sync interval (minutes)')
+			.setDesc('How often the two-way TickTick sync runs. 0 disables automatic sync.')
+			.addText((text) =>
+				text.setValue(String(this.plugin.settings.syncIntervalMinutes)).onChange(async (value) => {
+					const minutes = Number.parseInt(value, 10);
+					if (Number.isInteger(minutes) && minutes >= 0) {
+						this.plugin.settings.syncIntervalMinutes = minutes;
+						await this.plugin.saveSettings();
+						this.plugin.restartSyncScheduler();
 					}
 				}),
 			);

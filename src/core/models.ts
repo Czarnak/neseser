@@ -40,6 +40,10 @@ export type ProjectParseResult =
 	| { kind: 'not-project' }
 	| { kind: 'invalid'; path: string; reason: string };
 
+export function isTaskClosed(task: Pick<Task, 'status'>): boolean {
+	return task.status === 'done' || task.status === 'cancelled';
+}
+
 export function titleFromPath(path: string): string {
 	const base = path.split('/').pop() ?? path;
 	return base.replace(/\.md$/, '');

@@ -112,6 +112,16 @@ describe('ProjectManager', () => {
 			expect(vault.notes.get(path)).toContain('reminder: "at 9: 00"');
 		});
 
+		test('writes ticktick-id when given (pull-created tasks)', async () => {
+			const { path } = await manager.createTask({
+				projectName: 'Alpha',
+				title: 'From phone',
+				ticktickId: 'tt-9',
+			});
+
+			expect(vault.notes.get(path)).toContain('ticktick-id: tt-9');
+		});
+
 		test('rejects duplicate task title in same project', async () => {
 			await manager.createTask({ projectName: 'Alpha', title: 'T' });
 
