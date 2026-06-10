@@ -45,23 +45,23 @@ function TaskRow({
 	return (
 		<>
 			{!hidden && (
-				<div className="ph-task-row" style={{ paddingLeft: `${depth * 18}px` }}>
+				<div className="ns-task-row" style={{ paddingLeft: `${depth * 18}px` }}>
 					<input
 						type="checkbox"
 						checked={task.status === 'done'}
 						onChange={() => callbacks.onToggleTask(task)}
 					/>
 					<span
-						className={`ph-task-title ph-status-${task.status}`}
+						className={`ns-task-title ns-status-${task.status}`}
 						onClick={() => callbacks.onOpenTask(task)}
 					>
 						{task.title}
 					</span>
 					{task.priority !== 'none' && (
-						<span className={`ph-badge ph-priority-${task.priority}`}>{task.priority}</span>
+						<span className={`ns-badge ns-priority-${task.priority}`}>{task.priority}</span>
 					)}
-					{task.due && <span className="ph-badge ph-due">{task.due}</span>}
-					{task.status === 'in-progress' && <span className="ph-badge ph-in-progress">in progress</span>}
+					{task.due && <span className="ns-badge ns-due">{task.due}</span>}
+					{task.status === 'in-progress' && <span className="ns-badge ns-in-progress">in progress</span>}
 				</div>
 			)}
 			{sortTree(node.children).map((child) => (
@@ -91,8 +91,8 @@ export function TaskListApp({ index, callbacks }: Props) {
 	);
 
 	return (
-		<div className="ph-task-list">
-			<div className="ph-toolbar">
+		<div className="ns-task-list">
+			<div className="ns-toolbar">
 				<select value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
 					<option value="">All projects</option>
 					{projects.map((p) => (
@@ -101,20 +101,20 @@ export function TaskListApp({ index, callbacks }: Props) {
 						</option>
 					))}
 				</select>
-				<label className="ph-show-done">
+				<label className="ns-show-done">
 					<input type="checkbox" checked={showDone} onChange={(e) => setShowDone(e.target.checked)} />
 					Show done
 				</label>
 			</div>
 
-			{visibleProjects.length === 0 && <p className="ph-empty">No projects yet. Run "Project Hub: Create project".</p>}
+			{visibleProjects.length === 0 && <p className="ns-empty">No projects yet. Run "Neseser: Create project".</p>}
 
 			{visibleProjects.map((project) => {
 				const tree = sortTree(index.getTaskTree(project.name));
 				return (
-					<section key={project.path} className="ph-project-section">
-						<h4 className="ph-project-heading">{project.name}</h4>
-						{tree.length === 0 && <p className="ph-empty">No tasks.</p>}
+					<section key={project.path} className="ns-project-section">
+						<h4 className="ns-project-heading">{project.name}</h4>
+						{tree.length === 0 && <p className="ns-empty">No tasks.</p>}
 						{tree.map((node) => (
 							<TaskRow key={node.task.path} node={node} depth={0} showDone={showDone} callbacks={callbacks} />
 						))}

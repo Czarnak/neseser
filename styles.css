@@ -1,49 +1,49 @@
-/* Project Hub plugin styles */
+/* Neseser plugin styles */
 
-.ph-task-list {
+.ns-task-list {
 	padding: 4px 8px;
 }
 
-.ph-toolbar {
+.ns-toolbar {
 	display: flex;
 	gap: 12px;
 	align-items: center;
 	margin-bottom: 8px;
 }
 
-.ph-show-done {
+.ns-show-done {
 	display: flex;
 	gap: 4px;
 	align-items: center;
 	font-size: var(--font-ui-small);
 }
 
-.ph-project-heading {
+.ns-project-heading {
 	margin: 12px 0 4px;
 	border-bottom: 1px solid var(--background-modifier-border);
 }
 
-.ph-task-row {
+.ns-task-row {
 	display: flex;
 	gap: 6px;
 	align-items: center;
 	padding: 2px 0;
 }
 
-.ph-task-title {
+.ns-task-title {
 	cursor: pointer;
 }
 
-.ph-task-title:hover {
+.ns-task-title:hover {
 	text-decoration: underline;
 }
 
-.ph-status-done {
+.ns-status-done {
 	text-decoration: line-through;
 	color: var(--text-muted);
 }
 
-.ph-badge {
+.ns-badge {
 	font-size: var(--font-ui-smaller);
 	padding: 0 6px;
 	border-radius: 8px;
@@ -51,22 +51,22 @@
 	color: var(--text-muted);
 }
 
-.ph-priority-high {
+.ns-priority-high {
 	background: rgba(var(--color-red-rgb), 0.2);
 	color: var(--color-red);
 }
 
-.ph-priority-medium {
+.ns-priority-medium {
 	background: rgba(var(--color-orange-rgb), 0.2);
 	color: var(--color-orange);
 }
 
-.ph-in-progress {
+.ns-in-progress {
 	background: rgba(var(--color-blue-rgb), 0.2);
 	color: var(--color-blue);
 }
 
-.ph-empty {
+.ns-empty {
 	color: var(--text-muted);
 	font-size: var(--font-ui-small);
 }

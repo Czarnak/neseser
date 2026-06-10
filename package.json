@@ -1,5 +1,5 @@
 {
-	"name": "project-hub",
+	"name": "neseser",
 	"version": "0.1.0",
 	"description": "Obsidian multi-project manager: projects as folders, tasks as notes, TickTick sync.",
 	"main": "main.js",

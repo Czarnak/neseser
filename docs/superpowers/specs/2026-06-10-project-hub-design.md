@@ -1,7 +1,8 @@
-# Project Hub — Obsidian Multi-Project Manager Plugin (Design)
+# Neseser — Obsidian Multi-Project Manager Plugin (Design)
 
 Date: 2026-06-10
 Status: Approved (brainstormed and accepted by user)
+Naming: renamed from working title "Project Hub" to **Neseser** (Polish: small personal suitcase) on user request, matching the registered TickTick app name.
 
 ## Problem
 

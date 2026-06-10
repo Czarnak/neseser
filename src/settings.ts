@@ -1,18 +1,18 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import type ProjectHubPlugin from './main';
+import type NeseserPlugin from './main';
 
-export interface ProjectHubSettings {
+export interface NeseserSettings {
 	projectsRoot: string;
 }
 
-export const DEFAULT_SETTINGS: ProjectHubSettings = {
+export const DEFAULT_SETTINGS: NeseserSettings = {
 	projectsRoot: 'Projects',
 };
 
-export class ProjectHubSettingTab extends PluginSettingTab {
+export class NeseserSettingTab extends PluginSettingTab {
 	constructor(
 		app: App,
-		private plugin: ProjectHubPlugin,
+		private plugin: NeseserPlugin,
 	) {
 		super(app, plugin);
 	}

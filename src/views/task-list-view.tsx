@@ -5,7 +5,7 @@ import type { ProjectManager } from '../core/project-manager';
 import type { TaskIndex } from '../core/task-index';
 import { TaskListApp } from '../ui/TaskListApp';
 
-export const VIEW_TYPE_TASK_LIST = 'project-hub-task-list';
+export const VIEW_TYPE_TASK_LIST = 'neseser-task-list';
 
 export class TaskListView extends ItemView {
 	private root: Root | null = null;
@@ -23,7 +23,7 @@ export class TaskListView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return 'Project Hub tasks';
+		return 'Neseser tasks';
 	}
 
 	override getIcon(): string {

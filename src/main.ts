@@ -2,7 +2,7 @@ import { App, Notice, Plugin, TFile, WorkspaceLeaf } from 'obsidian';
 import { Frontmatter } from './core/models';
 import { ProjectManager, VaultAdapter } from './core/project-manager';
 import { TaskIndex } from './core/task-index';
-import { DEFAULT_SETTINGS, ProjectHubSettingTab, ProjectHubSettings } from './settings';
+import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings } from './settings';
 import { NewProjectModal, NewTaskModal } from './ui/modals';
 import { TaskListView, VIEW_TYPE_TASK_LIST } from './views/task-list-view';
 
@@ -28,8 +28,8 @@ class ObsidianVaultAdapter implements VaultAdapter {
 	}
 }
 
-export default class ProjectHubPlugin extends Plugin {
-	settings: ProjectHubSettings = DEFAULT_SETTINGS;
+export default class NeseserPlugin extends Plugin {
+	settings: NeseserSettings = DEFAULT_SETTINGS;
 	index!: TaskIndex;
 	manager!: ProjectManager;
 
@@ -42,7 +42,7 @@ export default class ProjectHubPlugin extends Plugin {
 		});
 
 		this.registerView(VIEW_TYPE_TASK_LIST, (leaf) => new TaskListView(leaf, this.index, this.manager));
-		this.addSettingTab(new ProjectHubSettingTab(this.app, this));
+		this.addSettingTab(new NeseserSettingTab(this.app, this));
 		this.registerCommands();
 
 		this.app.workspace.onLayoutReady(() => {
@@ -64,7 +64,7 @@ export default class ProjectHubPlugin extends Plugin {
 	}
 
 	private registerCommands(): void {
-		this.addRibbonIcon('list-checks', 'Project Hub: open task list', () => void this.activateTaskList());
+		this.addRibbonIcon('list-checks', 'Neseser: open task list', () => void this.activateTaskList());
 
 		this.addCommand({
 			id: 'open-task-list',
