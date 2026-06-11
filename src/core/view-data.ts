@@ -48,16 +48,23 @@ export function taskProgress(tasks: Task[]): TaskProgress {
 	};
 }
 
-/** Day index of a date string's wall-clock date, or null when unparseable. */
-function dueDayNumber(value: string): number | null {
+/** Wall-clock 'YYYY-MM-DD' of a due/deadline string, or null when unparseable. */
+export function dueDateKey(value: string): string | null {
 	const literal = /^(\d{4})-(\d{2})-(\d{2})/.exec(value.trim());
-	if (literal) {
-		return Date.UTC(Number(literal[1]), Number(literal[2]) - 1, Number(literal[3])) / DAY_MS;
-	}
+	if (literal) return `${literal[1]}-${literal[2]}-${literal[3]}`;
 	const ms = Date.parse(value);
 	if (Number.isNaN(ms)) return null;
 	const date = new Date(ms);
-	return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / DAY_MS;
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	return `${date.getFullYear()}-${month}-${day}`;
+}
+
+/** Day index of a date string's wall-clock date, or null when unparseable. */
+function dueDayNumber(value: string): number | null {
+	const key = dueDateKey(value);
+	if (key === null) return null;
+	return Date.parse(`${key}T00:00:00Z`) / DAY_MS;
 }
 
 export function upcomingDeadlines(

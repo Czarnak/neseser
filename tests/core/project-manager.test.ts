@@ -155,5 +155,13 @@ describe('ProjectManager', () => {
 			expect(fm['status']).toBe('todo');
 			expect(fm['completed-at']).toBeUndefined();
 		});
+
+		test('updateTaskDue rewrites the due frontmatter', async () => {
+			await manager.updateTaskDue('Projects/Alpha/Tasks/T.md', '2026-06-15');
+
+			expect(vault.frontmatters.get('Projects/Alpha/Tasks/T.md')).toMatchObject({
+				due: '2026-06-15',
+			});
+		});
 	});
 });

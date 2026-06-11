@@ -7,10 +7,11 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Task, TaskStatus } from '../core/models';
 import type { TaskIndex } from '../core/task-index';
 import { KanbanColumn, buildKanbanColumns } from '../core/view-data';
+import { useDragClickGuard } from './use-drag-click-guard';
 import { useIndexRefresh } from './use-index-refresh';
 
 export interface KanbanCallbacks {
@@ -104,22 +105,14 @@ export function KanbanApp({ index, callbacks }: Props) {
 	const sensors = useSensors(
 		useSensor(PointerSensor, { activationConstraint: { distance: DRAG_ACTIVATION_DISTANCE_PX } }),
 	);
-	// The browser fires a click on the dragged card right after drop; swallow it
-	// so finishing a drag does not also open the task note.
-	const dragHappenedRef = useRef(false);
+	const guard = useDragClickGuard();
 
 	const projects = index.getAllProjects();
 	const tasks = projectFilter ? index.getTasksForProject(projectFilter) : index.getAllTasks();
 	const columns = buildKanbanColumns(tasks);
 
-	const handleDragStart = () => {
-		dragHappenedRef.current = true;
-	};
-
 	const handleDragEnd = (event: DragEndEvent) => {
-		window.setTimeout(() => {
-			dragHappenedRef.current = false;
-		}, 0);
+		guard.markDragEnd();
 		const targetStatus = event.over?.id as TaskStatus | undefined;
 		if (!targetStatus) return;
 		const task = tasks.find((t) => t.path === String(event.active.id));
@@ -127,7 +120,7 @@ export function KanbanApp({ index, callbacks }: Props) {
 	};
 
 	const openTask = (task: Task) => {
-		if (!dragHappenedRef.current) callbacks.onOpenTask(task);
+		if (guard.canClick()) callbacks.onOpenTask(task);
 	};
 
 	return (
@@ -145,7 +138,7 @@ export function KanbanApp({ index, callbacks }: Props) {
 
 			{projects.length === 0 && <p className="ns-empty">No projects yet. Run "Neseser: Create project".</p>}
 
-			<DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+			<DndContext sensors={sensors} onDragStart={guard.markDragStart} onDragEnd={handleDragEnd}>
 				<div className="ns-kanban-board">
 					{columns.map((column) => (
 						<Column

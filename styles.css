@@ -237,3 +237,89 @@
 	gap: 4px;
 	flex-wrap: wrap;
 }
+
+/* Calendar */
+
+.ns-calendar {
+	padding: 8px 12px;
+}
+
+.ns-cal-label {
+	font-weight: 600;
+	margin: 0 8px;
+}
+
+.ns-cal-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 4px;
+	margin-bottom: 4px;
+}
+
+.ns-cal-weekday {
+	text-align: center;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.ns-cal-day {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	min-height: 88px;
+	padding: 4px;
+	background: var(--background-secondary);
+	overflow: hidden;
+}
+
+.ns-cal-outside {
+	opacity: 0.45;
+}
+
+.ns-cal-today {
+	border-color: var(--interactive-accent);
+}
+
+.ns-cal-day-over {
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
+}
+
+.ns-cal-day-number {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-bottom: 2px;
+}
+
+.ns-cal-chip {
+	font-size: var(--font-ui-smaller);
+	border: 1px solid var(--background-modifier-border);
+	border-left-width: 3px;
+	border-radius: 4px;
+	padding: 1px 4px;
+	margin-bottom: 2px;
+	background: var(--background-primary);
+	cursor: grab;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ns-cal-chip-high {
+	border-left-color: var(--color-red);
+}
+
+.ns-cal-chip-medium {
+	border-left-color: var(--color-orange);
+}
+
+.ns-cal-chip-low {
+	border-left-color: var(--color-blue);
+}
+
+.ns-cal-chip-dragging {
+	opacity: 0.85;
+	cursor: grabbing;
+	position: relative;
+	z-index: 10;
+	box-shadow: var(--shadow-s);
+}

@@ -9,6 +9,7 @@ import { SyncSnapshot, emptySnapshot } from './sync/sync-state';
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
 import { NewProjectModal, NewTaskModal } from './ui/modals';
+import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
 import { KanbanView, VIEW_TYPE_KANBAN } from './views/kanban-view';
 import { TaskListView, VIEW_TYPE_TASK_LIST } from './views/task-list-view';
@@ -118,6 +119,7 @@ export default class NeseserPlugin extends Plugin {
 		this.registerView(VIEW_TYPE_TASK_LIST, (leaf) => new TaskListView(leaf, this.index, this.manager));
 		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
 		this.registerView(VIEW_TYPE_KANBAN, (leaf) => new KanbanView(leaf, this.index, this.manager));
+		this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.index, this.manager));
 		this.addSettingTab(new NeseserSettingTab(this.app, this));
 		this.statusBar = this.addStatusBarItem();
 		this.setStatus('idle');
@@ -279,6 +281,9 @@ export default class NeseserPlugin extends Plugin {
 		this.addRibbonIcon('kanban', 'Neseser: open kanban board', () =>
 			void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
 		);
+		this.addRibbonIcon('calendar', 'Neseser: open calendar', () =>
+			void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
+		);
 
 		this.addCommand({
 			id: 'open-task-list',
@@ -296,6 +301,12 @@ export default class NeseserPlugin extends Plugin {
 			id: 'open-kanban',
 			name: 'Open kanban board',
 			callback: () => void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
+		});
+
+		this.addCommand({
+			id: 'open-calendar',
+			name: 'Open calendar',
+			callback: () => void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
 		});
 
 		this.addCommand({

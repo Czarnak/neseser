@@ -126,4 +126,10 @@ export class ProjectManager {
 		});
 	}
 
+	async updateTaskDue(path: string, due: string): Promise<void> {
+		await this.vault.updateFrontmatter(path, (fm) => {
+			fm['due'] = due;
+		});
+	}
+
 }
