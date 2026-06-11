@@ -14,7 +14,6 @@ import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
 import { KanbanView, VIEW_TYPE_KANBAN } from './views/kanban-view';
 import { NavigationView, VIEW_TYPE_NAVIGATION } from './views/navigation-view';
-import { TaskListView, VIEW_TYPE_TASK_LIST } from './views/task-list-view';
 
 class ObsidianVaultAdapter implements VaultAdapter {
 	constructor(private app: App) {}
@@ -119,7 +118,6 @@ export default class NeseserPlugin extends Plugin {
 		});
 		this.engineStore = new ObsidianEngineStore(this.app, this.vaultAdapter, this.manager);
 
-		this.registerView(VIEW_TYPE_TASK_LIST, (leaf) => new TaskListView(leaf, this.index, this.manager));
 		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
 		this.registerView(VIEW_TYPE_KANBAN, (leaf) => new KanbanView(leaf, this.index, this.manager));
 		this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.index, this.manager));
@@ -127,7 +125,6 @@ export default class NeseserPlugin extends Plugin {
 			VIEW_TYPE_NAVIGATION,
 			(leaf) =>
 				new NavigationView(leaf, this.index, this.syncStatus, {
-					onOpenTaskList: () => void this.activateView(VIEW_TYPE_TASK_LIST, 'sidebar'),
 					onOpenDashboard: () => void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
 					onOpenKanban: () => void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
 					onOpenCalendar: () => void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
@@ -142,6 +139,9 @@ export default class NeseserPlugin extends Plugin {
 		this.registerCommands();
 
 		this.app.workspace.onLayoutReady(() => {
+			// Migration: the task list view was removed (redundant with the dashboard);
+			// drop any leaf left over from an older workspace layout.
+			this.app.workspace.detachLeavesOfType('neseser-task-list');
 			this.buildInitialIndex();
 			this.registerVaultEvents();
 			this.restartSyncScheduler();
@@ -299,12 +299,6 @@ export default class NeseserPlugin extends Plugin {
 			id: 'open-navigation',
 			name: 'Open navigation',
 			callback: () => void this.activateView(VIEW_TYPE_NAVIGATION, 'sidebar'),
-		});
-
-		this.addCommand({
-			id: 'open-task-list',
-			name: 'Open task list',
-			callback: () => void this.activateView(VIEW_TYPE_TASK_LIST, 'sidebar'),
 		});
 
 		this.addCommand({

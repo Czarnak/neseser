@@ -5,7 +5,6 @@ import { useIndexRefresh } from './use-index-refresh';
 import { useSyncStatus } from './use-sync-status';
 
 export interface NavigationCallbacks {
-	onOpenTaskList: () => void;
 	onOpenDashboard: () => void;
 	onOpenKanban: () => void;
 	onOpenCalendar: () => void;
@@ -34,9 +33,7 @@ export function NavigationApp({ index, syncStatus, callbacks }: Props) {
 				<div className="ns-nav-buttons">
 					<button onClick={callbacks.onOpenDashboard}>Dashboard</button>
 					<button onClick={callbacks.onOpenKanban}>Kanban board</button>
-					<button onClick={callbacks.onOpenCalendar}>Calendar</button>
-					<button onClick={callbacks.onOpenTaskList}>Task list</button>
-				</div>
+					<button onClick={callbacks.onOpenCalendar}>Calendar</button>				</div>
 			</div>
 
 			<div className="ns-nav-section">
