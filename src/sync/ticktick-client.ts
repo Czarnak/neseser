@@ -98,8 +98,6 @@ export interface TickTickProject {
 
 export interface TickTickTask extends TickTickTaskDraft {
 	id: string;
-	/** 0 = normal, 2 = completed */
-	status?: number;
 	modifiedTime?: string;
 }
 

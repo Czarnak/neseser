@@ -112,6 +112,16 @@ describe('ProjectManager', () => {
 			expect(vault.notes.get(path)).toContain('reminder: "at 9: 00"');
 		});
 
+		test('writes ticktick-id when given (pull-created tasks)', async () => {
+			const { path } = await manager.createTask({
+				projectName: 'Alpha',
+				title: 'From phone',
+				ticktickId: 'tt-9',
+			});
+
+			expect(vault.notes.get(path)).toContain('ticktick-id: tt-9');
+		});
+
 		test('rejects duplicate task title in same project', async () => {
 			await manager.createTask({ projectName: 'Alpha', title: 'T' });
 
@@ -144,6 +154,14 @@ describe('ProjectManager', () => {
 			const fm = vault.frontmatters.get('Projects/Alpha/Tasks/T.md') ?? {};
 			expect(fm['status']).toBe('todo');
 			expect(fm['completed-at']).toBeUndefined();
+		});
+
+		test('updateTaskDue rewrites the due frontmatter', async () => {
+			await manager.updateTaskDue('Projects/Alpha/Tasks/T.md', '2026-06-15');
+
+			expect(vault.frontmatters.get('Projects/Alpha/Tasks/T.md')).toMatchObject({
+				due: '2026-06-15',
+			});
 		});
 	});
 });

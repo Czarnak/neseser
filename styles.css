@@ -70,3 +70,256 @@
 	color: var(--text-muted);
 	font-size: var(--font-ui-small);
 }
+
+/* Dashboard */
+
+.ns-dashboard {
+	padding: 8px 12px;
+}
+
+.ns-section-heading {
+	margin: 16px 0 8px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.ns-project-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 10px;
+}
+
+.ns-project-card {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 10px;
+	background: var(--background-secondary);
+}
+
+.ns-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+	font-weight: 600;
+}
+
+.ns-project-on-hold {
+	background: rgba(var(--color-orange-rgb), 0.2);
+	color: var(--color-orange);
+}
+
+.ns-project-done {
+	background: rgba(var(--color-green-rgb), 0.2);
+	color: var(--color-green);
+}
+
+.ns-progress {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.ns-progress-bar {
+	flex: 1;
+	height: 6px;
+	border-radius: 3px;
+	background: var(--background-modifier-border);
+	overflow: hidden;
+}
+
+.ns-progress-fill {
+	height: 100%;
+	background: var(--interactive-accent);
+}
+
+.ns-progress-text {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.ns-card-deadline {
+	margin-top: 6px;
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+}
+
+.ns-deadline-row,
+.ns-issue-row {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	padding: 2px 0;
+}
+
+.ns-overdue .ns-due,
+.ns-overdue-badge {
+	background: rgba(var(--color-red-rgb), 0.2);
+	color: var(--color-red);
+}
+
+.ns-issue-reason {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-error);
+}
+
+/* Kanban */
+
+.ns-kanban {
+	padding: 8px 12px;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.ns-kanban-board {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	overflow-x: auto;
+	flex: 1;
+}
+
+.ns-kanban-column {
+	flex: 1;
+	min-width: 180px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 8px;
+	background: var(--background-secondary);
+}
+
+.ns-kanban-column-over {
+	border-color: var(--interactive-accent);
+	background: var(--background-modifier-hover);
+}
+
+.ns-kanban-column-heading {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0 0 8px;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	font-size: var(--font-ui-smaller);
+	letter-spacing: 0.05em;
+}
+
+.ns-kanban-count {
+	background: var(--background-secondary-alt);
+	border-radius: 8px;
+	padding: 0 6px;
+}
+
+.ns-kanban-card {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	padding: 6px 8px;
+	margin-bottom: 6px;
+	background: var(--background-primary);
+	cursor: grab;
+}
+
+.ns-kanban-card-dragging {
+	opacity: 0.85;
+	cursor: grabbing;
+	position: relative;
+	z-index: 10;
+	box-shadow: var(--shadow-s);
+}
+
+.ns-kanban-card-title {
+	margin-bottom: 4px;
+}
+
+.ns-kanban-card-meta {
+	display: flex;
+	gap: 4px;
+	flex-wrap: wrap;
+}
+
+/* Calendar */
+
+.ns-calendar {
+	padding: 8px 12px;
+}
+
+.ns-cal-label {
+	font-weight: 600;
+	margin: 0 8px;
+}
+
+.ns-cal-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 4px;
+	margin-bottom: 4px;
+}
+
+.ns-cal-weekday {
+	text-align: center;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.ns-cal-day {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	min-height: 88px;
+	padding: 4px;
+	background: var(--background-secondary);
+	overflow: hidden;
+}
+
+.ns-cal-outside {
+	opacity: 0.45;
+}
+
+.ns-cal-today {
+	border-color: var(--interactive-accent);
+}
+
+.ns-cal-day-over {
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
+}
+
+.ns-cal-day-number {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	margin-bottom: 2px;
+}
+
+.ns-cal-chip {
+	font-size: var(--font-ui-smaller);
+	border: 1px solid var(--background-modifier-border);
+	border-left-width: 3px;
+	border-radius: 4px;
+	padding: 1px 4px;
+	margin-bottom: 2px;
+	background: var(--background-primary);
+	cursor: grab;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ns-cal-chip-high {
+	border-left-color: var(--color-red);
+}
+
+.ns-cal-chip-medium {
+	border-left-color: var(--color-orange);
+}
+
+.ns-cal-chip-low {
+	border-left-color: var(--color-blue);
+}
+
+.ns-cal-chip-dragging {
+	opacity: 0.85;
+	cursor: grabbing;
+	position: relative;
+	z-index: 10;
+	box-shadow: var(--shadow-s);
+}

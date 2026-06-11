@@ -24,6 +24,8 @@ export interface CreateTaskInput {
 	priority?: Priority;
 	parent?: string;
 	reminder?: string;
+	/** Set when the note materializes a task pulled from TickTick. */
+	ticktickId?: string;
 }
 
 const ILLEGAL_NAME_CHARS = /[\\/:*?"<>|#^[\]]/g;
@@ -103,6 +105,7 @@ export class ProjectManager {
 		if (input.due) fm['due'] = input.due;
 		if (input.parent) fm['parent'] = `[[${input.parent}]]`;
 		if (input.reminder) fm['reminder'] = input.reminder;
+		if (input.ticktickId) fm['ticktick-id'] = input.ticktickId;
 
 		await this.vault.createNote(path, frontmatterBlock(fm));
 		return { path };
@@ -120,6 +123,12 @@ export class ProjectManager {
 			} else {
 				delete fm['completed-at'];
 			}
+		});
+	}
+
+	async updateTaskDue(path: string, due: string): Promise<void> {
+		await this.vault.updateFrontmatter(path, (fm) => {
+			fm['due'] = due;
 		});
 	}
 

@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Task, TaskStatus } from '../core/models';
 import type { TaskIndex, TaskTreeNode } from '../core/task-index';
+import { compareTasks } from '../core/view-data';
+import { useIndexRefresh } from './use-index-refresh';
 
 export interface TaskListCallbacks {
 	onToggleTask: (task: Task) => void;
@@ -12,14 +14,7 @@ interface Props {
 	callbacks: TaskListCallbacks;
 }
 
-const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2, none: 3 };
 const HIDDEN_STATUSES_DEFAULT: TaskStatus[] = ['done', 'cancelled'];
-
-function compareTasks(a: Task, b: Task): number {
-	const dueCompare = (a.due ?? '9999').localeCompare(b.due ?? '9999');
-	if (dueCompare !== 0) return dueCompare;
-	return (PRIORITY_ORDER[a.priority] ?? 9) - (PRIORITY_ORDER[b.priority] ?? 9);
-}
 
 function sortTree(nodes: TaskTreeNode[]): TaskTreeNode[] {
 	return [...nodes]
@@ -78,8 +73,7 @@ function TaskRow({
 }
 
 export function TaskListApp({ index, callbacks }: Props) {
-	const [, setTick] = useState(0);
-	useEffect(() => index.subscribe(() => setTick((t) => t + 1)), [index]);
+	useIndexRefresh(index);
 
 	const [projectFilter, setProjectFilter] = useState<string>('');
 	const [showDone, setShowDone] = useState(false);
