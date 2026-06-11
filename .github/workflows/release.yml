@@ -1,0 +1,73 @@
+name: Release
+
+"on":
+    push:
+        tags:
+            - "v*.*.*"
+
+permissions:
+    contents: write
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - name: Checkout full history
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Verify tag matches manifest version
+              env:
+                  TAG_NAME: ${{ github.ref_name }}
+              run: |
+                  MANIFEST_VERSION=$(node -p "require('./manifest.json').version")
+                  if [ "${TAG_NAME#v}" != "$MANIFEST_VERSION" ]; then
+                    echo "Tag $TAG_NAME does not match manifest.json version $MANIFEST_VERSION" >&2
+                    exit 1
+                  fi
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run tests (with coverage gate)
+              run: npm run coverage
+
+            - name: Build plugin
+              run: npm run build
+
+            - name: Determine previous tag
+              id: prev_tag
+              run: |
+                  PREV=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+                  echo "tag=$PREV" >> "$GITHUB_OUTPUT"
+
+            - name: Build release notes
+              env:
+                  TAG_NAME: ${{ github.ref_name }}
+                  PREV_TAG: ${{ steps.prev_tag.outputs.tag }}
+              run: |
+                  if [ -z "$PREV_TAG" ]; then
+                    git log --pretty=format:"- %s (%h)" "$TAG_NAME" > release_notes.md
+                  else
+                    git log --pretty=format:"- %s (%h)" "${PREV_TAG}..${TAG_NAME}" > release_notes.md
+                  fi
+
+            - name: Create GitHub Release
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAG_NAME: ${{ github.ref_name }}
+              run: |
+                  gh release create "$TAG_NAME" \
+                    --title "$TAG_NAME" \
+                    --notes-file release_notes.md \
+                    main.js manifest.json styles.css

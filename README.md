@@ -10,7 +10,6 @@ An Obsidian plugin for comprehensive multi-project management. Neseser treats yo
   - **Dashboard View**: Get an overview of all your active projects and their status.
   - **Kanban View**: Visualize your tasks across different stages.
   - **Calendar View**: See your deadlines and schedule at a glance.
-  - **List View**: A detailed, tabular list of your tasks.
 - **TickTick Sync**: Seamlessly synchronize your tasks with TickTick.
 
 ## Installation

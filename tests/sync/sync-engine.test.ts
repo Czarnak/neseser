@@ -267,6 +267,25 @@ describe('SyncEngine.syncAll', () => {
 			expect(draft.priority).toBe(5);
 		});
 
+		test('does not misread the server\'s canonical ".000+0000" date echo as a remote edit after a push', async () => {
+			index.projects = [makeProject('Alpha')];
+			index.trees.set('Alpha', [leaf(makeTask('T', { due: '2026-06-15' }))]);
+			await engine.syncAll(index);
+			index.trees.set('Alpha', [leaf(makeTask('T', { due: '2026-06-17' }))]);
+			await engine.syncAll(index);
+			// The live API stores timestamps with milliseconds; simulate its canonical echo.
+			const id = snapshot.tasks['Projects/Alpha/Tasks/T.md']!.ticktickId;
+			const remote = client.remoteTask('ttp-1', id)!;
+			client.editRemote('ttp-1', id, { dueDate: remote.dueDate!.replace('+0000', '.000+0000') });
+			client.calls = [];
+
+			const summary = await engine.syncAll(index);
+
+			expect(summary.pulledUpdated).toBe(0);
+			expect(summary.skipped).toBe(1);
+			expect(client.callsOf('updateTask')).toHaveLength(0);
+		});
+
 		test('completes a synced task once when it is done locally', async () => {
 			index.projects = [makeProject('Alpha')];
 			index.trees.set('Alpha', [leaf(makeTask('T'))]);

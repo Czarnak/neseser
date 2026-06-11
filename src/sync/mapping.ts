@@ -20,6 +20,13 @@ export interface TickTickTaskDraft {
 	priority: number;
 	/** 0 = normal, 2 = completed; sent on update so a reopen sticks remotely */
 	status?: number;
+	/**
+	 * Always sent equal to dueDate: app-edited tasks carry a startDate, and a
+	 * dueDate-only update leaves it behind — the task becomes a multi-day span
+	 * the app still shows on the old date. (Genuine remote spans collapse to
+	 * the due day on push; v1 models a single date.)
+	 */
+	startDate?: string;
 	dueDate?: string;
 	isAllDay?: boolean;
 	timeZone?: string;
@@ -121,7 +128,8 @@ export function taskToTickTick(
 		const isAllDay = DATE_ONLY.test(task.due);
 		// Date-only strings get a local-midnight Date; timed strings parse as local wall time.
 		const due = new Date(isAllDay ? `${task.due}T00:00:00` : task.due);
-		draft.dueDate = toApiDateTime(due);
+		draft.startDate = toApiDateTime(due);
+		draft.dueDate = draft.startDate;
 		draft.isAllDay = isAllDay;
 		draft.timeZone = opts.timeZone;
 		draft.reminders = [isAllDay ? ALL_DAY_REMINDER : ON_TIME_REMINDER];
@@ -134,12 +142,22 @@ export function taskToTickTick(
 	return draft;
 }
 
+/**
+ * Epoch ms when parseable so the "+0000" draft rendering and the server's
+ * canonical ".000+0000" echo compare equal; raw string otherwise.
+ */
+function fingerprintDue(dueDate: string | undefined): number | string | null {
+	if (dueDate === undefined) return null;
+	const ms = parseApiDateMs(dueDate);
+	return Number.isNaN(ms) ? dueDate : ms;
+}
+
 /** Stable digest of the remote fields we sync; detects remote edits between runs. */
 export function remoteFingerprint(remote: RemoteTaskFields): string {
 	return JSON.stringify({
 		title: remote.title,
 		closed: remote.status === 2,
-		due: remote.dueDate ?? null,
+		due: fingerprintDue(remote.dueDate),
 		priority: remote.priority ?? 0,
 		items: (remote.items ?? []).map((item) => ({ title: item.title, status: item.status })),
 	});

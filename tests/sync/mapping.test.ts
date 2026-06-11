@@ -42,7 +42,16 @@ describe('taskToTickTick', () => {
 
 		expect(draft).toMatchObject({ projectId: 'ttp-1', title: 'Ship it', priority: 5 });
 		expect(draft.dueDate).toBeUndefined();
+		expect(draft.startDate).toBeUndefined();
 		expect(draft.reminders).toBeUndefined();
+	});
+
+	test('sends startDate equal to dueDate so a date change moves app-edited tasks off their old startDate', () => {
+		const allDay = taskToTickTick(makeTask({ due: '2026-06-15' }), [], OPTS);
+		expect(allDay.startDate).toBe(allDay.dueDate);
+
+		const timed = taskToTickTick(makeTask({ due: '2026-06-15T09:30' }), [], OPTS);
+		expect(timed.startDate).toBe(timed.dueDate);
 	});
 
 	test('date-only due becomes all-day with 9am reminder trigger', () => {
@@ -166,6 +175,19 @@ describe('remoteFingerprint', () => {
 		expect(remoteFingerprint(remote({ dueDate: '2026-06-15T07:30:00+0000' }))).not.toBe(base);
 		expect(remoteFingerprint(remote({ priority: 5 }))).not.toBe(base);
 		expect(remoteFingerprint(remote({ items: [{ title: 'C', status: 0 }] }))).not.toBe(base);
+	});
+
+	test('matches across "+0000" draft and ".000+0000" server renderings of the same instant', () => {
+		expect(remoteFingerprint(remote({ dueDate: '2026-06-16T22:00:00+0000' }))).toBe(
+			remoteFingerprint(remote({ dueDate: '2026-06-16T22:00:00.000+0000' })),
+		);
+	});
+
+	test('still distinguishes different instants and tolerates unparseable dates', () => {
+		expect(remoteFingerprint(remote({ dueDate: '2026-06-16T22:00:00+0000' }))).not.toBe(
+			remoteFingerprint(remote({ dueDate: '2026-06-17T22:00:00+0000' })),
+		);
+		expect(remoteFingerprint(remote({ dueDate: 'garbage' }))).not.toBe(remoteFingerprint(remote()));
 	});
 
 	test('ignores volatile fields like modifiedTime and checklist item ids', () => {
