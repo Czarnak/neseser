@@ -80,6 +80,26 @@ describe('parseTask', () => {
 
 		expect(result.kind).toBe('invalid');
 	});
+
+	test('parses start date field', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Span.md', {
+			type: 'task',
+			start: '2026-06-12',
+			due: '2026-06-15',
+		});
+
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.start).toBe('2026-06-12');
+	});
+
+	test('returns invalid for unparseable start date', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Bad.md', { type: 'task', start: 'someday' });
+
+		expect(result.kind).toBe('invalid');
+		if (result.kind !== 'invalid') return;
+		expect(result.reason).toContain('start');
+	});
 });
 
 describe('parseProject', () => {
@@ -177,8 +197,25 @@ describe('taskToFrontmatter', () => {
 
 		expect(fm.type).toBe('task');
 		expect('due' in fm).toBe(false);
+		expect('start' in fm).toBe(false);
 		expect('parent' in fm).toBe(false);
 		expect('ticktick-id' in fm).toBe(false);
+	});
+
+	test('round-trips start through parseTask', () => {
+		const fm = taskToFrontmatter({
+			path: 'Projects/Alpha/Tasks/Span.md',
+			title: 'Span',
+			status: 'todo',
+			priority: 'none',
+			start: '2026-06-12',
+			due: '2026-06-15',
+		});
+
+		const result = parseTask('Projects/Alpha/Tasks/Span.md', fm);
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.start).toBe('2026-06-12');
 	});
 });
 

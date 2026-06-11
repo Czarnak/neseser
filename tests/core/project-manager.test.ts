@@ -112,6 +112,19 @@ describe('ProjectManager', () => {
 			expect(vault.notes.get(path)).toContain('reminder: "at 9: 00"');
 		});
 
+		test('writes start when given', async () => {
+			const { path } = await manager.createTask({
+				projectName: 'Alpha',
+				title: 'Span',
+				start: '2026-06-12',
+				due: '2026-06-15',
+			});
+
+			const content = vault.notes.get(path) ?? '';
+			expect(content).toContain('start: 2026-06-12');
+			expect(content).toContain('due: 2026-06-15');
+		});
+
 		test('writes ticktick-id when given (pull-created tasks)', async () => {
 			const { path } = await manager.createTask({
 				projectName: 'Alpha',
@@ -162,6 +175,30 @@ describe('ProjectManager', () => {
 			expect(vault.frontmatters.get('Projects/Alpha/Tasks/T.md')).toMatchObject({
 				due: '2026-06-15',
 			});
+		});
+
+		test('updateTaskDates writes start and due', async () => {
+			await manager.updateTaskDates('Projects/Alpha/Tasks/T.md', {
+				start: '2026-06-12',
+				due: '2026-06-15',
+			});
+
+			expect(vault.frontmatters.get('Projects/Alpha/Tasks/T.md')).toMatchObject({
+				start: '2026-06-12',
+				due: '2026-06-15',
+			});
+		});
+
+		test('updateTaskDates without start removes an existing start', async () => {
+			await manager.updateTaskDates('Projects/Alpha/Tasks/T.md', {
+				start: '2026-06-12',
+				due: '2026-06-15',
+			});
+			await manager.updateTaskDates('Projects/Alpha/Tasks/T.md', { due: '2026-06-16' });
+
+			const fm = vault.frontmatters.get('Projects/Alpha/Tasks/T.md') ?? {};
+			expect(fm['due']).toBe('2026-06-16');
+			expect(fm['start']).toBeUndefined();
 		});
 	});
 });

@@ -11,6 +11,8 @@ export interface Task {
 	title: string;
 	status: TaskStatus;
 	priority: Priority;
+	/** Span start for the Gantt view; tasks without it are single-day (due only). */
+	start?: string;
 	due?: string;
 	parent?: string;
 	reminder?: string;
@@ -94,6 +96,9 @@ export function parseTask(path: string, fm: Frontmatter | undefined): TaskParseR
 	const priority = parseEnum(fm, 'priority', PRIORITIES, 'none');
 	if ('error' in priority) return { kind: 'invalid', path, reason: priority.error };
 
+	const start = parseDate(fm, 'start');
+	if ('error' in start) return { kind: 'invalid', path, reason: start.error };
+
 	const due = parseDate(fm, 'due');
 	if ('error' in due) return { kind: 'invalid', path, reason: due.error };
 
@@ -108,6 +113,7 @@ export function parseTask(path: string, fm: Frontmatter | undefined): TaskParseR
 			title: titleFromPath(path),
 			status: status.value,
 			priority: priority.value,
+			start: start.value,
 			due: due.value,
 			parent,
 			reminder: optionalString(fm, 'reminder'),
@@ -146,6 +152,7 @@ export function taskToFrontmatter(task: Task): Frontmatter {
 		status: task.status,
 		priority: task.priority,
 	};
+	if (task.start !== undefined) fm['start'] = task.start;
 	if (task.due !== undefined) fm['due'] = task.due;
 	if (task.parent !== undefined) fm['parent'] = `[[${task.parent}]]`;
 	if (task.reminder !== undefined) fm['reminder'] = task.reminder;
