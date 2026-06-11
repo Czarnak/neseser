@@ -9,6 +9,8 @@ import { SyncSnapshot, emptySnapshot } from './sync/sync-state';
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
 import { NewProjectModal, NewTaskModal } from './ui/modals';
+import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
+import { KanbanView, VIEW_TYPE_KANBAN } from './views/kanban-view';
 import { TaskListView, VIEW_TYPE_TASK_LIST } from './views/task-list-view';
 
 class ObsidianVaultAdapter implements VaultAdapter {
@@ -114,6 +116,8 @@ export default class NeseserPlugin extends Plugin {
 		this.engineStore = new ObsidianEngineStore(this.app, this.vaultAdapter, this.manager);
 
 		this.registerView(VIEW_TYPE_TASK_LIST, (leaf) => new TaskListView(leaf, this.index, this.manager));
+		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
+		this.registerView(VIEW_TYPE_KANBAN, (leaf) => new KanbanView(leaf, this.index, this.manager));
 		this.addSettingTab(new NeseserSettingTab(this.app, this));
 		this.statusBar = this.addStatusBarItem();
 		this.setStatus('idle');
@@ -266,12 +270,32 @@ export default class NeseserPlugin extends Plugin {
 	}
 
 	private registerCommands(): void {
-		this.addRibbonIcon('list-checks', 'Neseser: open task list', () => void this.activateTaskList());
+		this.addRibbonIcon('list-checks', 'Neseser: open task list', () =>
+			void this.activateView(VIEW_TYPE_TASK_LIST, 'sidebar'),
+		);
+		this.addRibbonIcon('layout-dashboard', 'Neseser: open dashboard', () =>
+			void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
+		);
+		this.addRibbonIcon('kanban', 'Neseser: open kanban board', () =>
+			void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
+		);
 
 		this.addCommand({
 			id: 'open-task-list',
 			name: 'Open task list',
-			callback: () => void this.activateTaskList(),
+			callback: () => void this.activateView(VIEW_TYPE_TASK_LIST, 'sidebar'),
+		});
+
+		this.addCommand({
+			id: 'open-dashboard',
+			name: 'Open dashboard',
+			callback: () => void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
+		});
+
+		this.addCommand({
+			id: 'open-kanban',
+			name: 'Open kanban board',
+			callback: () => void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
 		});
 
 		this.addCommand({
@@ -316,15 +340,16 @@ export default class NeseserPlugin extends Plugin {
 		});
 	}
 
-	private async activateTaskList(): Promise<void> {
-		const existing = this.app.workspace.getLeavesOfType(VIEW_TYPE_TASK_LIST)[0];
+	private async activateView(viewType: string, location: 'sidebar' | 'tab'): Promise<void> {
+		const existing = this.app.workspace.getLeavesOfType(viewType)[0];
 		if (existing) {
 			await this.app.workspace.revealLeaf(existing);
 			return;
 		}
-		const leaf: WorkspaceLeaf | null = this.app.workspace.getRightLeaf(false);
+		const leaf: WorkspaceLeaf | null =
+			location === 'sidebar' ? this.app.workspace.getRightLeaf(false) : this.app.workspace.getLeaf(true);
 		if (!leaf) return;
-		await leaf.setViewState({ type: VIEW_TYPE_TASK_LIST, active: true });
+		await leaf.setViewState({ type: viewType, active: true });
 		await this.app.workspace.revealLeaf(leaf);
 	}
 

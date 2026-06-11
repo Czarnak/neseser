@@ -1,0 +1,58 @@
+import { ItemView, Notice, WorkspaceLeaf } from 'obsidian';
+import { Root, createRoot } from 'react-dom/client';
+import { Task, TaskStatus } from '../core/models';
+import type { ProjectManager } from '../core/project-manager';
+import type { TaskIndex } from '../core/task-index';
+import { KanbanApp } from '../ui/KanbanApp';
+
+export const VIEW_TYPE_KANBAN = 'neseser-kanban';
+
+export class KanbanView extends ItemView {
+	private root: Root | null = null;
+
+	constructor(
+		leaf: WorkspaceLeaf,
+		private index: TaskIndex,
+		private manager: ProjectManager,
+	) {
+		super(leaf);
+	}
+
+	getViewType(): string {
+		return VIEW_TYPE_KANBAN;
+	}
+
+	getDisplayText(): string {
+		return 'Neseser kanban';
+	}
+
+	override getIcon(): string {
+		return 'kanban';
+	}
+
+	override async onOpen(): Promise<void> {
+		const container = this.containerEl.children[1] as HTMLElement;
+		container.empty();
+		this.root = createRoot(container);
+		this.root.render(
+			<KanbanApp
+				index={this.index}
+				callbacks={{
+					onMoveTask: (task: Task, status: TaskStatus) => {
+						this.manager.updateTaskStatus(task.path, status).catch((error: unknown) => {
+							new Notice(`Could not move task: ${error instanceof Error ? error.message : String(error)}`);
+						});
+					},
+					onOpenTask: (task: Task) => {
+						void this.app.workspace.openLinkText(task.path, '', false);
+					},
+				}}
+			/>,
+		);
+	}
+
+	override async onClose(): Promise<void> {
+		this.root?.unmount();
+		this.root = null;
+	}
+}
