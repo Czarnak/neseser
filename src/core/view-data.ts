@@ -1,4 +1,4 @@
-import { Project, TASK_STATUSES, Task, TaskStatus, isTaskClosed } from './models';
+import { PROJECT_STATUSES, Project, TASK_STATUSES, Task, TaskStatus, isTaskClosed } from './models';
 
 /**
  * Pure data shaping for the dashboard and kanban views. Callers pick the task
@@ -25,7 +25,13 @@ export interface DeadlineEntry {
 }
 
 const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2, none: 3 };
+const STATUS_RANK = new Map(PROJECT_STATUSES.map((status, rank) => [status, rank]));
 const DAY_MS = 86_400_000;
+
+export function compareProjects(a: Project, b: Project): number {
+	const rankDiff = (STATUS_RANK.get(a.status) ?? 9) - (STATUS_RANK.get(b.status) ?? 9);
+	return rankDiff !== 0 ? rankDiff : a.name.localeCompare(b.name);
+}
 
 export function compareTasks(a: Task, b: Task): number {
 	const dueCompare = (a.due ?? '9999').localeCompare(b.due ?? '9999');

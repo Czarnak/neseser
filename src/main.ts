@@ -6,12 +6,14 @@ import { runOAuthFlow } from './sync/oauth-flow';
 import { ExponentialBackoff, SyncScheduler } from './sync/scheduler';
 import { LocalStore, NewLocalTask, SyncEngine, SyncSummary } from './sync/sync-engine';
 import { SyncSnapshot, emptySnapshot } from './sync/sync-state';
+import { SyncStatus, SyncStatusStore, formatSyncStatus } from './sync/sync-status';
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
 import { NewProjectModal, NewTaskModal } from './ui/modals';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
 import { KanbanView, VIEW_TYPE_KANBAN } from './views/kanban-view';
+import { NavigationView, VIEW_TYPE_NAVIGATION } from './views/navigation-view';
 import { TaskListView, VIEW_TYPE_TASK_LIST } from './views/task-list-view';
 
 class ObsidianVaultAdapter implements VaultAdapter {
@@ -98,6 +100,7 @@ interface PersistedData {
 export default class NeseserPlugin extends Plugin {
 	settings: NeseserSettings = DEFAULT_SETTINGS;
 	syncState: SyncSnapshot = emptySnapshot();
+	syncStatus = new SyncStatusStore();
 	index!: TaskIndex;
 	manager!: ProjectManager;
 	private vaultAdapter!: ObsidianVaultAdapter;
@@ -120,9 +123,22 @@ export default class NeseserPlugin extends Plugin {
 		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
 		this.registerView(VIEW_TYPE_KANBAN, (leaf) => new KanbanView(leaf, this.index, this.manager));
 		this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.index, this.manager));
+		this.registerView(
+			VIEW_TYPE_NAVIGATION,
+			(leaf) =>
+				new NavigationView(leaf, this.index, this.syncStatus, {
+					onOpenTaskList: () => void this.activateView(VIEW_TYPE_TASK_LIST, 'sidebar'),
+					onOpenDashboard: () => void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
+					onOpenKanban: () => void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
+					onOpenCalendar: () => void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
+					onCreateProject: () => this.openNewProjectModal(),
+					onSyncNow: () => void this.syncWithTickTick(true),
+					onConnect: () => this.connectTickTickInteractive(),
+				}),
+		);
 		this.addSettingTab(new NeseserSettingTab(this.app, this));
 		this.statusBar = this.addStatusBarItem();
-		this.setStatus('idle');
+		this.updateSyncStatus({ state: isTickTickConnected(this.settings) ? 'idle' : 'disconnected' });
 		this.registerCommands();
 
 		this.app.workspace.onLayoutReady(() => {
@@ -174,6 +190,7 @@ export default class NeseserPlugin extends Plugin {
 		this.settings.ticktickAccessToken = tokens.accessToken;
 		this.settings.ticktickTokenExpiresAt = Date.now() + tokens.expiresIn * 1000;
 		await this.persistAll();
+		this.updateSyncStatus({ state: 'idle' });
 	}
 
 	/** Two-way sync. Returns false when the run had errors (drives backoff). */
@@ -184,12 +201,12 @@ export default class NeseserPlugin extends Plugin {
 		}
 		if (!isTickTickConnected(this.settings)) {
 			if (manual) new Notice('Neseser: connect TickTick first (plugin settings)');
-			else this.setStatus('sync: not connected');
+			else this.updateSyncStatus({ state: 'disconnected' });
 			return true; // not an outage; no backoff churn while disconnected
 		}
 
 		this.syncInFlight = true;
-		this.setStatus('syncing…');
+		this.updateSyncStatus({ state: 'syncing' });
 		try {
 			const client = new TickTickClient(obsidianHttp, () => this.settings.ticktickAccessToken);
 			const engine = new SyncEngine(
@@ -208,7 +225,7 @@ export default class NeseserPlugin extends Plugin {
 					? 'Neseser: TickTick rejected the token — reconnect in plugin settings'
 					: `Neseser: sync failed — ${error instanceof Error ? error.message : String(error)}`;
 			if (manual) new Notice(message);
-			this.setStatus('sync failed');
+			this.updateSyncStatus({ state: 'error' });
 			return false;
 		} finally {
 			this.syncInFlight = false;
@@ -260,30 +277,29 @@ export default class NeseserPlugin extends Plugin {
 				);
 			}
 			console.warn('[neseser] sync errors', summary.errors);
-			this.setStatus(`sync: ${summary.errors.length} errors`);
+			this.updateSyncStatus({ state: 'error', errorCount: summary.errors.length });
 		} else {
 			if (manual) new Notice(`Neseser: synced with TickTick — ${okText}`);
-			this.setStatus(`synced ${new Date().toLocaleTimeString()}`);
+			this.updateSyncStatus({ state: 'idle', lastSyncAt: Date.now() });
 		}
 	}
 
-	private setStatus(text: string): void {
-		this.statusBar.setText(`Neseser: ${text}`);
+	/** Carries lastSyncAt forward (store.update) and mirrors the status to the status bar. */
+	private updateSyncStatus(status: SyncStatus): void {
+		this.syncStatus.update(status);
+		this.statusBar.setText(`Neseser: ${formatSyncStatus(this.syncStatus.get())}`);
 	}
 
 	private registerCommands(): void {
-		this.addRibbonIcon('list-checks', 'Neseser: open task list', () =>
-			void this.activateView(VIEW_TYPE_TASK_LIST, 'sidebar'),
+		this.addRibbonIcon('compass', 'Neseser: open navigation', () =>
+			void this.activateView(VIEW_TYPE_NAVIGATION, 'sidebar'),
 		);
-		this.addRibbonIcon('layout-dashboard', 'Neseser: open dashboard', () =>
-			void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
-		);
-		this.addRibbonIcon('kanban', 'Neseser: open kanban board', () =>
-			void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
-		);
-		this.addRibbonIcon('calendar', 'Neseser: open calendar', () =>
-			void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
-		);
+
+		this.addCommand({
+			id: 'open-navigation',
+			name: 'Open navigation',
+			callback: () => void this.activateView(VIEW_TYPE_NAVIGATION, 'sidebar'),
+		});
 
 		this.addCommand({
 			id: 'open-task-list',
@@ -312,13 +328,7 @@ export default class NeseserPlugin extends Plugin {
 		this.addCommand({
 			id: 'create-project',
 			name: 'Create project',
-			callback: () => {
-				new NewProjectModal(this.app, async (input) => {
-					const { indexPath } = await this.manager.createProject(input);
-					new Notice(`Project created: ${input.name}`);
-					await this.app.workspace.openLinkText(indexPath, '', false);
-				}).open();
-			},
+			callback: () => this.openNewProjectModal(),
 		});
 
 		this.addCommand({
@@ -335,13 +345,7 @@ export default class NeseserPlugin extends Plugin {
 		this.addCommand({
 			id: 'connect-ticktick',
 			name: 'Connect TickTick',
-			callback: () => {
-				this.connectTickTick()
-					.then(() => new Notice('Neseser connected to TickTick'))
-					.catch((error: unknown) =>
-						new Notice(error instanceof Error ? error.message : String(error)),
-					);
-			},
+			callback: () => this.connectTickTickInteractive(),
 		});
 
 		this.addCommand({
@@ -349,6 +353,20 @@ export default class NeseserPlugin extends Plugin {
 			name: 'Sync with TickTick now',
 			callback: () => void this.syncWithTickTick(true),
 		});
+	}
+
+	private openNewProjectModal(): void {
+		new NewProjectModal(this.app, async (input) => {
+			const { indexPath } = await this.manager.createProject(input);
+			new Notice(`Project created: ${input.name}`);
+			await this.app.workspace.openLinkText(indexPath, '', false);
+		}).open();
+	}
+
+	private connectTickTickInteractive(): void {
+		this.connectTickTick()
+			.then(() => new Notice('Neseser connected to TickTick'))
+			.catch((error: unknown) => new Notice(error instanceof Error ? error.message : String(error)));
 	}
 
 	private async activateView(viewType: string, location: 'sidebar' | 'tab'): Promise<void> {

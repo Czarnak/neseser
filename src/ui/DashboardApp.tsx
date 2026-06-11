@@ -1,6 +1,6 @@
-import { PROJECT_STATUSES, Project } from '../core/models';
+import { Project } from '../core/models';
 import type { InvalidEntry, TaskIndex } from '../core/task-index';
-import { DeadlineEntry, taskProgress, upcomingDeadlines } from '../core/view-data';
+import { DeadlineEntry, compareProjects, taskProgress, upcomingDeadlines } from '../core/view-data';
 import { useIndexRefresh } from './use-index-refresh';
 
 export interface DashboardCallbacks {
@@ -10,13 +10,6 @@ export interface DashboardCallbacks {
 interface Props {
 	index: TaskIndex;
 	callbacks: DashboardCallbacks;
-}
-
-const STATUS_RANK = new Map(PROJECT_STATUSES.map((status, rank) => [status, rank]));
-
-function compareProjects(a: Project, b: Project): number {
-	const rankDiff = (STATUS_RANK.get(a.status) ?? 9) - (STATUS_RANK.get(b.status) ?? 9);
-	return rankDiff !== 0 ? rankDiff : a.name.localeCompare(b.name);
 }
 
 function ProjectCard({ project, index, callbacks }: { project: Project; index: TaskIndex; callbacks: DashboardCallbacks }) {

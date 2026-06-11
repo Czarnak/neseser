@@ -323,3 +323,49 @@
 	z-index: 10;
 	box-shadow: var(--shadow-s);
 }
+
+/* Navigation */
+
+.ns-nav {
+	padding: 4px 8px;
+}
+
+.ns-nav-section {
+	margin-bottom: 16px;
+}
+
+.ns-nav-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.ns-nav-project-row {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 2px 0;
+}
+
+.ns-nav-project-name {
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ns-nav-project-name:hover {
+	text-decoration: underline;
+}
+
+.ns-nav-sync-status {
+	margin: 4px 0;
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+}
+
+.ns-nav-sync-error {
+	color: var(--text-error);
+}

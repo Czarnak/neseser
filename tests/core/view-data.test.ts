@@ -3,6 +3,7 @@ import { Project, TASK_STATUSES, Task } from '../../src/core/models';
 import {
 	DeadlineEntry,
 	buildKanbanColumns,
+	compareProjects,
 	compareTasks,
 	taskProgress,
 	upcomingDeadlines,
@@ -48,6 +49,27 @@ describe('compareTasks', () => {
 		const sorted = [low, none, high].sort(compareTasks);
 
 		expect(sorted.map((t) => t.title)).toEqual(['high', 'low', 'none']);
+	});
+});
+
+describe('compareProjects', () => {
+	test('ranks projects by status in canonical order', () => {
+		const projects = [
+			project('Old', { status: 'archived' }),
+			project('Shipped', { status: 'done' }),
+			project('Paused', { status: 'on-hold' }),
+			project('Current'),
+		];
+
+		const sorted = [...projects].sort(compareProjects);
+
+		expect(sorted.map((p) => p.name)).toEqual(['Current', 'Paused', 'Shipped', 'Old']);
+	});
+
+	test('breaks status ties by name', () => {
+		const sorted = [project('Beta'), project('Alpha')].sort(compareProjects);
+
+		expect(sorted.map((p) => p.name)).toEqual(['Alpha', 'Beta']);
 	});
 });
 
