@@ -99,10 +99,15 @@ describe('todayGroups', () => {
 		const late = makeTask({ path: 'p/late.md', title: 'late', due: '2026-06-12T14:00' });
 		const noTime = makeTask({ path: 'p/notime.md', title: 'notime', due: '2026-06-12', priority: 'high' });
 		const { today } = todayGroups([late, noTime, early], NOW);
-		// compareTasks: due asc, then priority — '2026-06-12T08:00' < '2026-06-12T14:00' < '2026-06-12' (no T suffix)
-		// Wait: '2026-06-12' < '2026-06-12T...' lexicographically; compareTasks uses localeCompare on raw .due
-		// '2026-06-12' < '2026-06-12T08:00' < '2026-06-12T14:00'
+		// '2026-06-12' < '2026-06-12T08:00' < '2026-06-12T14:00' lexicographically
 		expect(today.map((t) => t.title)).toEqual(['notime', 'early', 'late']);
+	});
+
+	test('priority tiebreak: same bare due, high before medium', () => {
+		const hi = makeTask({ path: 'p/hi.md', title: 'hi', due: '2026-06-12', priority: 'high' });
+		const med = makeTask({ path: 'p/med.md', title: 'med', due: '2026-06-12', priority: 'medium' });
+		const { today } = todayGroups([med, hi], NOW);
+		expect(today.map((t) => t.title)).toEqual(['hi', 'med']);
 	});
 
 	test('returns empty groups for empty input', () => {
