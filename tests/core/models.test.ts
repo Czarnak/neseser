@@ -100,6 +100,48 @@ describe('parseTask', () => {
 		if (result.kind !== 'invalid') return;
 		expect(result.reason).toContain('start');
 	});
+
+	test('parses daily recurrence', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Water plants.md', {
+			type: 'task',
+			recurrence: 'daily',
+		});
+
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.recurrence).toBe('daily');
+	});
+
+	test('parses weekly recurrence', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Review.md', {
+			type: 'task',
+			recurrence: 'weekly',
+		});
+
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.recurrence).toBe('weekly');
+	});
+
+	test('absent recurrence parses as undefined', () => {
+		const result = parseTask('Projects/Alpha/Tasks/T.md', { type: 'task' });
+
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.recurrence).toBeUndefined();
+	});
+
+	test('returns invalid for unknown recurrence value', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Bad.md', {
+			type: 'task',
+			recurrence: 'monthly',
+		});
+
+		expect(result.kind).toBe('invalid');
+		if (result.kind !== 'invalid') return;
+		expect(result.reason).toContain('recurrence');
+		expect(result.reason).toContain('daily, weekly');
+	});
 });
 
 describe('parseProject', () => {
@@ -216,6 +258,33 @@ describe('taskToFrontmatter', () => {
 		expect(result.kind).toBe('task');
 		if (result.kind !== 'task') return;
 		expect(result.task.start).toBe('2026-06-12');
+	});
+
+	test('round-trips recurrence through parseTask', () => {
+		const fm = taskToFrontmatter({
+			path: 'Projects/Alpha/Tasks/Water plants.md',
+			title: 'Water plants',
+			status: 'todo',
+			priority: 'none',
+			recurrence: 'weekly',
+		});
+
+		expect(fm['recurrence']).toBe('weekly');
+		const result = parseTask('Projects/Alpha/Tasks/Water plants.md', fm);
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.recurrence).toBe('weekly');
+	});
+
+	test('omits recurrence key when unset', () => {
+		const fm = taskToFrontmatter({
+			path: 'Projects/Alpha/Tasks/T.md',
+			title: 'T',
+			status: 'todo',
+			priority: 'none',
+		});
+
+		expect('recurrence' in fm).toBe(false);
 	});
 });
 
