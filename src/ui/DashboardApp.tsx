@@ -1,7 +1,9 @@
 import { Project } from '../core/models';
 import type { InvalidEntry, TaskIndex } from '../core/task-index';
 import { DeadlineEntry, compareProjects, taskProgress, upcomingDeadlines } from '../core/view-data';
+import { burndownSeries } from '../core/burndown-data';
 import { useIndexRefresh } from './use-index-refresh';
+import { Sparkline } from './Sparkline';
 
 export interface DashboardCallbacks {
 	onOpenPath: (path: string) => void;
@@ -13,8 +15,10 @@ interface Props {
 }
 
 function ProjectCard({ project, index, callbacks }: { project: Project; index: TaskIndex; callbacks: DashboardCallbacks }) {
-	const progress = taskProgress(index.getTasksForProject(project.name));
+	const tasks = index.getTasksForProject(project.name);
+	const progress = taskProgress(tasks);
 	const percent = progress.total === 0 ? 0 : Math.round((progress.done / progress.total) * 100);
+	const sparkValues = burndownSeries(tasks, new Date()).map((p) => p.open);
 
 	return (
 		<div className="ns-project-card">
@@ -32,6 +36,7 @@ function ProjectCard({ project, index, callbacks }: { project: Project; index: T
 					{progress.done}/{progress.total}
 				</span>
 			</div>
+			<Sparkline values={sparkValues} />
 			{project.deadline && <div className="ns-card-deadline">Deadline: {project.deadline}</div>}
 		</div>
 	);

@@ -586,3 +586,22 @@
 	cursor: pointer;
 	box-shadow: none;
 }
+
+/* Sparkline */
+.ns-sparkline {
+	width: 100%;
+	height: 28px;
+	display: block;
+	margin-top: 4px;
+}
+
+.ns-sparkline-line {
+	fill: none;
+	stroke: var(--interactive-accent);
+	stroke-width: 1.5;
+}
+
+.ns-sparkline-area {
+	fill: var(--interactive-accent);
+	opacity: 0.15;
+}
