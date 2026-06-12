@@ -11,6 +11,7 @@ export interface TaskTreeNode {
 }
 
 type Listener = () => void;
+type CompletionListener = (task: Task) => void;
 
 /**
  * In-memory index of all projects and tasks under the projects root.
@@ -22,15 +23,24 @@ export class TaskIndex {
 	private projects = new Map<string, Project>();
 	private invalid = new Map<string, InvalidEntry>();
 	private listeners = new Set<Listener>();
+	private completionListeners = new Set<CompletionListener>();
 
 	constructor(private projectsRoot: string) {}
 
 	onFileChanged(path: string, fm: Frontmatter | undefined): void {
 		if (!this.isUnderRoot(path)) return;
 
+		const previous = this.tasks.get(path);
 		const hadEntry = this.removeEntries(path);
 		const added = this.addEntries(path, fm);
 		if (hadEntry || added) this.notify();
+
+		// Completion = a known task transitioning into done; the initial index
+		// build has no previous entry, so startup can never fire this.
+		const next = this.tasks.get(path);
+		if (previous && next && previous.status !== 'done' && next.status === 'done') {
+			for (const listener of this.completionListeners) listener(next);
+		}
 	}
 
 	onFileDeleted(path: string): void {
@@ -98,6 +108,12 @@ export class TaskIndex {
 	subscribe(listener: Listener): () => void {
 		this.listeners.add(listener);
 		return () => this.listeners.delete(listener);
+	}
+
+	/** Fires when a known task transitions into done, from any completion path. */
+	onTaskCompleted(listener: CompletionListener): () => void {
+		this.completionListeners.add(listener);
+		return () => this.completionListeners.delete(listener);
 	}
 
 	/** Parent links are sibling note titles, so scope keys to the task's project. */
