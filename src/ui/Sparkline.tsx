@@ -13,6 +13,7 @@ export function Sparkline({ values, width = 120, height = 28 }: SparklineProps) 
 			className="ns-sparkline"
 			viewBox={`0 0 ${width} ${height}`}
 			preserveAspectRatio="none"
+			aria-hidden="true"
 		>
 			<polygon className="ns-sparkline-area" points={geo.area} />
 			<polyline className="ns-sparkline-line" points={geo.line} />
