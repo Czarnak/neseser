@@ -537,6 +537,118 @@ describe('SyncEngine.syncAll', () => {
 		});
 	});
 
+	describe('spans (start field)', () => {
+		test('a span push is echo-free on the next run (canonical server rendering)', async () => {
+			const { projectId, taskId } = await seedSynced();
+			index.trees.set('Alpha', [leaf(makeTask('T', { start: '2026-06-16', due: '2026-06-17' }))]);
+
+			const pushSummary = await engine.syncAll(index);
+
+			expect(pushSummary.updated).toBe(1);
+			const draft = client.callsOf('updateTask')[0]?.args[0] as TickTickTaskDraft;
+			expect(draft.isAllDay).toBe(true);
+			expect(draft.startDate).not.toBe(draft.dueDate);
+
+			// The live API stores timestamps with milliseconds; simulate its canonical echo.
+			const remote = client.remoteTask(projectId, taskId);
+			client.editRemote(projectId, taskId, {
+				startDate: remote?.startDate?.replace('+0000', '.000+0000'),
+				dueDate: remote?.dueDate?.replace('+0000', '.000+0000'),
+			});
+			client.calls = [];
+
+			const summary = await engine.syncAll(index);
+
+			expect(summary.pulledUpdated).toBe(0);
+			expect(summary.skipped).toBe(1);
+			expect(client.callsOf('updateTask')).toHaveLength(0);
+		});
+
+		test('a remote span edit pulls start and due into the note', async () => {
+			const { projectId, taskId } = await seedSynced();
+			client.editRemote(projectId, taskId, {
+				startDate: '2026-06-15T22:00:00.000+0000',
+				dueDate: '2026-06-17T22:00:00.000+0000',
+				isAllDay: true,
+				modifiedTime: '2026-06-11T09:00:00+0000',
+			});
+
+			const summary = await engine.syncAll(index);
+
+			expect(summary.pulledUpdated).toBe(1);
+			expect(store.written.get(TASK_PATH)).toMatchObject({
+				start: '2026-06-16',
+				due: '2026-06-17',
+			});
+		});
+
+		test('a remote collapse to a single day removes the local start', async () => {
+			const { projectId, taskId } = await seedSynced();
+			index.trees.set('Alpha', [leaf(makeTask('T', { start: '2026-06-16', due: '2026-06-17' }))]);
+			await engine.syncAll(index); // span pushed; note frontmatter carries start
+			await store.updateFrontmatter(TASK_PATH, (fm) => {
+				fm['start'] = '2026-06-16';
+				fm['due'] = '2026-06-17';
+			});
+			client.editRemote(projectId, taskId, {
+				startDate: '2026-06-19T22:00:00.000+0000',
+				dueDate: '2026-06-19T22:00:00.000+0000',
+				isAllDay: true,
+				modifiedTime: '2026-06-11T09:00:00+0000',
+			});
+			client.calls = [];
+
+			const summary = await engine.syncAll(index);
+
+			expect(summary.pulledUpdated).toBe(1);
+			const fm = store.written.get(TASK_PATH) ?? {};
+			expect(fm['due']).toBe('2026-06-20');
+			expect(fm['start']).toBeUndefined();
+		});
+
+		test('a new remote span task materializes locally with start and stays quiet', async () => {
+			index.projects = [makeProject('Alpha', { ticktickProjectId: 'ttp-9' })];
+			const remote = client.seedRemote('ttp-9', {
+				title: 'Span from phone',
+				startDate: '2026-06-15T22:00:00.000+0000',
+				dueDate: '2026-06-17T22:00:00.000+0000',
+				isAllDay: true,
+			});
+
+			const summary = await engine.syncAll(index);
+
+			expect(summary.pulledCreated).toBe(1);
+			expect(store.createdNotes).toEqual([
+				{
+					projectName: 'Alpha',
+					title: 'Span from phone',
+					priority: 'none',
+					start: '2026-06-16',
+					due: '2026-06-17',
+					ticktickId: remote.id,
+				},
+			]);
+
+			// The vault note now exists and is indexed with the pulled span.
+			index.trees.set('Alpha', [
+				leaf(
+					makeTask('Span from phone', {
+						path: 'Projects/Alpha/Tasks/Span from phone.md',
+						start: '2026-06-16',
+						due: '2026-06-17',
+					}),
+				),
+			]);
+			client.calls = [];
+
+			const second = await engine.syncAll(index);
+
+			expect(second.pulledUpdated).toBe(0);
+			expect(second.updated).toBe(0);
+			expect(second.skipped).toBe(1);
+		});
+	});
+
 	describe('conflicts: both sides changed (last-writer-wins, Obsidian wins ties)', () => {
 		const LOCAL_EDIT_TIME = Date.parse('2026-06-11T10:00:00Z');
 		const REMOTE_EARLIER = '2026-06-11T08:00:00+0000';

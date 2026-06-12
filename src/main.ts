@@ -53,6 +53,7 @@ class ObsidianEngineStore implements LocalStore {
 		return this.manager.createTask({
 			projectName: input.projectName,
 			title: input.title,
+			start: input.start,
 			due: input.due,
 			priority: input.priority,
 			ticktickId: input.ticktickId,

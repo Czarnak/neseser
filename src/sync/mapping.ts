@@ -21,10 +21,12 @@ export interface TickTickTaskDraft {
 	/** 0 = normal, 2 = completed; sent on update so a reopen sticks remotely */
 	status?: number;
 	/**
-	 * Always sent equal to dueDate: app-edited tasks carry a startDate, and a
-	 * dueDate-only update leaves it behind — the task becomes a multi-day span
-	 * the app still shows on the old date. (Genuine remote spans collapse to
-	 * the due day on push; v1 models a single date.)
+	 * Always sent when dueDate is: the span start when the task has one, else
+	 * equal to dueDate — app-edited tasks carry a startDate, and a dueDate-only
+	 * update leaves it behind, turning the task into a multi-day span the app
+	 * still shows on the old date. All-day spans use an exclusive dueDate (the
+	 * midnight after the last day, live-probe verified); startDate === dueDate
+	 * is the single-day form the app itself uses.
 	 */
 	startDate?: string;
 	dueDate?: string;
@@ -38,6 +40,7 @@ export interface TickTickTaskDraft {
 export interface RemoteTaskFields {
 	title: string;
 	status?: number;
+	startDate?: string;
 	dueDate?: string;
 	priority?: number;
 	items?: TickTickChecklistItem[];
@@ -103,6 +106,81 @@ function toApiDateTime(date: Date): string {
 	return `${date.toISOString().slice(0, 19)}+0000`;
 }
 
+/** Calendar-day arithmetic on "YYYY-MM-DD" strings; never touches zones, so DST can't shift it. */
+function shiftDay(dateOnly: string, days: number): string {
+	const [year, month, day] = dateOnly.split('-').map(Number);
+	return new Date(Date.UTC(year ?? 0, (month ?? 1) - 1, (day ?? 1) + days)).toISOString().slice(0, 10);
+}
+
+/** Local frontmatter date → Date: date-only at local midnight, timed as local wall time. */
+function parseLocal(value: string): Date {
+	return new Date(DATE_ONLY.test(value) ? `${value}T00:00:00` : value);
+}
+
+interface ApiDates {
+	startDate: string;
+	dueDate: string;
+	isAllDay: boolean;
+}
+
+/**
+ * Local start/due → API instants. All-day spans get an exclusive dueDate
+ * (midnight after the due day); start ≥ due (including the typo case) falls
+ * back to the single-day form, per the design decisions.
+ */
+function pushDates(start: string | undefined, due: string): ApiDates {
+	const dueObj = parseLocal(due);
+	const dueAllDay = DATE_ONLY.test(due);
+	const single: ApiDates = {
+		startDate: toApiDateTime(dueObj),
+		dueDate: toApiDateTime(dueObj),
+		isAllDay: dueAllDay,
+	};
+	if (start === undefined) return single;
+
+	const startObj = parseLocal(start);
+	if (!(startObj.getTime() < dueObj.getTime())) return single;
+
+	const isAllDay = dueAllDay && DATE_ONLY.test(start);
+	return {
+		startDate: toApiDateTime(startObj),
+		dueDate: isAllDay ? toApiDateTime(parseLocal(shiftDay(due, 1))) : toApiDateTime(dueObj),
+		isAllDay,
+	};
+}
+
+export interface LocalDates {
+	start?: string;
+	due?: string;
+}
+
+/**
+ * Remote startDate/dueDate → local frontmatter dates. All-day spans carry an
+ * exclusive dueDate (live-probe verified), so local `due` is the day before
+ * it; startDate === dueDate is the single-day form and yields no `start`.
+ */
+export function remoteDatesToLocal(
+	startDate: string | undefined,
+	dueDate: string | undefined,
+	isAllDay: boolean,
+	timeZone: string,
+): LocalDates {
+	if (dueDate === undefined) return {};
+	const due = remoteDueToLocal(dueDate, isAllDay, timeZone);
+	if (due === undefined) return {};
+	if (startDate === undefined) return { due };
+
+	const startMs = parseApiDateMs(startDate);
+	if (Number.isNaN(startMs) || startMs >= parseApiDateMs(dueDate)) return { due };
+
+	const start = remoteDueToLocal(startDate, isAllDay, timeZone);
+	if (start === undefined) return { due };
+	if (!isAllDay) return { start, due };
+
+	const lastDay = shiftDay(due, -1);
+	return start < lastDay ? { start, due: lastDay } : { due: lastDay };
+}
+
 function flattenItems(children: TaskTreeNode[]): TickTickChecklistItem[] {
 	const items: TickTickChecklistItem[] = [];
 	for (const child of children) {
@@ -125,14 +203,12 @@ export function taskToTickTick(
 	};
 
 	if (task.due) {
-		const isAllDay = DATE_ONLY.test(task.due);
-		// Date-only strings get a local-midnight Date; timed strings parse as local wall time.
-		const due = new Date(isAllDay ? `${task.due}T00:00:00` : task.due);
-		draft.startDate = toApiDateTime(due);
-		draft.dueDate = draft.startDate;
-		draft.isAllDay = isAllDay;
+		const dates = pushDates(task.start, task.due);
+		draft.startDate = dates.startDate;
+		draft.dueDate = dates.dueDate;
+		draft.isAllDay = dates.isAllDay;
 		draft.timeZone = opts.timeZone;
-		draft.reminders = [isAllDay ? ALL_DAY_REMINDER : ON_TIME_REMINDER];
+		draft.reminders = [dates.isAllDay ? ALL_DAY_REMINDER : ON_TIME_REMINDER];
 	}
 
 	if (children.length > 0) {
@@ -157,6 +233,7 @@ export function remoteFingerprint(remote: RemoteTaskFields): string {
 	return JSON.stringify({
 		title: remote.title,
 		closed: remote.status === 2,
+		start: fingerprintDue(remote.startDate),
 		due: fingerprintDue(remote.dueDate),
 		priority: remote.priority ?? 0,
 		items: (remote.items ?? []).map((item) => ({ title: item.title, status: item.status })),
@@ -168,6 +245,7 @@ export function pushFingerprint(task: Task, children: TaskTreeNode[]): string {
 	return JSON.stringify({
 		title: task.title,
 		status: task.status,
+		start: task.start ?? null,
 		due: task.due ?? null,
 		priority: task.priority,
 		items: flattenItems(children),
