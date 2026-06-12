@@ -570,4 +570,19 @@
 .ns-today-checkbox {
 	flex-shrink: 0;
 	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	accent-color: var(--interactive-accent);
+}
+
+/* Title is a button for keyboard access; render it as plain text */
+.ns-today-row .ns-task-title {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	box-shadow: none;
 }

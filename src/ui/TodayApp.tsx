@@ -41,12 +41,13 @@ function TaskRow({
 			<input
 				className="ns-today-checkbox"
 				type="checkbox"
+				aria-label={task.title}
 				checked={isDone}
 				onChange={(e) => onToggle(e.target.checked)}
 			/>
-			<span className="ns-task-title" onClick={onOpen}>
+			<button type="button" className="ns-task-title" onClick={onOpen}>
 				{task.title}
-			</span>
+			</button>
 			{projectName && <span className="ns-badge">{projectName}</span>}
 			{dueBadge && <span className="ns-badge ns-due">{dueBadge}</span>}
 			{task.priority !== 'none' && (
