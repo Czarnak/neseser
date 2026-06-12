@@ -5,7 +5,7 @@ import {
 	parseApiDateMs,
 	priorityFromTickTick,
 	pushFingerprint,
-	remoteDueToLocal,
+	remoteDatesToLocal,
 	remoteFingerprint,
 	taskToTickTick,
 } from './mapping';
@@ -26,6 +26,7 @@ export interface SyncClient {
 export interface NewLocalTask {
 	projectName: string;
 	title: string;
+	start?: string;
 	due?: string;
 	priority?: Priority;
 	ticktickId: string;
@@ -333,23 +334,30 @@ export class SyncEngine {
 		summary.created++;
 	}
 
-	/** due/priority of a remote task as they should appear in local frontmatter. */
-	private remoteFieldsToLocal(remote: TickTickTask): { due: string | undefined; priority: Priority } {
-		return {
-			due: remote.dueDate
-				? remoteDueToLocal(remote.dueDate, remote.isAllDay ?? false, this.timeZone)
-				: undefined,
-			priority: priorityFromTickTick(remote.priority),
-		};
+	/** start/due/priority of a remote task as they should appear in local frontmatter. */
+	private remoteFieldsToLocal(remote: TickTickTask): {
+		start: string | undefined;
+		due: string | undefined;
+		priority: Priority;
+	} {
+		const { start, due } = remoteDatesToLocal(
+			remote.startDate,
+			remote.dueDate,
+			remote.isAllDay ?? false,
+			this.timeZone,
+		);
+		return { start, due, priority: priorityFromTickTick(remote.priority) };
 	}
 
 	/** Remote edit, local untouched (or remote won): apply remote fields to the note. */
 	private async pullFields(node: TaskTreeNode, record: TaskSyncRecord, remote: TickTickTask): Promise<void> {
 		const { task, children } = node;
-		const { due, priority } = this.remoteFieldsToLocal(remote);
+		const { start, due, priority } = this.remoteFieldsToLocal(remote);
 		const reopen = isTaskClosed(task); // remote is open whenever we land here
 
 		await this.store.updateFrontmatter(task.path, (fm) => {
+			if (start !== undefined) fm['start'] = start;
+			else delete fm['start'];
 			if (due !== undefined) fm['due'] = due;
 			else delete fm['due'];
 			fm['priority'] = priority;
@@ -361,7 +369,7 @@ export class SyncEngine {
 
 		// Remote title renames and checklist edits are absorbed into the
 		// baseline but not written to the vault (note filename = task title).
-		const pulled: Task = { ...task, due, priority, status: reopen ? 'todo' : task.status };
+		const pulled: Task = { ...task, start, due, priority, status: reopen ? 'todo' : task.status };
 		record.fingerprint = pushFingerprint(pulled, children);
 		record.remoteFingerprint = remoteFingerprint(remote);
 		if (reopen) record.completedPushed = false;
@@ -388,17 +396,18 @@ export class SyncEngine {
 
 	/** Task created remotely: materialize it as a local note. */
 	private async pullCreate(projectName: string, remote: TickTickTask, summary: SyncSummary): Promise<void> {
-		const { due, priority } = this.remoteFieldsToLocal(remote);
+		const { start, due, priority } = this.remoteFieldsToLocal(remote);
 		const { path } = await this.store.createTaskNote({
 			projectName,
 			title: remote.title,
+			start,
 			due,
 			priority,
 			ticktickId: remote.id,
 		});
 		// Fingerprint what the index will parse (title comes from the file name,
 		// which may be a sanitized variant of the remote title).
-		const local: Task = { path, title: titleFromPath(path), status: 'todo', priority, due };
+		const local: Task = { path, title: titleFromPath(path), status: 'todo', priority, start, due };
 		this.snapshot.tasks[path] = {
 			ticktickId: remote.id,
 			fingerprint: pushFingerprint(local, []),

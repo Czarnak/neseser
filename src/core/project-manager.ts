@@ -20,6 +20,7 @@ export interface CreateProjectInput {
 export interface CreateTaskInput {
 	projectName: string;
 	title: string;
+	start?: string;
 	due?: string;
 	priority?: Priority;
 	parent?: string;
@@ -102,6 +103,7 @@ export class ProjectManager {
 			priority: input.priority ?? 'none',
 			created: isoDate(this.now()),
 		};
+		if (input.start) fm['start'] = input.start;
 		if (input.due) fm['due'] = input.due;
 		if (input.parent) fm['parent'] = `[[${input.parent}]]`;
 		if (input.reminder) fm['reminder'] = input.reminder;
@@ -132,4 +134,11 @@ export class ProjectManager {
 		});
 	}
 
+	async updateTaskDates(path: string, dates: { start?: string; due: string }): Promise<void> {
+		await this.vault.updateFrontmatter(path, (fm) => {
+			if (dates.start !== undefined) fm['start'] = dates.start;
+			else delete fm['start'];
+			fm['due'] = dates.due;
+		});
+	}
 }

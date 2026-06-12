@@ -8,6 +8,7 @@ export interface NavigationCallbacks {
 	onOpenDashboard: () => void;
 	onOpenKanban: () => void;
 	onOpenCalendar: () => void;
+	onOpenGantt: () => void;
 	onOpenProject: (path: string) => void;
 	onCreateProject: () => void;
 	onSyncNow: () => void;
@@ -33,7 +34,9 @@ export function NavigationApp({ index, syncStatus, callbacks }: Props) {
 				<div className="ns-nav-buttons">
 					<button onClick={callbacks.onOpenDashboard}>Dashboard</button>
 					<button onClick={callbacks.onOpenKanban}>Kanban board</button>
-					<button onClick={callbacks.onOpenCalendar}>Calendar</button>				</div>
+					<button onClick={callbacks.onOpenCalendar}>Calendar</button>
+					<button onClick={callbacks.onOpenGantt}>Gantt</button>
+				</div>
 			</div>
 
 			<div className="ns-nav-section">

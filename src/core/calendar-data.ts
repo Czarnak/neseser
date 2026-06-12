@@ -15,18 +15,18 @@ export interface CalendarDay {
 
 const WEEK_LENGTH = 7;
 
-function dayKey(date: Date): string {
+export function dayKey(date: Date): string {
 	const month = String(date.getMonth() + 1).padStart(2, '0');
 	const day = String(date.getDate()).padStart(2, '0');
 	return `${date.getFullYear()}-${month}-${day}`;
 }
 
-function addDays(date: Date, days: number): Date {
+export function addDays(date: Date, days: number): Date {
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }
 
 /** 0 for Monday … 6 for Sunday. */
-function mondayIndex(date: Date): number {
+export function mondayIndex(date: Date): number {
 	return (date.getDay() + 6) % 7;
 }
 
