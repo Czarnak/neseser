@@ -270,5 +270,20 @@ describe('TaskIndex', () => {
 
 			expect(renderListener).toHaveBeenCalledTimes(2);
 		});
+
+		test('a throwing first listener does not prevent second listener from firing, and onFileChanged does not throw', () => {
+			const throwing = vi.fn().mockImplementation(() => { throw new Error('boom'); });
+			const safe = vi.fn();
+			index.onTaskCompleted(throwing);
+			index.onTaskCompleted(safe);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			expect(() => {
+				index.onFileChanged(PATH, taskFm({ status: 'done' }));
+			}).not.toThrow();
+
+			expect(throwing).toHaveBeenCalledTimes(1);
+			expect(safe).toHaveBeenCalledTimes(1);
+		});
 	});
 });

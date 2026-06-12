@@ -1,4 +1,4 @@
-import { Task } from './models';
+import { Recurrence, Task } from './models';
 import { rescheduleDue } from './calendar-data';
 import { dayDiff, shiftDayKey } from './gantt-data';
 import { dueDateKey } from './view-data';
@@ -29,7 +29,7 @@ export function nextInstanceTitle(title: string, newDueKey: string): string {
  * until the candidate is not in the past. Start keeps its distance to due.
  */
 export function nextOccurrence(
-	task: Pick<Task, 'due' | 'start' | 'recurrence'>,
+	task: Pick<Task, 'due' | 'start'> & { recurrence: Recurrence },
 	todayKey: string,
 ): NextOccurrence | null {
 	if (!task.due) return null;
@@ -54,8 +54,10 @@ export function nextOccurrence(
 
 const LEADING_FRONTMATTER = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
 
-/** Content after the closing frontmatter fence; '' if nothing follows; unchanged without leading fm. */
+/** Content after the closing frontmatter fence; '' if nothing follows; unchanged without leading fm.
+ * Returns '' if content starts with '---' but has no closing fence (malformed/unclosed frontmatter). */
 export function noteBody(content: string): string {
 	if (!content.startsWith('---')) return content;
+	if (!LEADING_FRONTMATTER.test(content)) return '';
 	return content.replace(LEADING_FRONTMATTER, '');
 }

@@ -162,4 +162,8 @@ describe('noteBody', () => {
 	test('returns content unchanged when there is no leading frontmatter', () => {
 		expect(noteBody('Just a note.\n')).toBe('Just a note.\n');
 	});
+
+	test('returns empty string when frontmatter starts with --- but has no closing fence', () => {
+		expect(noteBody('---\ntitle: x\nno closing fence')).toBe('');
+	});
 });

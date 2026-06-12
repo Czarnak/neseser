@@ -127,7 +127,7 @@ export class NewTaskModal extends SubmitModal {
 			dd.addOption('', '(none)');
 			for (const r of RECURRENCES) dd.addOption(r, r);
 			dd.setValue(this.recurrence);
-			dd.onChange((value) => (this.recurrence = value as Recurrence | ''));
+			dd.onChange((value) => (this.recurrence = (RECURRENCES as readonly string[]).includes(value) ? (value as Recurrence) : ''));
 		});
 
 		parentSetting = new Setting(this.contentEl).setName('Parent task').addDropdown((dd) => {

@@ -134,8 +134,12 @@ export class ProjectManager {
 	 */
 	async regenerateRecurringInstance(task: Task, projectName: string): Promise<RegenerationResult> {
 		if (!task.due) return { kind: 'skipped-no-due' };
+		if (!task.recurrence) return { kind: 'skipped-no-due' };
 
-		const next = nextOccurrence(task, dayKey(this.now()));
+		const next = nextOccurrence(
+			{ due: task.due, start: task.start, recurrence: task.recurrence },
+			dayKey(this.now()),
+		);
 		if (next === null) return { kind: 'skipped-no-due' };
 		const newDueKey = dueDateKey(next.due);
 		if (newDueKey === null) return { kind: 'skipped-no-due' };
@@ -162,12 +166,14 @@ export class ProjectManager {
 			recurrence: task.recurrence,
 			body,
 		});
+		// Intentionally NOT in a finally: a crash before this line self-heals via the exists-check on the next completion.
 		await removeRecurrence();
 		return { kind: 'created', path };
 	}
 
-	private taskPath(projectName: string, title: string): string {
-		return `${this.settings.projectsRoot}/${projectName}/Tasks/${sanitizeName(title)}.md`;
+	/** Resolves the vault path for a task; sanitizes rawTitle internally (idempotent for already-sanitized callers). */
+	private taskPath(projectName: string, rawTitle: string): string {
+		return `${this.settings.projectsRoot}/${projectName}/Tasks/${sanitizeName(rawTitle)}.md`;
 	}
 
 	async completeTask(path: string): Promise<void> {

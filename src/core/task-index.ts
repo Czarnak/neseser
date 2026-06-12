@@ -39,7 +39,13 @@ export class TaskIndex {
 		// build has no previous entry, so startup can never fire this.
 		const next = this.tasks.get(path);
 		if (previous && next && previous.status !== 'done' && next.status === 'done') {
-			for (const listener of this.completionListeners) listener(next);
+			for (const listener of this.completionListeners) {
+				try {
+					listener(next);
+				} catch {
+					// Intentionally swallowed: sibling listeners must still run.
+				}
+			}
 		}
 	}
 
@@ -110,7 +116,10 @@ export class TaskIndex {
 		return () => this.listeners.delete(listener);
 	}
 
-	/** Fires when a known task transitions into done, from any completion path. */
+	/**
+	 * Fires when a known task transitions into done, from any completion path.
+	 * Contract: listeners must handle their own errors; exceptions thrown by a listener are discarded.
+	 */
 	onTaskCompleted(listener: CompletionListener): () => void {
 		this.completionListeners.add(listener);
 		return () => this.completionListeners.delete(listener);
