@@ -194,3 +194,32 @@ export function resizeEnd(start: string | undefined, due: string, dayDelta: numb
 	if (start !== undefined && clampedKey === startKey) return { due: due2 };
 	return { start, due: due2 };
 }
+
+/**
+ * Translate a move-bar drag event into the new span dates for the task.
+ * Returns null when the task has no due date (no-op in the view).
+ */
+export function computeMoveResult(
+	taskStart: string | undefined,
+	taskDue: string | undefined,
+	dayDelta: number,
+): SpanDates | null {
+	if (!taskDue) return null;
+	return shiftSpan(taskStart, taskDue, dayDelta);
+}
+
+/**
+ * Translate a resize-edge drag event into the new span dates for the task.
+ * Returns null when the task has no due date (no-op in the view).
+ */
+export function computeResizeResult(
+	taskStart: string | undefined,
+	taskDue: string | undefined,
+	dayDelta: number,
+	edge: 'start' | 'end',
+): SpanDates | null {
+	if (!taskDue) return null;
+	return edge === 'start'
+		? resizeStart(taskStart, taskDue, dayDelta)
+		: resizeEnd(taskStart, taskDue, dayDelta);
+}

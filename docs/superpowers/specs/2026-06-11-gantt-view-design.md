@@ -22,12 +22,14 @@ Neseser v1 is feature-complete (dashboard, kanban, calendar, navigation hub, two
 ## Phases (TDD throughout — test first, per repo convention)
 
 ### Phase 1 — data model: `start` field
+
 - `src/core/models.ts`: add `start?: string` to `Task`; parse in `parseTask` with the existing `parseDate` helper.
 - `src/core/project-manager.ts`: add `updateTaskDates(path, { start?, due })` next to `updateTaskDue` — sets both fields, deletes `start` when undefined. Add optional `start` to `CreateTaskInput` (written into new-note frontmatter).
 - Tests: `tests/core/models.test.ts`, `tests/core/project-manager.test.ts`.
 - Out of scope (YAGNI): `start` input in `NewTaskModal` — spans are created by resizing in the Gantt.
 
 ### Phase 2 — sync: real spans both ways
+
 - **Live probe first** (decision 4) to pin down all-day span semantics.
 - `src/sync/mapping.ts`:
   - `taskToTickTick`: when `task.start` is set, parses, and ≤ due → `startDate` from `start`, `dueDate` from `due` (else current `startDate = dueDate` behavior). Update the `TickTickTaskDraft.startDate` doc comment.
@@ -41,6 +43,7 @@ Neseser v1 is feature-complete (dashboard, kanban, calendar, navigation hub, two
 - Tests: `tests/sync/mapping.test.ts`, `tests/sync/sync-engine.test.ts` (span push, start-only remote edit pulls, echo-free round trip, start=due → no local start).
 
 ### Phase 3 — gantt core data module
+
 - New `src/core/gantt-data.ts` (pure, mirrors `calendar-data.ts` style):
   - Timeline window: anchor date + zoom (`'week' | 'month' | 'quarter'` → px-per-day + visible day count); columns as day keys (reuse `dueDateKey` from `view-data.ts`; export/reuse the small day-math helpers from `calendar-data.ts` instead of duplicating).
   - `ganttRows(projects, tasks)`: swimlanes sorted with `compareProjects`, tasks with a due sorted by start-then-due; each row → `{ task, startKey, endKey }` (startKey = start ?? due; clamp start > due).
@@ -51,6 +54,7 @@ Neseser v1 is feature-complete (dashboard, kanban, calendar, navigation hub, two
 - Tests: new `tests/core/gantt-data.test.ts` (this module is most of the feature's logic — keep it exhaustive like `calendar-data.test.ts`).
 
 ### Phase 4 — UI + wiring
+
 - New `src/ui/GanttApp.tsx`: controls row (zoom select, prev/today/next, "Show done" checkbox — same conventions as `CalendarApp`); left label column with collapsible project headers; scrollable CSS-grid timeline; `useIndexRefresh`, `useDragClickGuard`, `PointerSensor` distance 4 px. Three draggable ids per bar (`path::move`, `path::start`, `path::end`); `onDragEnd` → day delta → callback.
 - New `src/views/gantt-view.tsx`: `VIEW_TYPE_GANTT = 'neseser-gantt'`, icon `gantt-chart` (lucide), callbacks `onMoveTask`/`onResizeTask` → `manager.updateTaskDates` (Notice on error, like calendar), `onOpenTask`.
 - `src/main.ts`: `registerView`, `onOpenGantt` nav callback, "Open Gantt" command (match existing view commands).
@@ -58,17 +62,20 @@ Neseser v1 is feature-complete (dashboard, kanban, calendar, navigation hub, two
 - `styles.css`: `ns-gantt-*` classes on Obsidian CSS variables (theme-safe), including drag/resize affordances, today line, deadline marker, collapsed swimlane state.
 
 ### Phase 5 — verification & release hygiene
+
 - `npm test` + `npm run coverage` (gate: 80 % on `core/` + `sync/`; UI excluded as before).
 - `npm run deploy:test` → manual check in test vault: render, zoom, nav, collapse, move, resize, click-open, show-done.
 - Live TickTick two-way check (user): span created in Obsidian shows as multi-day in the TickTick app; span edited in the app pulls back into `start`; due-only tasks unchanged; no echo loops on second sync.
 - Bump `manifest.json`/`versions.json`/`package.json` minor version (per repo release convention).
 
 ## Verification summary
+
 1. Unit: all phases TDD'd; new gantt-data suite carries the view logic.
 2. Integration: sync-engine tests cover span round-trips and the no-echo invariant.
 3. Manual: test vault (UI) + live TickTick (sync), both user-verified — same gates as phases 4/5 of v1.
 
 ## Known risks
+
 - TickTick all-day `dueDate` inclusivity unknown → live probe in Phase 2 before locking mapping.
 - Fingerprint digest change → transient one-time re-baseline per task after upgrade (documented, accepted).
 - Sticky-startDate server behavior (from the date-push bug) now becomes a feature path; the existing always-send-startDate discipline is preserved, only its value changes.

@@ -12,6 +12,7 @@ import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnect
 import { NewProjectModal, NewTaskModal } from './ui/modals';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
+import { GanttView, VIEW_TYPE_GANTT } from './views/gantt-view';
 import { KanbanView, VIEW_TYPE_KANBAN } from './views/kanban-view';
 import { NavigationView, VIEW_TYPE_NAVIGATION } from './views/navigation-view';
 
@@ -122,6 +123,7 @@ export default class NeseserPlugin extends Plugin {
 		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
 		this.registerView(VIEW_TYPE_KANBAN, (leaf) => new KanbanView(leaf, this.index, this.manager));
 		this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.index, this.manager));
+		this.registerView(VIEW_TYPE_GANTT, (leaf) => new GanttView(leaf, this.index, this.manager));
 		this.registerView(
 			VIEW_TYPE_NAVIGATION,
 			(leaf) =>
@@ -129,6 +131,7 @@ export default class NeseserPlugin extends Plugin {
 					onOpenDashboard: () => void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
 					onOpenKanban: () => void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
 					onOpenCalendar: () => void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
+					onOpenGantt: () => void this.activateView(VIEW_TYPE_GANTT, 'tab'),
 					onCreateProject: () => this.openNewProjectModal(),
 					onSyncNow: () => void this.syncWithTickTick(true),
 					onConnect: () => this.connectTickTickInteractive(),
@@ -318,6 +321,12 @@ export default class NeseserPlugin extends Plugin {
 			id: 'open-calendar',
 			name: 'Open calendar',
 			callback: () => void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
+		});
+
+		this.addCommand({
+			id: 'open-gantt',
+			name: 'Open Gantt',
+			callback: () => void this.activateView(VIEW_TYPE_GANTT, 'tab'),
 		});
 
 		this.addCommand({
