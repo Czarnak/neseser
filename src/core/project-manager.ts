@@ -1,10 +1,14 @@
-import { Frontmatter, Priority, TaskStatus } from './models';
+import { Frontmatter, Priority, Recurrence, Task, TaskStatus } from './models';
+import { dayKey } from './calendar-data';
+import { nextInstanceTitle, nextOccurrence, noteBody } from './recurrence';
+import { dueDateKey } from './view-data';
 
 /** Thin boundary over Obsidian vault IO so core stays testable; main.ts provides the real one. */
 export interface VaultAdapter {
 	exists(path: string): Promise<boolean>;
 	createFolder(path: string): Promise<void>;
 	createNote(path: string, content: string): Promise<void>;
+	readNote(path: string): Promise<string>;
 	updateFrontmatter(path: string, updater: (fm: Frontmatter) => void): Promise<void>;
 }
 
@@ -24,10 +28,18 @@ export interface CreateTaskInput {
 	due?: string;
 	priority?: Priority;
 	parent?: string;
+	recurrence?: Recurrence;
 	reminder?: string;
 	/** Set when the note materializes a task pulled from TickTick. */
 	ticktickId?: string;
+	/** Note content below the frontmatter block. */
+	body?: string;
 }
+
+export type RegenerationResult =
+	| { kind: 'created'; path: string }
+	| { kind: 'skipped-exists' }
+	| { kind: 'skipped-no-due' };
 
 const ILLEGAL_NAME_CHARS = /[\\/:*?"<>|#^[\]]/g;
 
@@ -92,7 +104,7 @@ export class ProjectManager {
 		const tasksDir = `${projectDir}/Tasks`;
 		if (!(await this.vault.exists(tasksDir))) await this.vault.createFolder(tasksDir);
 
-		const path = `${tasksDir}/${title}.md`;
+		const path = this.taskPath(input.projectName, title);
 		if (await this.vault.exists(path)) {
 			throw new Error(`Task "${title}" already exists in ${input.projectName}`);
 		}
@@ -106,11 +118,56 @@ export class ProjectManager {
 		if (input.start) fm['start'] = input.start;
 		if (input.due) fm['due'] = input.due;
 		if (input.parent) fm['parent'] = `[[${input.parent}]]`;
+		if (input.recurrence) fm['recurrence'] = input.recurrence;
 		if (input.reminder) fm['reminder'] = input.reminder;
 		if (input.ticktickId) fm['ticktick-id'] = input.ticktickId;
 
-		await this.vault.createNote(path, frontmatterBlock(fm));
+		await this.vault.createNote(path, frontmatterBlock(fm) + (input.body ?? ''));
 		return { path };
+	}
+
+	/**
+	 * Spawns the next instance of a completed recurring task as a fresh note,
+	 * then removes `recurrence` from the completed note so the chain lives in
+	 * exactly one place. Create-before-delete: a crash in between leaves a
+	 * duplicate key, which the collision branch heals on the next completion.
+	 */
+	async regenerateRecurringInstance(task: Task, projectName: string): Promise<RegenerationResult> {
+		if (!task.due) return { kind: 'skipped-no-due' };
+
+		const next = nextOccurrence(task, dayKey(this.now()));
+		if (next === null) return { kind: 'skipped-no-due' };
+		const newDueKey = dueDateKey(next.due);
+		if (newDueKey === null) return { kind: 'skipped-no-due' };
+
+		const removeRecurrence = (): Promise<void> =>
+			this.vault.updateFrontmatter(task.path, (fm) => {
+				delete fm['recurrence'];
+			});
+
+		const title = nextInstanceTitle(task.title, newDueKey);
+		if (await this.vault.exists(this.taskPath(projectName, title))) {
+			await removeRecurrence();
+			return { kind: 'skipped-exists' };
+		}
+
+		const body = noteBody(await this.vault.readNote(task.path));
+		const { path } = await this.createTask({
+			projectName,
+			title,
+			due: next.due,
+			start: next.start,
+			priority: task.priority,
+			parent: task.parent,
+			recurrence: task.recurrence,
+			body,
+		});
+		await removeRecurrence();
+		return { kind: 'created', path };
+	}
+
+	private taskPath(projectName: string, title: string): string {
+		return `${this.settings.projectsRoot}/${projectName}/Tasks/${sanitizeName(title)}.md`;
 	}
 
 	async completeTask(path: string): Promise<void> {

@@ -32,6 +32,12 @@ class ObsidianVaultAdapter implements VaultAdapter {
 		await this.app.vault.create(path, content);
 	}
 
+	async readNote(path: string): Promise<string> {
+		const file = this.app.vault.getAbstractFileByPath(path);
+		if (!(file instanceof TFile)) throw new Error(`Not a file: ${path}`);
+		return this.app.vault.read(file);
+	}
+
 	async updateFrontmatter(path: string, updater: (fm: Frontmatter) => void): Promise<void> {
 		const file = this.app.vault.getAbstractFileByPath(path);
 		if (!(file instanceof TFile)) throw new Error(`Not a file: ${path}`);
