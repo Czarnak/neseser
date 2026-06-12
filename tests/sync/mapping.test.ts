@@ -248,6 +248,12 @@ describe('pushFingerprint', () => {
 			pushFingerprint(makeTask({ created: '2026-02-02' }), []),
 		);
 	});
+
+	test('ignores recurrence (local-only field never triggers a push)', () => {
+		expect(pushFingerprint(makeTask({ recurrence: 'daily' }), [])).toBe(
+			pushFingerprint(makeTask(), []),
+		);
+	});
 });
 
 describe('priorityFromTickTick', () => {

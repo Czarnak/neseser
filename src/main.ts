@@ -1,5 +1,5 @@
 import { App, Notice, Plugin, TFile, WorkspaceLeaf, requestUrl } from 'obsidian';
-import { Frontmatter } from './core/models';
+import { Frontmatter, Task, titleFromPath } from './core/models';
 import { ProjectManager, VaultAdapter } from './core/project-manager';
 import { TaskIndex } from './core/task-index';
 import { runOAuthFlow } from './sync/oauth-flow';
@@ -126,6 +126,7 @@ export default class NeseserPlugin extends Plugin {
 			projectsRoot: this.settings.projectsRoot,
 		});
 		this.engineStore = new ObsidianEngineStore(this.app, this.vaultAdapter, this.manager);
+		this.index.onTaskCompleted((task) => void this.handleTaskCompleted(task));
 
 		this.registerView(VIEW_TYPE_TODAY, (leaf) => new TodayView(leaf, this.index, this.manager));
 		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
@@ -372,6 +373,28 @@ export default class NeseserPlugin extends Plugin {
 			name: 'Sync with TickTick now',
 			callback: () => void this.syncWithTickTick(true),
 		});
+	}
+
+	/** Spawns the next instance of a recurring task whenever one transitions to done. */
+	private async handleTaskCompleted(task: Task): Promise<void> {
+		if (!task.recurrence) return;
+		const projectName = this.index.projectNameForPath(task.path);
+		if (projectName === null) return;
+
+		try {
+			const result = await this.manager.regenerateRecurringInstance(task, projectName);
+			if (result.kind === 'created') {
+				new Notice(`Neseser: next occurrence created — ${titleFromPath(result.path)}`);
+			} else if (result.kind === 'skipped-no-due') {
+				new Notice(`Neseser: "${task.title}" recurs but has no due date — next instance not created`);
+			}
+		} catch (error) {
+			new Notice(
+				`Neseser: recurring task regeneration failed — ${
+					error instanceof Error ? error.message : String(error)
+				}`,
+			);
+		}
 	}
 
 	private openNewProjectModal(): void {
