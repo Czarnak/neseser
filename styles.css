@@ -539,3 +539,50 @@
 .ns-gantt-bar-clipped-end .ns-gantt-handle-end {
 	display: none;
 }
+
+/* Today */
+
+.ns-today {
+	padding: 12px 16px;
+}
+
+.ns-today-group-heading {
+	margin: 16px 0 6px;
+	font-size: var(--font-ui-small);
+	font-weight: 600;
+	text-transform: uppercase;
+	color: var(--text-muted);
+}
+
+.ns-today-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
+	padding: 4px 2px;
+	border-radius: 4px;
+}
+
+.ns-today-row:hover {
+	background: var(--background-modifier-hover);
+}
+
+.ns-today-checkbox {
+	flex-shrink: 0;
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	accent-color: var(--interactive-accent);
+}
+
+/* Title is a button for keyboard access; render it as plain text */
+.ns-today-row .ns-task-title {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	box-shadow: none;
+}
