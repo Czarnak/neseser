@@ -1,0 +1,14 @@
+node_modules/
+main.js
+*.js.map
+coverage/
+test-vault/
+.DS_Store
+
+.claude/
+.codex/
+.gemini/
+.agent/
+.vscode/
+.tmp_pytest/
+*.md
