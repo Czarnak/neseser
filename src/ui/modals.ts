@@ -1,5 +1,5 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
-import { PRIORITIES, Priority } from '../core/models';
+import { PRIORITIES, Priority, RECURRENCES, Recurrence } from '../core/models';
 import type { CreateProjectInput, CreateTaskInput } from '../core/project-manager';
 import type { TaskIndex } from '../core/task-index';
 
@@ -68,6 +68,7 @@ export class NewTaskModal extends SubmitModal {
 	private taskTitle = '';
 	private due = '';
 	private priority: Priority = 'none';
+	private recurrence: Recurrence | '' = '';
 	private parent = '';
 
 	constructor(
@@ -122,6 +123,13 @@ export class NewTaskModal extends SubmitModal {
 			dd.onChange((value) => (this.priority = value as Priority));
 		});
 
+		new Setting(this.contentEl).setName('Recurrence').addDropdown((dd) => {
+			dd.addOption('', '(none)');
+			for (const r of RECURRENCES) dd.addOption(r, r);
+			dd.setValue(this.recurrence);
+			dd.onChange((value) => (this.recurrence = (RECURRENCES as readonly string[]).includes(value) ? (value as Recurrence) : ''));
+		});
+
 		parentSetting = new Setting(this.contentEl).setName('Parent task').addDropdown((dd) => {
 			refreshParentOptions(dd.selectEl);
 			dd.onChange((value) => (this.parent = value));
@@ -132,11 +140,13 @@ export class NewTaskModal extends SubmitModal {
 
 	protected async submit(): Promise<void> {
 		if (!this.projectName) throw new Error('Create a project first');
+		if (this.recurrence && !this.due.trim()) throw new Error('Recurring tasks need a due date');
 		await this.onSubmit({
 			projectName: this.projectName,
 			title: this.taskTitle,
 			due: this.due.trim() || undefined,
 			priority: this.priority,
+			recurrence: this.recurrence || undefined,
 			parent: this.parent || undefined,
 		});
 	}

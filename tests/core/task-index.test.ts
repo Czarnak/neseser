@@ -149,4 +149,141 @@ describe('TaskIndex', () => {
 
 		expect(listener).not.toHaveBeenCalled();
 	});
+
+	describe('onTaskCompleted', () => {
+		const PATH = 'Projects/Alpha/Tasks/T.md';
+
+		test('fires exactly once with the new task on todo to done', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done', recurrence: 'daily' }));
+
+			expect(listener).toHaveBeenCalledTimes(1);
+			expect(listener).toHaveBeenCalledWith(
+				expect.objectContaining({ path: PATH, status: 'done', recurrence: 'daily' }),
+			);
+		});
+
+		test('fires on in-progress to done', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'in-progress' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(listener).toHaveBeenCalledTimes(1);
+		});
+
+		test('fires on cancelled to done', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'cancelled' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(listener).toHaveBeenCalledTimes(1);
+		});
+
+		test('does not fire on done to done (duplicate metadata event)', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(listener).toHaveBeenCalledTimes(1);
+		});
+
+		test('does not fire when the first sighting is already done (startup build)', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		test('does not fire on done to todo, then fires again on the next completion', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			expect(listener).toHaveBeenCalledTimes(1);
+
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+			expect(listener).toHaveBeenCalledTimes(2);
+		});
+
+		test('unsubscribe stops completion events', () => {
+			const listener = vi.fn();
+			const unsubscribe = index.onTaskCompleted(listener);
+			unsubscribe();
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		test('does not fire when the previous state was invalid frontmatter', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'doing' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		test('never fires for project notes', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged('Projects/Alpha/Alpha.md', { type: 'project', status: 'active' });
+			index.onFileChanged('Projects/Alpha/Alpha.md', { type: 'project', status: 'done' });
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		test('never fires from onFileDeleted or onFileRenamed', () => {
+			const listener = vi.fn();
+			index.onTaskCompleted(listener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			index.onFileRenamed(PATH, 'Projects/Alpha/Tasks/R.md', taskFm({ status: 'done' }));
+			index.onFileDeleted('Projects/Alpha/Tasks/R.md');
+
+			expect(listener).not.toHaveBeenCalled();
+		});
+
+		test('completion transitions still notify re-render subscribers', () => {
+			const renderListener = vi.fn();
+			index.subscribe(renderListener);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			index.onFileChanged(PATH, taskFm({ status: 'done' }));
+
+			expect(renderListener).toHaveBeenCalledTimes(2);
+		});
+
+		test('a throwing first listener does not prevent second listener from firing, and onFileChanged does not throw', () => {
+			const throwing = vi.fn().mockImplementation(() => { throw new Error('boom'); });
+			const safe = vi.fn();
+			index.onTaskCompleted(throwing);
+			index.onTaskCompleted(safe);
+
+			index.onFileChanged(PATH, taskFm({ status: 'todo' }));
+			expect(() => {
+				index.onFileChanged(PATH, taskFm({ status: 'done' }));
+			}).not.toThrow();
+
+			expect(throwing).toHaveBeenCalledTimes(1);
+			expect(safe).toHaveBeenCalledTimes(1);
+		});
+	});
 });

@@ -1,10 +1,12 @@
 export type TaskStatus = 'todo' | 'in-progress' | 'done' | 'cancelled';
 export type ProjectStatus = 'active' | 'on-hold' | 'done' | 'archived';
 export type Priority = 'none' | 'low' | 'medium' | 'high';
+export type Recurrence = 'daily' | 'weekly';
 
 export const TASK_STATUSES: readonly TaskStatus[] = ['todo', 'in-progress', 'done', 'cancelled'];
 export const PROJECT_STATUSES: readonly ProjectStatus[] = ['active', 'on-hold', 'done', 'archived'];
 export const PRIORITIES: readonly Priority[] = ['none', 'low', 'medium', 'high'];
+export const RECURRENCES: readonly Recurrence[] = ['daily', 'weekly'];
 
 export interface Task {
 	path: string;
@@ -15,6 +17,8 @@ export interface Task {
 	start?: string;
 	due?: string;
 	parent?: string;
+	/** Local-only repeat rule; never synced to TickTick. */
+	recurrence?: Recurrence;
 	reminder?: string;
 	created?: string;
 	completedAt?: string;
@@ -78,6 +82,20 @@ function parseEnum<T extends string>(
 	return { error: `invalid ${key}: ${String(raw)} (allowed: ${allowed.join(', ')})` };
 }
 
+/** Like parseEnum, but the key is genuinely optional: absence means undefined, not a fallback. */
+function parseOptionalEnum<T extends string>(
+	fm: Frontmatter,
+	key: string,
+	allowed: readonly T[],
+): { value: T | undefined } | { error: string } {
+	const raw = fm[key];
+	if (raw === null || raw === undefined) return { value: undefined };
+	if (typeof raw === 'string' && (allowed as readonly string[]).includes(raw)) {
+		return { value: raw as T };
+	}
+	return { error: `invalid ${key}: ${String(raw)} (allowed: ${allowed.join(', ')})` };
+}
+
 function parseDate(fm: Frontmatter, key: string): { value: string | undefined } | { error: string } {
 	const raw = optionalString(fm, key);
 	if (raw === undefined) return { value: undefined };
@@ -95,6 +113,9 @@ export function parseTask(path: string, fm: Frontmatter | undefined): TaskParseR
 
 	const priority = parseEnum(fm, 'priority', PRIORITIES, 'none');
 	if ('error' in priority) return { kind: 'invalid', path, reason: priority.error };
+
+	const recurrence = parseOptionalEnum(fm, 'recurrence', RECURRENCES);
+	if ('error' in recurrence) return { kind: 'invalid', path, reason: recurrence.error };
 
 	const start = parseDate(fm, 'start');
 	if ('error' in start) return { kind: 'invalid', path, reason: start.error };
@@ -116,6 +137,7 @@ export function parseTask(path: string, fm: Frontmatter | undefined): TaskParseR
 			start: start.value,
 			due: due.value,
 			parent,
+			recurrence: recurrence.value,
 			reminder: optionalString(fm, 'reminder'),
 			created: optionalString(fm, 'created'),
 			completedAt: optionalString(fm, 'completed-at'),
@@ -155,6 +177,7 @@ export function taskToFrontmatter(task: Task): Frontmatter {
 	if (task.start !== undefined) fm['start'] = task.start;
 	if (task.due !== undefined) fm['due'] = task.due;
 	if (task.parent !== undefined) fm['parent'] = `[[${task.parent}]]`;
+	if (task.recurrence !== undefined) fm['recurrence'] = task.recurrence;
 	if (task.reminder !== undefined) fm['reminder'] = task.reminder;
 	if (task.created !== undefined) fm['created'] = task.created;
 	if (task.completedAt !== undefined) fm['completed-at'] = task.completedAt;

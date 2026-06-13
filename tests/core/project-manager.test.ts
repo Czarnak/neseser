@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
-import type { Frontmatter } from '../../src/core/models';
+import type { Frontmatter, Task } from '../../src/core/models';
 import { ProjectManager, VaultAdapter } from '../../src/core/project-manager';
 
 class FakeVault implements VaultAdapter {
@@ -17,6 +17,12 @@ class FakeVault implements VaultAdapter {
 
 	async createNote(path: string, content: string): Promise<void> {
 		this.notes.set(path, content);
+	}
+
+	async readNote(path: string): Promise<string> {
+		const content = this.notes.get(path);
+		if (content === undefined) throw new Error(`Missing note: ${path}`);
+		return content;
 	}
 
 	async updateFrontmatter(path: string, updater: (fm: Frontmatter) => void): Promise<void> {
@@ -135,6 +141,27 @@ describe('ProjectManager', () => {
 			expect(vault.notes.get(path)).toContain('ticktick-id: tt-9');
 		});
 
+		test('writes recurrence when given', async () => {
+			const { path } = await manager.createTask({
+				projectName: 'Alpha',
+				title: 'Habit',
+				recurrence: 'weekly',
+			});
+
+			expect(vault.notes.get(path)).toContain('recurrence: weekly');
+		});
+
+		test('appends the body after the frontmatter block', async () => {
+			const { path } = await manager.createTask({
+				projectName: 'Alpha',
+				title: 'With body',
+				body: 'Step one.\n',
+			});
+
+			const content = vault.notes.get(path) ?? '';
+			expect(content.endsWith('---\nStep one.\n')).toBe(true);
+		});
+
 		test('rejects duplicate task title in same project', async () => {
 			await manager.createTask({ projectName: 'Alpha', title: 'T' });
 
@@ -199,6 +226,148 @@ describe('ProjectManager', () => {
 			const fm = vault.frontmatters.get('Projects/Alpha/Tasks/T.md') ?? {};
 			expect(fm['due']).toBe('2026-06-16');
 			expect(fm['start']).toBeUndefined();
+		});
+	});
+
+	describe('regenerateRecurringInstance', () => {
+		const OLD_PATH = 'Projects/Alpha/Tasks/Daily standup.md';
+
+		function recurringTask(overrides: Partial<Task> = {}): Task {
+			return {
+				path: OLD_PATH,
+				title: 'Daily standup',
+				status: 'done',
+				priority: 'none',
+				due: '2026-06-09',
+				recurrence: 'daily',
+				...overrides,
+			};
+		}
+
+		beforeEach(async () => {
+			await manager.createProject({ name: 'Alpha' });
+			vault.notes.set(
+				OLD_PATH,
+				'---\ntype: task\nstatus: done\ndue: 2026-06-09\nrecurrence: daily\n---\nChecklist body.\n',
+			);
+			vault.frontmatters.set(OLD_PATH, { type: 'task', recurrence: 'daily' });
+		});
+
+		test('creates the next instance with shifted dates and copied fields', async () => {
+			const result = await manager.regenerateRecurringInstance(
+				recurringTask({
+					start: '2026-06-08',
+					priority: 'high',
+					parent: 'Build parser',
+				}),
+				'Alpha',
+			);
+
+			expect(result).toEqual({
+				kind: 'created',
+				path: 'Projects/Alpha/Tasks/Daily standup 2026-06-10.md',
+			});
+			const content = vault.notes.get('Projects/Alpha/Tasks/Daily standup 2026-06-10.md') ?? '';
+			expect(content).toContain('status: todo');
+			expect(content).toContain('created: 2026-06-10');
+			expect(content).toContain('start: 2026-06-09');
+			expect(content).toContain('due: 2026-06-10');
+			expect(content).toContain('priority: high');
+			expect(content).toContain('parent: "[[Build parser]]"');
+			expect(content).toContain('recurrence: daily');
+			expect(content).toContain('Checklist body.');
+		});
+
+		test('does not copy reminder, ticktick fields, or completed-at', async () => {
+			await manager.regenerateRecurringInstance(
+				recurringTask({
+					reminder: '2026-06-09T09:00',
+					ticktickId: 'tt-1',
+					ticktickEtag: 'e-1',
+					completedAt: '2026-06-09T18:00:00.000Z',
+				}),
+				'Alpha',
+			);
+
+			const content = vault.notes.get('Projects/Alpha/Tasks/Daily standup 2026-06-10.md') ?? '';
+			expect(content).not.toContain('reminder');
+			expect(content).not.toContain('ticktick-id');
+			expect(content).not.toContain('ticktick-etag');
+			expect(content).not.toContain('completed-at');
+		});
+
+		test('deletes recurrence from the completed note after creating the new one', async () => {
+			await manager.regenerateRecurringInstance(recurringTask(), 'Alpha');
+
+			expect('recurrence' in (vault.frontmatters.get(OLD_PATH) ?? {})).toBe(false);
+		});
+
+		test('returns skipped-exists on collision and still deletes the old recurrence key', async () => {
+			vault.notes.set('Projects/Alpha/Tasks/Daily standup 2026-06-10.md', 'existing');
+
+			const result = await manager.regenerateRecurringInstance(recurringTask(), 'Alpha');
+
+			expect(result).toEqual({ kind: 'skipped-exists' });
+			expect(vault.notes.get('Projects/Alpha/Tasks/Daily standup 2026-06-10.md')).toBe('existing');
+			expect('recurrence' in (vault.frontmatters.get(OLD_PATH) ?? {})).toBe(false);
+		});
+
+		test('returns skipped-no-due and keeps recurrence when due is missing', async () => {
+			const result = await manager.regenerateRecurringInstance(
+				recurringTask({ due: undefined }),
+				'Alpha',
+			);
+
+			expect(result).toEqual({ kind: 'skipped-no-due' });
+			expect(vault.frontmatters.get(OLD_PATH)?.['recurrence']).toBe('daily');
+		});
+
+		test('returns skipped-no-due and keeps recurrence when due is unparseable', async () => {
+			const result = await manager.regenerateRecurringInstance(
+				recurringTask({ due: 'whenever' }),
+				'Alpha',
+			);
+
+			expect(result).toEqual({ kind: 'skipped-no-due' });
+			expect(vault.frontmatters.get(OLD_PATH)?.['recurrence']).toBe('daily');
+		});
+
+		test('replaces the old date suffix instead of stacking a second one', async () => {
+			const path = 'Projects/Alpha/Tasks/Water plants 2026-06-12.md';
+			vault.notes.set(path, '---\ntype: task\ndue: 2026-06-12\nrecurrence: daily\n---\n');
+
+			const result = await manager.regenerateRecurringInstance(
+				recurringTask({ path, title: 'Water plants 2026-06-12', due: '2026-06-12' }),
+				'Alpha',
+			);
+
+			expect(result).toEqual({
+				kind: 'created',
+				path: 'Projects/Alpha/Tasks/Water plants 2026-06-13.md',
+			});
+		});
+
+		test('copies an empty body for a frontmatter-only note', async () => {
+			vault.notes.set(OLD_PATH, '---\ntype: task\ndue: 2026-06-09\nrecurrence: daily\n---\n');
+
+			await manager.regenerateRecurringInstance(recurringTask(), 'Alpha');
+
+			const content = vault.notes.get('Projects/Alpha/Tasks/Daily standup 2026-06-10.md') ?? '';
+			expect(content.endsWith('---\n')).toBe(true);
+		});
+
+		test('rolls a long-overdue daily task to today', async () => {
+			const result = await manager.regenerateRecurringInstance(
+				recurringTask({ due: '2026-05-31' }),
+				'Alpha',
+			);
+
+			expect(result).toEqual({
+				kind: 'created',
+				path: 'Projects/Alpha/Tasks/Daily standup 2026-06-10.md',
+			});
+			const content = vault.notes.get('Projects/Alpha/Tasks/Daily standup 2026-06-10.md') ?? '';
+			expect(content).toContain('due: 2026-06-10');
 		});
 	});
 });
