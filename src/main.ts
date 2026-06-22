@@ -143,6 +143,7 @@ export default class NeseserPlugin extends Plugin {
 					onOpenCalendar: () => void this.activateView(VIEW_TYPE_CALENDAR, 'tab'),
 					onOpenGantt: () => void this.activateView(VIEW_TYPE_GANTT, 'tab'),
 					onCreateProject: () => this.openNewProjectModal(),
+					onCreateTask: () => this.openNewTaskModal(),
 					onSyncNow: () => void this.syncWithTickTick(true),
 					onConnect: () => this.connectTickTickInteractive(),
 				}),
@@ -354,12 +355,7 @@ export default class NeseserPlugin extends Plugin {
 		this.addCommand({
 			id: 'create-task',
 			name: 'Create task',
-			callback: () => {
-				new NewTaskModal(this.app, this.index, async (input) => {
-					await this.manager.createTask(input);
-					new Notice(`Task created: ${input.title}`);
-				}).open();
-			},
+			callback: () => this.openNewTaskModal(),
 		});
 
 		this.addCommand({
@@ -402,6 +398,13 @@ export default class NeseserPlugin extends Plugin {
 			const { indexPath } = await this.manager.createProject(input);
 			new Notice(`Project created: ${input.name}`);
 			await this.app.workspace.openLinkText(indexPath, '', false);
+		}).open();
+	}
+
+	private openNewTaskModal(): void {
+		new NewTaskModal(this.app, this.index, async (input) => {
+			await this.manager.createTask(input);
+			new Notice(`Task created: ${input.title}`);
 		}).open();
 	}
 

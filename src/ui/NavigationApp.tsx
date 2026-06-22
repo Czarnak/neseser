@@ -12,6 +12,7 @@ export interface NavigationCallbacks {
 	onOpenGantt: () => void;
 	onOpenProject: (path: string) => void;
 	onCreateProject: () => void;
+	onCreateTask: () => void;
 	onSyncNow: () => void;
 	onConnect: () => void;
 }
@@ -54,6 +55,7 @@ export function NavigationApp({ index, syncStatus, callbacks }: Props) {
 				))}
 				<div className="ns-nav-buttons">
 					<button onClick={callbacks.onCreateProject}>Add project</button>
+					<button onClick={callbacks.onCreateTask}>Add task</button>
 				</div>
 			</div>
 

@@ -10,3 +10,4 @@ graphify-out/cost.json
 graphify-out/.graphify_chunk_*
 graphify-out/.graphify_python
 graphify-out/.graphify_root
+graphify-out/graph.html
