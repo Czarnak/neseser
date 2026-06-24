@@ -415,6 +415,31 @@
 	background: var(--background-secondary);
 }
 
+.ns-gantt-month-header {
+	padding: 4px;
+	text-align: center;
+	font-size: var(--font-ui-small);
+	font-weight: 600;
+	color: var(--text-normal);
+	border-right: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ns-gantt-week-header {
+	padding: 4px;
+	text-align: center;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	border-right: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .ns-gantt-today-marker {
 	position: absolute;
 	top: 0;

@@ -16,6 +16,15 @@ export interface GanttWindow {
 	dayWidthPx: number;
 }
 
+export interface HeaderSegment {
+	/** Stable React key: the first day key of the run. */
+	key: string;
+	/** Caption shown for the run (month name or week label). */
+	label: string;
+	/** Day columns the run covers, ≥ 1. */
+	span: number;
+}
+
 export interface GanttRow {
 	task: Task;
 	/** First day of the bar: start ?? due, clamped to ≤ endKey. */
@@ -89,6 +98,73 @@ export function ganttWindow(anchor: Date, zoom: GanttZoom): GanttWindow {
 export function shiftAnchor(anchor: Date, zoom: GanttZoom, direction: 1 | -1): Date {
 	if (zoom === 'week') return addDays(anchor, 7 * direction);
 	return new Date(anchor.getFullYear(), anchor.getMonth() + MONTHS_PER_ZOOM[zoom] * direction, 1);
+}
+
+const MONTH_NAMES = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+] as const;
+
+/** ISO 8601 week number (1–53) for a day key; Thursday-of-week rule, UTC-based. */
+export function isoWeekNumber(key: string): number {
+	const ms = dayKeyMs(key);
+	if (Number.isNaN(ms)) return 0;
+	const dow = (new Date(ms).getUTCDay() + 6) % 7; // Mon=0 … Sun=6
+	const thursday = ms + (3 - dow) * DAY_MS;
+	const yearStart = Date.UTC(new Date(thursday).getUTCFullYear(), 0, 1);
+	return Math.floor((thursday - yearStart) / DAY_MS / 7) + 1;
+}
+
+/** The Monday day key of the week containing the given day; identity for week grouping. */
+function mondayKey(key: string): string {
+	const ms = dayKeyMs(key);
+	if (Number.isNaN(ms)) return key;
+	return shiftDayKey(key, -((new Date(ms).getUTCDay() + 6) % 7));
+}
+
+/** Collapse a contiguous day run into labelled header segments by a grouping identity. */
+function buildSegments(
+	days: string[],
+	identityOf: (key: string) => string,
+	labelOf: (key: string) => string,
+): HeaderSegment[] {
+	const segments: HeaderSegment[] = [];
+	let currentId: string | null = null;
+	for (const day of days) {
+		const id = identityOf(day);
+		const last = segments[segments.length - 1];
+		if (id === currentId && last) {
+			segments[segments.length - 1] = { ...last, span: last.span + 1 };
+		} else {
+			currentId = id;
+			segments.push({ key: day, label: labelOf(day), span: 1 });
+		}
+	}
+	return segments;
+}
+
+/** Header segments for the month tier: one run per calendar month, labelled by name. */
+export function monthSegments(days: string[]): HeaderSegment[] {
+	return buildSegments(
+		days,
+		(key) => key.slice(0, 7),
+		(key) => MONTH_NAMES[Number(key.slice(5, 7)) - 1] ?? key.slice(0, 7),
+	);
+}
+
+/** Header segments for the week tier: one run per ISO week, labelled `W<number>`. */
+export function weekSegments(days: string[]): HeaderSegment[] {
+	return buildSegments(days, mondayKey, (key) => `W${isoWeekNumber(key)}`);
 }
 
 function clampStartKey(start: string | undefined, endKey: string): string {

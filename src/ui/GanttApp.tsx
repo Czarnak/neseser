@@ -6,16 +6,19 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
 	BarGeometry,
 	GanttZoom,
+	HeaderSegment,
 	barGeometry,
 	daysFromPixels,
 	ganttLanes,
 	ganttWindow,
 	markerOffset,
+	monthSegments,
 	shiftAnchor,
+	weekSegments,
 } from '../core/gantt-data';
 import { Task, isTaskClosed } from '../core/models';
 import type { TaskIndex } from '../core/task-index';
@@ -105,6 +108,42 @@ function GanttBar({
 	);
 }
 
+/** One row of the stacked timeline header: a sticky label cell + spanning cells. */
+function GanttHeaderTier({
+	segments,
+	cellClassName,
+	columnCount,
+	dayWidthPx,
+	children,
+}: {
+	segments: HeaderSegment[];
+	cellClassName: string;
+	columnCount: number;
+	dayWidthPx: number;
+	children?: ReactNode;
+}) {
+	return (
+		<div className="ns-gantt-row ns-gantt-header">
+			<div className="ns-gantt-label-cell ns-gantt-header-label" />
+			<div
+				className="ns-gantt-cells"
+				style={{ gridTemplateColumns: `repeat(${columnCount}, ${dayWidthPx}px)` }}
+			>
+				{segments.map((segment) => (
+					<div
+						key={segment.key}
+						className={cellClassName}
+						style={{ gridColumn: `span ${segment.span}` }}
+					>
+						{segment.label}
+					</div>
+				))}
+				{children}
+			</div>
+		</div>
+	);
+}
+
 export function GanttApp({ index, callbacks }: Props) {
 	useIndexRefresh(index);
 
@@ -119,6 +158,13 @@ export function GanttApp({ index, callbacks }: Props) {
 	);
 
 	const windowData = ganttWindow(anchor, zoom);
+	const months = monthSegments(windowData.days);
+	const weeks = weekSegments(windowData.days);
+	const daySegments: HeaderSegment[] = windowData.days.map((day) => ({
+		key: day,
+		label: day.slice(8, 10),
+		span: 1,
+	}));
 	const projects = index.getAllProjects();
 	const tasksByProject = new Map<string, Task[]>();
 	for (const p of projects) {
@@ -192,28 +238,29 @@ export function GanttApp({ index, callbacks }: Props) {
 			<div className="ns-gantt-layout">
 				<DndContext sensors={sensors} onDragStart={guard.markDragStart} onDragEnd={handleDragEnd}>
 					<div className="ns-gantt-scroll-area">
-						{/* Header */}
-						<div className="ns-gantt-row ns-gantt-header">
-							<div className="ns-gantt-label-cell ns-gantt-header-label" />
-							<div
-								className="ns-gantt-cells"
-								style={{
-									gridTemplateColumns: `repeat(${windowData.days.length}, ${windowData.dayWidthPx}px)`,
-								}}
-							>
-								{windowData.days.map((day) => (
-									<div key={day} className="ns-gantt-day-header">
-										{day.slice(8, 10)}
-									</div>
-								))}
-								{todayOffset !== null && (
-									<div
-										className="ns-gantt-today-marker"
-										style={{ gridColumn: todayOffset + 1 }}
-									/>
-								)}
-							</div>
-						</div>
+						{/* Header: month → week number → day, stacked top to bottom */}
+						<GanttHeaderTier
+							segments={months}
+							cellClassName="ns-gantt-month-header"
+							columnCount={windowData.days.length}
+							dayWidthPx={windowData.dayWidthPx}
+						/>
+						<GanttHeaderTier
+							segments={weeks}
+							cellClassName="ns-gantt-week-header"
+							columnCount={windowData.days.length}
+							dayWidthPx={windowData.dayWidthPx}
+						/>
+						<GanttHeaderTier
+							segments={daySegments}
+							cellClassName="ns-gantt-day-header"
+							columnCount={windowData.days.length}
+							dayWidthPx={windowData.dayWidthPx}
+						>
+							{todayOffset !== null && (
+								<div className="ns-gantt-today-marker" style={{ gridColumn: todayOffset + 1 }} />
+							)}
+						</GanttHeaderTier>
 
 						{/* Lanes */}
 						{lanes.map((lane) => {

@@ -7,12 +7,15 @@ import {
 	ganttLanes,
 	ganttRows,
 	ganttWindow,
+	isoWeekNumber,
 	markerOffset,
+	monthSegments,
 	resizeEnd,
 	resizeStart,
 	shiftAnchor,
 	shiftDayKey,
 	shiftSpan,
+	weekSegments,
 } from '../../src/core/gantt-data';
 
 function task(title: string, overrides: Partial<Task> = {}): Task {
@@ -79,6 +82,72 @@ describe('ganttWindow', () => {
 		expect(week).toBeGreaterThan(month);
 		expect(month).toBeGreaterThan(quarter);
 		expect(quarter).toBeGreaterThan(0);
+	});
+});
+
+const totalSpan = (segments: { span: number }[]): number =>
+	segments.reduce((sum, segment) => sum + segment.span, 0);
+
+describe('isoWeekNumber', () => {
+	test('returns the ISO week for a mid-year Thursday', () => {
+		expect(isoWeekNumber('2026-06-11')).toBe(24);
+	});
+
+	test('a January day rolls back into the previous 53-week year', () => {
+		// 2026 starts on a Thursday, so it is a 53-week ISO year and
+		// 2027-01-01 (a Friday) still belongs to 2026-W53.
+		expect(isoWeekNumber('2027-01-01')).toBe(53);
+	});
+});
+
+describe('monthSegments', () => {
+	test('month zoom is a single segment named for the month', () => {
+		const segments = monthSegments(ganttWindow(ANCHOR, 'month').days);
+
+		expect(segments).toEqual([{ key: '2026-06-01', label: 'June', span: 30 }]);
+	});
+
+	test('quarter zoom splits into one segment per calendar month', () => {
+		const segments = monthSegments(ganttWindow(ANCHOR, 'quarter').days);
+
+		expect(segments.map((s) => s.label)).toEqual(['April', 'May', 'June']);
+		expect(segments.map((s) => s.span)).toEqual([30, 31, 30]);
+	});
+
+	test('a week straddling a month end yields two segments', () => {
+		const segments = monthSegments(ganttWindow(new Date(2026, 5, 30), 'week').days);
+
+		expect(segments).toEqual([
+			{ key: '2026-06-29', label: 'June', span: 2 },
+			{ key: '2026-07-01', label: 'July', span: 5 },
+		]);
+	});
+
+	test('the segment spans always sum to the number of days', () => {
+		const days = ganttWindow(ANCHOR, 'quarter').days;
+
+		expect(totalSpan(monthSegments(days))).toBe(days.length);
+	});
+});
+
+describe('weekSegments', () => {
+	test('week zoom is a single ISO-week segment', () => {
+		const segments = weekSegments(ganttWindow(ANCHOR, 'week').days);
+
+		expect(segments).toEqual([{ key: '2026-06-08', label: 'W24', span: 7 }]);
+	});
+
+	test('month zoom splits into consecutive ISO weeks', () => {
+		const segments = weekSegments(ganttWindow(ANCHOR, 'month').days);
+
+		expect(segments.map((s) => s.label)).toEqual(['W23', 'W24', 'W25', 'W26', 'W27']);
+		expect(segments.map((s) => s.span)).toEqual([7, 7, 7, 7, 2]);
+	});
+
+	test('the segment spans always sum to the number of days', () => {
+		const days = ganttWindow(ANCHOR, 'quarter').days;
+
+		expect(totalSpan(weekSegments(days))).toBe(days.length);
 	});
 });
 
