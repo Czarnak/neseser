@@ -2041,7 +2041,7 @@
       "label": "step()",
       "file_type": "code",
       "source_file": "src/ui/GanttApp.tsx",
-      "source_location": "L180",
+      "source_location": "L183",
       "id": "ui_ganttapp_step",
       "community": 1,
       "norm_label": "step()"
@@ -2050,7 +2050,7 @@
       "label": "handleDragEnd()",
       "file_type": "code",
       "source_file": "src/ui/GanttApp.tsx",
-      "source_location": "L182",
+      "source_location": "L185",
       "id": "ui_ganttapp_handledragend",
       "community": 1,
       "norm_label": "handledragend()"
@@ -2059,7 +2059,7 @@
       "label": "openTask()",
       "file_type": "code",
       "source_file": "src/ui/GanttApp.tsx",
-      "source_location": "L204",
+      "source_location": "L207",
       "id": "ui_ganttapp_opentask",
       "community": 1,
       "norm_label": "opentask()"
@@ -2068,7 +2068,7 @@
       "label": "toggleProject()",
       "file_type": "code",
       "source_file": "src/ui/GanttApp.tsx",
-      "source_location": "L208",
+      "source_location": "L211",
       "id": "ui_ganttapp_toggleproject",
       "community": 1,
       "norm_label": "toggleproject()"
@@ -5020,9 +5020,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_gantt_data_ts",
-      "target": "core_gantt_data_isoweeknumber",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_isoweeknumber"
     },
     {
       "relation": "contains",
@@ -5030,9 +5030,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_gantt_data_ts",
-      "target": "core_gantt_data_mondaykey",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_mondaykey"
     },
     {
       "relation": "contains",
@@ -5040,9 +5040,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L136",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_gantt_data_ts",
-      "target": "core_gantt_data_buildsegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_buildsegments"
     },
     {
       "relation": "contains",
@@ -5050,9 +5050,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_gantt_data_ts",
-      "target": "core_gantt_data_monthsegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_monthsegments"
     },
     {
       "relation": "contains",
@@ -5060,9 +5060,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_gantt_data_ts",
-      "target": "core_gantt_data_weeksegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_weeksegments"
     },
     {
       "relation": "contains",
@@ -5203,9 +5203,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_gantt_data_isoweeknumber",
-      "target": "core_gantt_data_daykeyms",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_daykeyms"
     },
     {
       "relation": "calls",
@@ -5214,9 +5214,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_gantt_data_mondaykey",
-      "target": "core_gantt_data_daykeyms",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_daykeyms"
     },
     {
       "relation": "calls",
@@ -5225,9 +5225,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_gantt_data_mondaykey",
-      "target": "core_gantt_data_shiftdaykey",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_shiftdaykey"
     },
     {
       "relation": "calls",
@@ -5434,9 +5434,9 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_gantt_data_test_ts",
-      "target": "core_gantt_data_isoweeknumber",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_isoweeknumber"
     },
     {
       "relation": "calls",
@@ -5445,9 +5445,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_gantt_data_monthsegments",
-      "target": "core_gantt_data_buildsegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_buildsegments"
     },
     {
       "relation": "calls",
@@ -5456,9 +5456,9 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_gantt_data_weeksegments",
-      "target": "core_gantt_data_buildsegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_buildsegments"
     },
     {
       "relation": "imports",
@@ -5467,9 +5467,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "core_gantt_data_monthsegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_monthsegments"
     },
     {
       "relation": "imports",
@@ -5478,9 +5478,9 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_gantt_data_test_ts",
-      "target": "core_gantt_data_monthsegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_monthsegments"
     },
     {
       "relation": "imports",
@@ -5489,9 +5489,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "core_gantt_data_weeksegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_weeksegments"
     },
     {
       "relation": "imports",
@@ -5500,9 +5500,9 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_gantt_data_test_ts",
-      "target": "core_gantt_data_weeksegments",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_weeksegments"
     },
     {
       "relation": "calls",
@@ -10299,9 +10299,9 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_gantt_data_test_ts",
-      "target": "core_gantt_data_test_totalspan",
-      "confidence_score": 1.0
+      "target": "core_gantt_data_test_totalspan"
     },
     {
       "relation": "contains",
@@ -11119,5 +11119,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "de05e83365f7156d4aae39fdf6f6bd24c2069f6d"
+  "built_at_commit": "d012d92f66b13ae7ac5dd7e7fa520f4f9d28a723"
 }

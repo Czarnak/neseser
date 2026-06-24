@@ -160,6 +160,9 @@ export function GanttApp({ index, callbacks }: Props) {
 	const windowData = ganttWindow(anchor, zoom);
 	const months = monthSegments(windowData.days);
 	const weeks = weekSegments(windowData.days);
+	// Quarter columns are too narrow to read a day number; the week/month
+	// labels carry the orientation there, so the day tier is dropped.
+	const showDayNumbers = zoom !== 'quarter';
 	const daySegments: HeaderSegment[] = windowData.days.map((day) => ({
 		key: day,
 		label: day.slice(8, 10),
@@ -238,29 +241,42 @@ export function GanttApp({ index, callbacks }: Props) {
 			<div className="ns-gantt-layout">
 				<DndContext sensors={sensors} onDragStart={guard.markDragStart} onDragEnd={handleDragEnd}>
 					<div className="ns-gantt-scroll-area">
-						{/* Header: month → week number → day, stacked top to bottom */}
-						<GanttHeaderTier
-							segments={months}
-							cellClassName="ns-gantt-month-header"
-							columnCount={windowData.days.length}
-							dayWidthPx={windowData.dayWidthPx}
-						/>
-						<GanttHeaderTier
-							segments={weeks}
-							cellClassName="ns-gantt-week-header"
-							columnCount={windowData.days.length}
-							dayWidthPx={windowData.dayWidthPx}
-						/>
-						<GanttHeaderTier
-							segments={daySegments}
-							cellClassName="ns-gantt-day-header"
-							columnCount={windowData.days.length}
-							dayWidthPx={windowData.dayWidthPx}
-						>
-							{todayOffset !== null && (
+						{/* Header: month → week number → day, stacked top to bottom.
+						    The today marker lives on the bottom-most tier so its line
+						    starts at the header's foot and extends down over the lanes. */}
+						{(() => {
+							const todayMarker = todayOffset !== null && (
 								<div className="ns-gantt-today-marker" style={{ gridColumn: todayOffset + 1 }} />
-							)}
-						</GanttHeaderTier>
+							);
+							return (
+								<>
+									<GanttHeaderTier
+										segments={months}
+										cellClassName="ns-gantt-month-header"
+										columnCount={windowData.days.length}
+										dayWidthPx={windowData.dayWidthPx}
+									/>
+									<GanttHeaderTier
+										segments={weeks}
+										cellClassName="ns-gantt-week-header"
+										columnCount={windowData.days.length}
+										dayWidthPx={windowData.dayWidthPx}
+									>
+										{!showDayNumbers && todayMarker}
+									</GanttHeaderTier>
+									{showDayNumbers && (
+										<GanttHeaderTier
+											segments={daySegments}
+											cellClassName="ns-gantt-day-header"
+											columnCount={windowData.days.length}
+											dayWidthPx={windowData.dayWidthPx}
+										>
+											{todayMarker}
+										</GanttHeaderTier>
+									)}
+								</>
+							);
+						})()}
 
 						{/* Lanes */}
 						{lanes.map((lane) => {
