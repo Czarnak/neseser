@@ -161,6 +161,7 @@ describe('parseProject', () => {
 		const result = parseProject('Projects/Alpha/Alpha.md', {
 			type: 'project',
 			status: 'on-hold',
+			category: 'Work',
 			deadline: '2026-12-31',
 			'ticktick-project-id': 'ttp-9',
 		});
@@ -169,9 +170,23 @@ describe('parseProject', () => {
 		if (result.kind !== 'project') return;
 		expect(result.project).toMatchObject({
 			status: 'on-hold',
+			category: 'Work',
 			deadline: '2026-12-31',
 			ticktickProjectId: 'ttp-9',
 		});
+	});
+
+	test('trims the category and treats blank as absent', () => {
+		const trimmed = parseProject('Projects/Alpha/Alpha.md', { type: 'project', category: '  Research  ' });
+		expect(trimmed.kind === 'project' && trimmed.project.category).toBe('Research');
+
+		const blank = parseProject('Projects/Alpha/Alpha.md', { type: 'project', category: '   ' });
+		expect(blank.kind === 'project' && blank.project.category).toBeUndefined();
+	});
+
+	test('leaves category undefined when the key is absent', () => {
+		const result = parseProject('Projects/Alpha/Alpha.md', { type: 'project' });
+		expect(result.kind === 'project' && result.project.category).toBeUndefined();
 	});
 
 	test('returns invalid for unknown project status', () => {

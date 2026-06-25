@@ -1,5 +1,7 @@
 import { ItemView, Notice, WorkspaceLeaf } from 'obsidian';
 import { Root, createRoot } from 'react-dom/client';
+import type { CategoryDef } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import { Task } from '../core/models';
 import type { ProjectManager } from '../core/project-manager';
 import type { TaskIndex } from '../core/task-index';
@@ -14,6 +16,8 @@ export class TodayView extends ItemView {
 		leaf: WorkspaceLeaf,
 		private index: TaskIndex,
 		private manager: ProjectManager,
+		private categoryFilter: CategoryFilterStore,
+		private getCategories: () => CategoryDef[],
 	) {
 		super(leaf);
 	}
@@ -37,6 +41,8 @@ export class TodayView extends ItemView {
 		this.root.render(
 			<TodayApp
 				index={this.index}
+				categoryFilter={this.categoryFilter}
+				getCategories={this.getCategories}
 				callbacks={{
 					onToggleTask: (task: Task, done: boolean) => {
 						this.manager

@@ -10,8 +10,13 @@ import {
 import { useState } from 'react';
 import { CalendarDay, monthGrid, tasksByDueDay, weekRow } from '../core/calendar-data';
 import { Task, isTaskClosed } from '../core/models';
+import type { CategoryDef } from '../core/category-data';
+import { allowedProjectNames, availableCategories, filterTasksByCategory } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { TaskIndex } from '../core/task-index';
 import { dueDateKey } from '../core/view-data';
+import { CategoryFilterBar } from './CategoryFilterBar';
+import { useCategoryFilter } from './use-category-filter';
 import { useDragClickGuard } from './use-drag-click-guard';
 import { useIndexRefresh } from './use-index-refresh';
 
@@ -22,6 +27,8 @@ export interface CalendarCallbacks {
 
 interface Props {
 	index: TaskIndex;
+	categoryFilter: CategoryFilterStore;
+	getCategories: () => CategoryDef[];
 	callbacks: CalendarCallbacks;
 }
 
@@ -82,8 +89,9 @@ function DayCell({
 	);
 }
 
-export function CalendarApp({ index, callbacks }: Props) {
+export function CalendarApp({ index, categoryFilter, getCategories, callbacks }: Props) {
 	useIndexRefresh(index);
+	const active = useCategoryFilter(categoryFilter);
 
 	const [mode, setMode] = useState<CalendarMode>('month');
 	const [anchor, setAnchor] = useState<Date>(() => new Date());
@@ -98,7 +106,14 @@ export function CalendarApp({ index, callbacks }: Props) {
 		mode === 'month'
 			? monthGrid(anchor.getFullYear(), anchor.getMonth(), today)
 			: [weekRow(anchor, today)];
-	const tasks = index.getAllTasks().filter((t) => showDone || !isTaskClosed(t));
+	const allProjects = index.getAllProjects();
+	const options = availableCategories(getCategories(), allProjects);
+	const allowed = allowedProjectNames(allProjects, active);
+	const tasks = filterTasksByCategory(
+		index.getAllTasks().filter((t) => showDone || !isTaskClosed(t)),
+		allowed,
+		(path) => index.projectNameForPath(path),
+	);
 	const byDay = tasksByDueDay(tasks);
 
 	const step = (direction: 1 | -1) => {
@@ -151,6 +166,7 @@ export function CalendarApp({ index, callbacks }: Props) {
 					<input type="checkbox" checked={showDone} onChange={(e) => setShowDone(e.target.checked)} />
 					Show done
 				</label>
+				<CategoryFilterBar options={options} active={active} onSelect={(value) => categoryFilter.set(value)} />
 			</div>
 
 			<DndContext sensors={sensors} onDragStart={guard.markDragStart} onDragEnd={handleDragEnd}>

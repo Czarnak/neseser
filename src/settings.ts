@@ -1,8 +1,11 @@
 import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
+import type { CategoryDef } from './core/category-data';
 import type NeseserPlugin from './main';
 
 export interface NeseserSettings {
 	projectsRoot: string;
+	/** User-managed project categories; seeded with defaults, freely editable. */
+	categories: CategoryDef[];
 	ticktickClientId: string;
 	ticktickClientSecret: string;
 	ticktickPort: number;
@@ -13,8 +16,17 @@ export interface NeseserSettings {
 	syncIntervalMinutes: number;
 }
 
+export const DEFAULT_CATEGORIES: CategoryDef[] = [
+	{ name: 'Work', color: '#4f9cf9' },
+	{ name: 'University', color: '#a855f7' },
+	{ name: 'Research', color: '#22c55e' },
+	{ name: 'Training', color: '#f59e0b' },
+	{ name: 'Social', color: '#ec4899' },
+];
+
 export const DEFAULT_SETTINGS: NeseserSettings = {
 	projectsRoot: 'Projects',
+	categories: DEFAULT_CATEGORIES,
 	ticktickClientId: 'I46A11I1VbyvgYo5mW',
 	ticktickClientSecret: '',
 	ticktickPort: 42813,
@@ -50,6 +62,8 @@ export class NeseserSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					}),
 			);
+
+		this.renderCategories();
 
 		new Setting(this.containerEl).setName('TickTick').setHeading();
 
@@ -101,6 +115,68 @@ export class NeseserSettingTab extends PluginSettingTab {
 				}),
 			);
 
+		this.renderTickTick();
+	}
+
+	/** Editable list of project categories: name + color per row, with add/remove. */
+	private renderCategories(): void {
+		new Setting(this.containerEl)
+			.setName('Categories')
+			.setDesc('Used to group and filter projects. Renaming or removing one here does not relabel existing projects.')
+			.setHeading();
+
+		const listEl = this.containerEl.createDiv({ cls: 'ns-settings-categories' });
+
+		// Update the registry in memory immediately, then persist; a failed save
+		// surfaces as a Notice instead of a silently dropped promise.
+		const applyCategories = (next: CategoryDef[]): void => {
+			this.plugin.settings.categories = next;
+			this.plugin
+				.saveSettings()
+				.catch((error: unknown) =>
+					new Notice(`Neseser: could not save categories — ${error instanceof Error ? error.message : String(error)}`),
+				);
+		};
+
+		this.plugin.settings.categories.forEach((category, idx) => {
+			new Setting(listEl)
+				.addText((text) =>
+					text
+						.setPlaceholder('Category name')
+						.setValue(category.name)
+						.onChange((value) =>
+							applyCategories(
+								this.plugin.settings.categories.map((c, i) => (i === idx ? { ...c, name: value } : c)),
+							),
+						),
+				)
+				.addColorPicker((picker) =>
+					picker.setValue(category.color).onChange((value) =>
+						applyCategories(
+							this.plugin.settings.categories.map((c, i) => (i === idx ? { ...c, color: value } : c)),
+						),
+					),
+				)
+				.addExtraButton((btn) =>
+					btn
+						.setIcon('trash')
+						.setTooltip('Remove category')
+						.onClick(() => {
+							applyCategories(this.plugin.settings.categories.filter((_, i) => i !== idx));
+							this.display();
+						}),
+				);
+		});
+
+		new Setting(listEl).addButton((btn) =>
+			btn.setButtonText('Add category').onClick(() => {
+				applyCategories([...this.plugin.settings.categories, { name: 'New category', color: '#8a8a8a' }]);
+				this.display();
+			}),
+		);
+	}
+
+	private renderTickTick(): void {
 		const connected = isTickTickConnected(this.plugin.settings);
 		const status = connected
 			? `Connected (token valid until ${new Date(this.plugin.settings.ticktickTokenExpiresAt).toLocaleDateString()})`

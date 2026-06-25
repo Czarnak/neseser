@@ -30,6 +30,8 @@ export interface Project {
 	path: string;
 	name: string;
 	status: ProjectStatus;
+	/** Free-form, user-defined grouping; absent when the project has none. */
+	category?: string;
 	deadline?: string;
 	ticktickProjectId?: string;
 }
@@ -156,12 +158,16 @@ export function parseProject(path: string, fm: Frontmatter | undefined): Project
 	const deadline = parseDate(fm, 'deadline');
 	if ('error' in deadline) return { kind: 'invalid', path, reason: deadline.error };
 
+	const categoryRaw = optionalString(fm, 'category')?.trim();
+	const category = categoryRaw ? categoryRaw : undefined;
+
 	return {
 		kind: 'project',
 		project: {
 			path,
 			name: titleFromPath(path),
 			status: status.value,
+			category,
 			deadline: deadline.value,
 			ticktickProjectId: optionalString(fm, 'ticktick-project-id'),
 		},

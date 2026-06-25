@@ -1,5 +1,7 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
 import { Root, createRoot } from 'react-dom/client';
+import type { CategoryDef } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { TaskIndex } from '../core/task-index';
 import { DashboardApp } from '../ui/DashboardApp';
 
@@ -11,6 +13,8 @@ export class DashboardView extends ItemView {
 	constructor(
 		leaf: WorkspaceLeaf,
 		private index: TaskIndex,
+		private categoryFilter: CategoryFilterStore,
+		private getCategories: () => CategoryDef[],
 	) {
 		super(leaf);
 	}
@@ -34,6 +38,8 @@ export class DashboardView extends ItemView {
 		this.root.render(
 			<DashboardApp
 				index={this.index}
+				categoryFilter={this.categoryFilter}
+				getCategories={this.getCategories}
 				callbacks={{
 					onOpenPath: (path: string) => {
 						void this.app.workspace.openLinkText(path, '', false);

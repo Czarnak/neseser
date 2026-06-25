@@ -1,6 +1,8 @@
 import { ItemView, Notice, WorkspaceLeaf } from 'obsidian';
 import { Root, createRoot } from 'react-dom/client';
 import { rescheduleDue } from '../core/calendar-data';
+import type { CategoryDef } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import { Task } from '../core/models';
 import type { ProjectManager } from '../core/project-manager';
 import type { TaskIndex } from '../core/task-index';
@@ -15,6 +17,8 @@ export class CalendarView extends ItemView {
 		leaf: WorkspaceLeaf,
 		private index: TaskIndex,
 		private manager: ProjectManager,
+		private categoryFilter: CategoryFilterStore,
+		private getCategories: () => CategoryDef[],
 	) {
 		super(leaf);
 	}
@@ -38,6 +42,8 @@ export class CalendarView extends ItemView {
 		this.root.render(
 			<CalendarApp
 				index={this.index}
+				categoryFilter={this.categoryFilter}
+				getCategories={this.getCategories}
 				callbacks={{
 					onRescheduleTask: (task: Task, dayKey: string) => {
 						this.manager.updateTaskDue(task.path, rescheduleDue(task.due, dayKey)).catch((error: unknown) => {

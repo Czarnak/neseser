@@ -1,7 +1,19 @@
 import { Project } from '../core/models';
+import type { CategoryDef } from '../core/category-data';
+import {
+	allowedProjectNames,
+	availableCategories,
+	categoryOf,
+	colorForCategory,
+	filterProjectsByCategory,
+	filterTasksByCategory,
+} from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { InvalidEntry, TaskIndex } from '../core/task-index';
 import { DeadlineEntry, compareProjects, taskProgress, upcomingDeadlines } from '../core/view-data';
 import { burndownSeries } from '../core/burndown-data';
+import { CategoryFilterBar } from './CategoryFilterBar';
+import { useCategoryFilter } from './use-category-filter';
 import { useIndexRefresh } from './use-index-refresh';
 import { Sparkline } from './Sparkline';
 
@@ -11,14 +23,27 @@ export interface DashboardCallbacks {
 
 interface Props {
 	index: TaskIndex;
+	categoryFilter: CategoryFilterStore;
+	getCategories: () => CategoryDef[];
 	callbacks: DashboardCallbacks;
 }
 
-function ProjectCard({ project, index, callbacks }: { project: Project; index: TaskIndex; callbacks: DashboardCallbacks }) {
+function ProjectCard({
+	project,
+	index,
+	registry,
+	callbacks,
+}: {
+	project: Project;
+	index: TaskIndex;
+	registry: CategoryDef[];
+	callbacks: DashboardCallbacks;
+}) {
 	const tasks = index.getTasksForProject(project.name);
 	const progress = taskProgress(tasks);
 	const percent = progress.total === 0 ? 0 : Math.round((progress.done / progress.total) * 100);
 	const sparkValues = burndownSeries(tasks, new Date()).map((p) => p.open);
+	const category = categoryOf(project);
 
 	return (
 		<div className="ns-project-card">
@@ -27,6 +52,10 @@ function ProjectCard({ project, index, callbacks }: { project: Project; index: T
 					{project.name}
 				</span>
 				<span className={`ns-badge ns-project-${project.status}`}>{project.status}</span>
+			</div>
+			<div className="ns-card-category">
+				<span className="ns-category-dot" style={{ backgroundColor: colorForCategory(category, registry) }} />
+				{category}
 			</div>
 			<div className="ns-progress">
 				<div className="ns-progress-bar">
@@ -66,20 +95,33 @@ function IssueRow({ issue, callbacks }: { issue: InvalidEntry; callbacks: Dashbo
 	);
 }
 
-export function DashboardApp({ index, callbacks }: Props) {
+export function DashboardApp({ index, categoryFilter, getCategories, callbacks }: Props) {
 	useIndexRefresh(index);
+	const active = useCategoryFilter(categoryFilter);
 
-	const projects = [...index.getAllProjects()].sort(compareProjects);
-	const deadlines = upcomingDeadlines(projects, index.getAllTasks(), new Date());
+	const registry = getCategories();
+	const allProjects = index.getAllProjects();
+	const options = availableCategories(registry, allProjects);
+	const projects = filterProjectsByCategory(allProjects, active).sort(compareProjects);
+	const allowed = allowedProjectNames(allProjects, active);
+	const tasks = filterTasksByCategory(index.getAllTasks(), allowed, (path) => index.projectNameForPath(path));
+	const deadlines = upcomingDeadlines(projects, tasks, new Date());
 	const issues = index.getInvalid();
 
 	return (
 		<div className="ns-dashboard">
 			<h4 className="ns-section-heading">Projects</h4>
-			{projects.length === 0 && <p className="ns-empty">No projects yet. Run "Neseser: Create project".</p>}
+			<CategoryFilterBar options={options} active={active} onSelect={(value) => categoryFilter.set(value)} />
+			{projects.length === 0 && <p className="ns-empty">No projects here. Run "Neseser: Create project".</p>}
 			<div className="ns-project-grid">
 				{projects.map((project) => (
-					<ProjectCard key={project.path} project={project} index={index} callbacks={callbacks} />
+					<ProjectCard
+						key={project.path}
+						project={project}
+						index={index}
+						registry={registry}
+						callbacks={callbacks}
+					/>
 				))}
 			</div>
 

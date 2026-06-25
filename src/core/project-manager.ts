@@ -18,6 +18,7 @@ export interface ProjectManagerSettings {
 
 export interface CreateProjectInput {
 	name: string;
+	category?: string;
 	deadline?: string;
 }
 
@@ -85,6 +86,8 @@ export class ProjectManager {
 		await this.vault.createFolder(`${projectDir}/Tasks`);
 
 		const fm: Record<string, string> = { type: 'project', status: 'active' };
+		const category = input.category?.trim();
+		if (category) fm['category'] = category;
 		if (input.deadline) fm['deadline'] = input.deadline;
 
 		const indexPath = `${projectDir}/${name}.md`;

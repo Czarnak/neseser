@@ -1,6 +1,11 @@
+import type { CategoryDef } from '../core/category-data';
+import { availableCategories, categoryOf, colorForCategory, filterProjectsByCategory } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { TaskIndex } from '../core/task-index';
 import { compareProjects } from '../core/view-data';
 import { SyncStatusStore, formatSyncStatus } from '../sync/sync-status';
+import { CategoryFilterBar } from './CategoryFilterBar';
+import { useCategoryFilter } from './use-category-filter';
 import { useIndexRefresh } from './use-index-refresh';
 import { useSyncStatus } from './use-sync-status';
 
@@ -20,14 +25,20 @@ export interface NavigationCallbacks {
 interface Props {
 	index: TaskIndex;
 	syncStatus: SyncStatusStore;
+	categoryFilter: CategoryFilterStore;
+	getCategories: () => CategoryDef[];
 	callbacks: NavigationCallbacks;
 }
 
-export function NavigationApp({ index, syncStatus, callbacks }: Props) {
+export function NavigationApp({ index, syncStatus, categoryFilter, getCategories, callbacks }: Props) {
 	useIndexRefresh(index);
 	const status = useSyncStatus(syncStatus);
+	const active = useCategoryFilter(categoryFilter);
 
-	const projects = [...index.getAllProjects()].sort(compareProjects);
+	const registry = getCategories();
+	const allProjects = index.getAllProjects();
+	const options = availableCategories(registry, allProjects);
+	const projects = filterProjectsByCategory(allProjects, active).sort(compareProjects);
 
 	return (
 		<div className="ns-nav">
@@ -44,15 +55,27 @@ export function NavigationApp({ index, syncStatus, callbacks }: Props) {
 
 			<div className="ns-nav-section">
 				<h4 className="ns-section-heading">Projects</h4>
-				{projects.length === 0 && <p className="ns-empty">No projects yet.</p>}
-				{projects.map((project) => (
-					<div key={project.path} className="ns-nav-project-row">
-						<span className="ns-nav-project-name" onClick={() => callbacks.onOpenProject(project.path)}>
-							{project.name}
-						</span>
-						<span className={`ns-badge ns-project-${project.status}`}>{project.status}</span>
-					</div>
-				))}
+				<CategoryFilterBar options={options} active={active} onSelect={(value) => categoryFilter.set(value)} />
+				{projects.length === 0 && <p className="ns-empty">No projects here.</p>}
+				{projects.map((project) => {
+					const cat = categoryOf(project);
+					return (
+						<div key={project.path} className="ns-nav-project-row">
+							<span
+								className="ns-nav-project-main"
+								onClick={() => callbacks.onOpenProject(project.path)}
+							>
+								<span
+									className="ns-category-dot"
+									style={{ backgroundColor: colorForCategory(cat, registry) }}
+									title={cat}
+								/>
+								<span className="ns-nav-project-name">{project.name}</span>
+							</span>
+							<span className={`ns-badge ns-project-${project.status}`}>{project.status}</span>
+						</div>
+					);
+				})}
 				<div className="ns-nav-buttons">
 					<button onClick={callbacks.onCreateProject}>Add project</button>
 					<button onClick={callbacks.onCreateTask}>Add task</button>

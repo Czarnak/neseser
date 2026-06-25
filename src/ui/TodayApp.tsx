@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { Task } from '../core/models';
+import type { CategoryDef } from '../core/category-data';
+import { allowedProjectNames, availableCategories, filterTasksByCategory } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { TaskIndex } from '../core/task-index';
 import { overdueDays, todayGroups } from '../core/today-data';
+import { CategoryFilterBar } from './CategoryFilterBar';
+import { useCategoryFilter } from './use-category-filter';
 import { useIndexRefresh } from './use-index-refresh';
 
 export interface TodayCallbacks {
@@ -11,6 +16,8 @@ export interface TodayCallbacks {
 
 interface Props {
 	index: TaskIndex;
+	categoryFilter: CategoryFilterStore;
+	getCategories: () => CategoryDef[];
 	callbacks: TodayCallbacks;
 }
 
@@ -57,13 +64,17 @@ function TaskRow({
 	);
 }
 
-export function TodayApp({ index, callbacks }: Props) {
+export function TodayApp({ index, categoryFilter, getCategories, callbacks }: Props) {
 	useIndexRefresh(index);
+	const active = useCategoryFilter(categoryFilter);
 	// Paths of tasks toggled done optimistically before the next index refresh
 	const [pending, setPending] = useState<ReadonlySet<string>>(new Set());
 
 	const now = new Date();
-	const tasks = index.getAllTasks();
+	const allProjects = index.getAllProjects();
+	const options = availableCategories(getCategories(), allProjects);
+	const allowed = allowedProjectNames(allProjects, active);
+	const tasks = filterTasksByCategory(index.getAllTasks(), allowed, (path) => index.projectNameForPath(path));
 	const { overdue, today } = todayGroups(tasks, now);
 
 	const handleToggle = (task: Task, done: boolean) => {
@@ -95,6 +106,7 @@ export function TodayApp({ index, callbacks }: Props) {
 
 	return (
 		<div className="ns-today">
+			<CategoryFilterBar options={options} active={active} onSelect={(value) => categoryFilter.set(value)} />
 			{!hasContent && <p className="ns-empty">Nothing due today. You are caught up!</p>}
 
 			{overdue.length > 0 && (

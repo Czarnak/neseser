@@ -1,5 +1,7 @@
 import { ItemView, Notice, WorkspaceLeaf } from 'obsidian';
 import { Root, createRoot } from 'react-dom/client';
+import type { CategoryDef } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import { computeMoveResult, computeResizeResult } from '../core/gantt-data';
 import { Task } from '../core/models';
 import type { ProjectManager } from '../core/project-manager';
@@ -15,6 +17,8 @@ export class GanttView extends ItemView {
 		leaf: WorkspaceLeaf,
 		private index: TaskIndex,
 		private manager: ProjectManager,
+		private categoryFilter: CategoryFilterStore,
+		private getCategories: () => CategoryDef[],
 	) {
 		super(leaf);
 	}
@@ -38,6 +42,8 @@ export class GanttView extends ItemView {
 		this.root.render(
 			<GanttApp
 				index={this.index}
+				categoryFilter={this.categoryFilter}
+				getCategories={this.getCategories}
 				callbacks={{
 					onMoveTask: (task: Task, dayDelta: number) => {
 						const newDates = computeMoveResult(task.start, task.due, dayDelta);

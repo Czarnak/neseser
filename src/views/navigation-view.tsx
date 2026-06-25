@@ -1,5 +1,7 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
 import { Root, createRoot } from 'react-dom/client';
+import type { CategoryDef } from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { TaskIndex } from '../core/task-index';
 import type { SyncStatusStore } from '../sync/sync-status';
 import { NavigationApp, NavigationCallbacks } from '../ui/NavigationApp';
@@ -16,6 +18,8 @@ export class NavigationView extends ItemView {
 		leaf: WorkspaceLeaf,
 		private index: TaskIndex,
 		private syncStatus: SyncStatusStore,
+		private categoryFilter: CategoryFilterStore,
+		private getCategories: () => CategoryDef[],
 		private callbacks: NavigationViewCallbacks,
 	) {
 		super(leaf);
@@ -41,6 +45,8 @@ export class NavigationView extends ItemView {
 			<NavigationApp
 				index={this.index}
 				syncStatus={this.syncStatus}
+				categoryFilter={this.categoryFilter}
+				getCategories={this.getCategories}
 				callbacks={{
 					...this.callbacks,
 					onOpenProject: (path: string) => {

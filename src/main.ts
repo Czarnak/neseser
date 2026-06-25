@@ -1,4 +1,5 @@
 import { App, Notice, Plugin, TFile, WorkspaceLeaf, requestUrl } from 'obsidian';
+import { CategoryFilterStore } from './core/category-filter';
 import { Frontmatter, Task, titleFromPath } from './core/models';
 import { ProjectManager, VaultAdapter } from './core/project-manager';
 import { TaskIndex } from './core/task-index';
@@ -109,6 +110,7 @@ export default class NeseserPlugin extends Plugin {
 	settings: NeseserSettings = DEFAULT_SETTINGS;
 	syncState: SyncSnapshot = emptySnapshot();
 	syncStatus = new SyncStatusStore();
+	categoryFilter = new CategoryFilterStore();
 	index!: TaskIndex;
 	manager!: ProjectManager;
 	private vaultAdapter!: ObsidianVaultAdapter;
@@ -116,6 +118,8 @@ export default class NeseserPlugin extends Plugin {
 	private statusBar!: HTMLElement;
 	private syncInFlight = false;
 	private scheduler: SyncScheduler | null = null;
+	/** Category registry read live, so a settings edit lands on the next view render. */
+	private readonly getCategories = () => this.settings.categories;
 
 	override async onload(): Promise<void> {
 		await this.loadPersisted();
@@ -128,15 +132,30 @@ export default class NeseserPlugin extends Plugin {
 		this.engineStore = new ObsidianEngineStore(this.app, this.vaultAdapter, this.manager);
 		this.index.onTaskCompleted((task) => void this.handleTaskCompleted(task));
 
-		this.registerView(VIEW_TYPE_TODAY, (leaf) => new TodayView(leaf, this.index, this.manager));
-		this.registerView(VIEW_TYPE_DASHBOARD, (leaf) => new DashboardView(leaf, this.index));
-		this.registerView(VIEW_TYPE_KANBAN, (leaf) => new KanbanView(leaf, this.index, this.manager));
-		this.registerView(VIEW_TYPE_CALENDAR, (leaf) => new CalendarView(leaf, this.index, this.manager));
-		this.registerView(VIEW_TYPE_GANTT, (leaf) => new GanttView(leaf, this.index, this.manager));
+		this.registerView(
+			VIEW_TYPE_TODAY,
+			(leaf) => new TodayView(leaf, this.index, this.manager, this.categoryFilter, this.getCategories),
+		);
+		this.registerView(
+			VIEW_TYPE_DASHBOARD,
+			(leaf) => new DashboardView(leaf, this.index, this.categoryFilter, this.getCategories),
+		);
+		this.registerView(
+			VIEW_TYPE_KANBAN,
+			(leaf) => new KanbanView(leaf, this.index, this.manager, this.categoryFilter, this.getCategories),
+		);
+		this.registerView(
+			VIEW_TYPE_CALENDAR,
+			(leaf) => new CalendarView(leaf, this.index, this.manager, this.categoryFilter, this.getCategories),
+		);
+		this.registerView(
+			VIEW_TYPE_GANTT,
+			(leaf) => new GanttView(leaf, this.index, this.manager, this.categoryFilter, this.getCategories),
+		);
 		this.registerView(
 			VIEW_TYPE_NAVIGATION,
 			(leaf) =>
-				new NavigationView(leaf, this.index, this.syncStatus, {
+				new NavigationView(leaf, this.index, this.syncStatus, this.categoryFilter, this.getCategories, {
 					onOpenToday: () => void this.activateView(VIEW_TYPE_TODAY, 'tab'),
 					onOpenDashboard: () => void this.activateView(VIEW_TYPE_DASHBOARD, 'tab'),
 					onOpenKanban: () => void this.activateView(VIEW_TYPE_KANBAN, 'tab'),
@@ -174,6 +193,9 @@ export default class NeseserPlugin extends Plugin {
 		// Legacy shape (pre-sync): settings fields at the root of data.json.
 		const settings = raw.settings ?? raw;
 		this.settings = { ...DEFAULT_SETTINGS, ...settings };
+		// Defensive copy: when no categories were persisted the spread aliases the
+		// shared DEFAULT_CATEGORIES array; clone so edits never mutate the default.
+		this.settings.categories = this.settings.categories.map((category) => ({ ...category }));
 		this.syncState = raw.syncState ?? emptySnapshot();
 	}
 
@@ -394,11 +416,15 @@ export default class NeseserPlugin extends Plugin {
 	}
 
 	private openNewProjectModal(): void {
-		new NewProjectModal(this.app, async (input) => {
-			const { indexPath } = await this.manager.createProject(input);
-			new Notice(`Project created: ${input.name}`);
-			await this.app.workspace.openLinkText(indexPath, '', false);
-		}).open();
+		new NewProjectModal(
+			this.app,
+			async (input) => {
+				const { indexPath } = await this.manager.createProject(input);
+				new Notice(`Project created: ${input.name}`);
+				await this.app.workspace.openLinkText(indexPath, '', false);
+			},
+			this.settings.categories.map((category) => category.name),
+		).open();
 	}
 
 	private openNewTaskModal(): void {

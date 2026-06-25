@@ -9,8 +9,18 @@ import {
 } from '@dnd-kit/core';
 import { useState } from 'react';
 import { Task, TaskStatus } from '../core/models';
+import type { CategoryDef } from '../core/category-data';
+import {
+	allowedProjectNames,
+	availableCategories,
+	filterProjectsByCategory,
+	filterTasksByCategory,
+} from '../core/category-data';
+import type { CategoryFilterStore } from '../core/category-filter';
 import type { TaskIndex } from '../core/task-index';
 import { KanbanColumn, buildKanbanColumns } from '../core/view-data';
+import { CategoryFilterBar } from './CategoryFilterBar';
+import { useCategoryFilter } from './use-category-filter';
 import { useDragClickGuard } from './use-drag-click-guard';
 import { useIndexRefresh } from './use-index-refresh';
 
@@ -21,6 +31,8 @@ export interface KanbanCallbacks {
 
 interface Props {
 	index: TaskIndex;
+	categoryFilter: CategoryFilterStore;
+	getCategories: () => CategoryDef[];
 	callbacks: KanbanCallbacks;
 }
 
@@ -98,8 +110,9 @@ function Column({
 	);
 }
 
-export function KanbanApp({ index, callbacks }: Props) {
+export function KanbanApp({ index, categoryFilter, getCategories, callbacks }: Props) {
 	useIndexRefresh(index);
+	const active = useCategoryFilter(categoryFilter);
 
 	const [projectFilter, setProjectFilter] = useState<string>('');
 	const sensors = useSensors(
@@ -107,8 +120,17 @@ export function KanbanApp({ index, callbacks }: Props) {
 	);
 	const guard = useDragClickGuard();
 
-	const projects = index.getAllProjects();
-	const tasks = projectFilter ? index.getTasksForProject(projectFilter) : index.getAllTasks();
+	const allProjects = index.getAllProjects();
+	const options = availableCategories(getCategories(), allProjects);
+	const projects = filterProjectsByCategory(allProjects, active);
+	// The chosen project may fall outside the active category; fall back to "all"
+	// so the board never silently empties with no matching dropdown option.
+	const effectiveProjectFilter = projects.some((p) => p.name === projectFilter) ? projectFilter : '';
+	const allowed = allowedProjectNames(allProjects, active);
+	const baseTasks = effectiveProjectFilter
+		? index.getTasksForProject(effectiveProjectFilter)
+		: index.getAllTasks();
+	const tasks = filterTasksByCategory(baseTasks, allowed, (path) => index.projectNameForPath(path));
 	const columns = buildKanbanColumns(tasks);
 
 	const handleDragEnd = (event: DragEndEvent) => {
@@ -126,7 +148,8 @@ export function KanbanApp({ index, callbacks }: Props) {
 	return (
 		<div className="ns-kanban">
 			<div className="ns-toolbar">
-				<select value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
+				<CategoryFilterBar options={options} active={active} onSelect={(value) => categoryFilter.set(value)} />
+				<select value={effectiveProjectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
 					<option value="">All projects</option>
 					{projects.map((p) => (
 						<option key={p.path} value={p.name}>
@@ -145,7 +168,7 @@ export function KanbanApp({ index, callbacks }: Props) {
 							key={column.status}
 							column={column}
 							index={index}
-							showProject={projectFilter === ''}
+							showProject={effectiveProjectFilter === ''}
 							onOpen={openTask}
 						/>
 					))}

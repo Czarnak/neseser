@@ -61,6 +61,20 @@ describe('ProjectManager', () => {
 			expect(vault.notes.get('Projects/Alpha/Alpha.md')).toContain('deadline: 2026-12-31');
 		});
 
+		test('includes category in index note when given', async () => {
+			await manager.createProject({ name: 'Alpha', category: 'University' });
+
+			expect(vault.notes.get('Projects/Alpha/Alpha.md')).toContain('category: University');
+		});
+
+		test('omits category when blank or absent', async () => {
+			await manager.createProject({ name: 'Alpha', category: '   ' });
+			await manager.createProject({ name: 'Beta' });
+
+			expect(vault.notes.get('Projects/Alpha/Alpha.md')).not.toContain('category:');
+			expect(vault.notes.get('Projects/Beta/Beta.md')).not.toContain('category:');
+		});
+
 		test('sanitizes characters that are illegal in file names', async () => {
 			const { indexPath } = await manager.createProject({ name: 'Ship/it: now?' });
 

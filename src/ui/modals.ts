@@ -30,11 +30,13 @@ abstract class SubmitModal extends Modal {
 
 export class NewProjectModal extends SubmitModal {
 	private name = '';
+	private category = '';
 	private deadline = '';
 
 	constructor(
 		app: App,
 		private onSubmit: (input: CreateProjectInput) => Promise<void>,
+		private categories: string[] = [],
 	) {
 		super(app);
 	}
@@ -45,6 +47,13 @@ export class NewProjectModal extends SubmitModal {
 		new Setting(this.contentEl).setName('Name').addText((text) => {
 			text.onChange((value) => (this.name = value));
 			text.inputEl.focus();
+		});
+
+		new Setting(this.contentEl).setName('Category').addDropdown((dd) => {
+			dd.addOption('', '(none)');
+			for (const name of this.categories) dd.addOption(name, name);
+			dd.setValue(this.category);
+			dd.onChange((value) => (this.category = value));
 		});
 
 		new Setting(this.contentEl)
@@ -58,6 +67,7 @@ export class NewProjectModal extends SubmitModal {
 	protected async submit(): Promise<void> {
 		await this.onSubmit({
 			name: this.name,
+			category: this.category.trim() || undefined,
 			deadline: this.deadline.trim() || undefined,
 		});
 	}
