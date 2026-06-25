@@ -1,16 +1,16 @@
 # Graph Report - neseser  (2026-06-25)
 
 ## Corpus Check
-- 61 files · ~33,729 words
+- 62 files · ~87,522 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 401 nodes · 812 edges · 19 communities (15 shown, 4 thin omitted)
+- 402 nodes · 812 edges · 20 communities (16 shown, 4 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 74 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fa5a0afa`
+- Built from commit: `61d1b957`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -55,7 +55,7 @@
 - `nextOccurrence()` --calls--> `rescheduleDue()`  [INFERRED]
   src/core/recurrence.ts → src/core/calendar-data.ts
 
-## Communities (19 total, 4 thin omitted)
+## Communities (20 total, 4 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -108,11 +108,11 @@ Nodes (4): addSubmitButton(), NewProjectModal, NewTaskModal, trySubmit()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `TaskIndex` connect `Community 5` to `Community 0`, `Community 1`, `Community 2`, `Community 4`, `Community 8`, `Community 11`, `Community 12`, `Community 13`?**
-  _High betweenness centrality (0.214) - this node is a cross-community bridge._
+  _High betweenness centrality (0.213) - this node is a cross-community bridge._
 - **Why does `SyncEngine` connect `Community 3` to `Community 2`, `Community 10`?**
-  _High betweenness centrality (0.133) - this node is a cross-community bridge._
+  _High betweenness centrality (0.132) - this node is a cross-community bridge._
 - **Why does `ProjectManager` connect `Community 4` to `Community 0`, `Community 2`, `Community 5`, `Community 14`?**
-  _High betweenness centrality (0.126) - this node is a cross-community bridge._
+  _High betweenness centrality (0.125) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `dueDateKey()` (e.g. with `tasksByDueDay()` and `clampStartKey()`) actually correct?**
   _`dueDateKey()` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Should `Community 0` be split into smaller, more focused modules?**

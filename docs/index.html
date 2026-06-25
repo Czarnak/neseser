@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Neseser | Obsidian multi-project manager</title>
+	<meta name="description"
+		content="Neseser is an Obsidian desktop plugin for managing projects as folders, tasks as notes, multiple planning views, and TickTick sync." />
+	<meta property="og:title" content="Neseser | Obsidian multi-project manager" />
+	<meta property="og:description"
+		content="Folders become projects. Notes become tasks. Views and TickTick sync keep the vault moving." />
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="assets/neseser-product-mockup.png" />
+	<link rel="stylesheet" href="styles.css" />
+	<script defer src="site.js"></script>
+</head>
+
+<body>
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="site-header" id="top">
+		<nav class="nav" aria-label="Primary navigation">
+			<a class="brand" href="#top" aria-label="Neseser home">
+				<span class="brand-mark" aria-hidden="true">N</span>
+				<span>Neseser</span>
+			</a>
+			<div class="nav-links">
+				<a href="#why">Why</a>
+				<a href="#views">Views</a>
+				<a href="#sync">Sync</a>
+				<a href="#install">Install</a>
+			</div>
+			<a class="nav-action" href="https://github.com/Czarnak/neseser">GitHub</a>
+		</nav>
+	</header>
+
+	<main id="main">
+		<section class="hero section-shell">
+			<div class="hero-copy" data-reveal>
+				<h1>Project management that lives in your Obsidian vault</h1>
+				<p>
+					Folders become projects. Notes become tasks. Views and TickTick sync keep
+					the vault moving.
+				</p>
+				<div class="hero-actions" aria-label="Primary actions">
+					<a class="button button-primary" href="#install">Install with BRAT</a>
+					<a class="button button-secondary" href="https://github.com/Czarnak/neseser">
+						View GitHub
+					</a>
+				</div>
+				<dl class="hero-facts" aria-label="Plugin facts">
+					<div>
+						<dt>Platform</dt>
+						<dd>Obsidian desktop</dd>
+					</div>
+					<div>
+						<dt>Model</dt>
+						<dd>Vault-native</dd>
+					</div>
+					<div>
+						<dt>License</dt>
+						<dd>MIT</dd>
+					</div>
+				</dl>
+			</div>
+			<div class="hero-media" data-reveal>
+				<img src="assets/neseser-product-mockup.png" width="1792" height="1024"
+					alt="Light product mockup of Neseser with folder navigation, task rows, kanban lanes, calendar activity, and sync status" />
+			</div>
+		</section>
+
+		<section class="fact-band" aria-label="Core model">
+			<div>
+				<strong>Projects as folders</strong>
+				<span>Use the structure your vault already has.</span>
+			</div>
+			<div>
+				<strong>Tasks as notes</strong>
+				<span>Keep context, metadata, and work history together.</span>
+			</div>
+			<div>
+				<strong>Views as lenses</strong>
+				<span>Move between today, dashboard, kanban, calendar, and gantt.</span>
+			</div>
+		</section>
+
+		<section class="section-shell layout-split" id="why">
+			<div class="section-copy" data-reveal>
+				<h2>Your vault stays the source of truth</h2>
+				<p>
+					Neseser does not ask you to move project planning into another app.
+					Each project remains a folder. Each task remains a note. The plugin
+					adds planning surfaces on top of that plain-file model.
+				</p>
+				<ul class="check-list">
+					<li>Configure one project root folder in settings.</li>
+					<li>Group work with editable categories and color tokens.</li>
+					<li>Open task notes directly from planning views.</li>
+				</ul>
+			</div>
+			<div class="vault-panel" data-reveal>
+				<div class="panel-title">Vault shape</div>
+				<pre aria-label="Example vault structure"><code>Projects
+  Research
+    Literature review.md
+    Dataset audit.md
+  Training
+    Monday intervals.md
+    Recovery notes.md
+  Work
+    Launch checklist.md
+    Vendor call.md</code></pre>
+			</div>
+		</section>
+
+		<section class="section-shell" id="views">
+			<div class="section-heading" data-reveal>
+				<h2>Pick the view that matches the decision</h2>
+				<p>
+					The same task index powers focused daily work, project health, schedule
+					review, timeline planning, and drag-friendly task flow.
+				</p>
+			</div>
+			<div class="views-grid">
+				<article class="view-card view-card-dashboard" data-reveal>
+					<div>
+						<h3>Dashboard</h3>
+						<p>Scan active projects, category filters, progress, and burndown shape.</p>
+					</div>
+					<span>Overview</span>
+				</article>
+				<article class="view-card view-card-today" data-reveal>
+					<h3>Today</h3>
+					<p>Focus on current tasks without leaving the vault.</p>
+					<span>Focus</span>
+				</article>
+				<article class="view-card view-card-kanban" data-reveal>
+					<h3>Kanban</h3>
+					<p>Move tasks across stages with status updates written back to notes.</p>
+					<span>Flow</span>
+				</article>
+				<article class="view-card view-card-calendar" data-reveal>
+					<h3>Calendar</h3>
+					<p>Review due dates and reschedule work from the planning surface.</p>
+					<span>Dates</span>
+				</article>
+				<article class="view-card view-card-gantt" data-reveal>
+					<h3>Gantt</h3>
+					<p>Track longer project timelines when sequence matters.</p>
+					<span>Timeline</span>
+				</article>
+				<article class="view-card view-card-navigation" data-reveal>
+					<h3>Navigation</h3>
+					<p>Open the right Neseser surface quickly from one control point.</p>
+					<span>Command</span>
+				</article>
+			</div>
+		</section>
+
+		<section class="section-shell sync-section" id="sync">
+			<div class="sync-panel" data-reveal aria-label="Sync states">
+				<div class="sync-row sync-row-active">
+					<span></span>
+					<strong>Obsidian vault</strong>
+					<small>Local project files</small>
+				</div>
+				<div class="sync-rail" aria-hidden="true">
+					<span></span>
+				</div>
+				<div class="sync-row">
+					<span></span>
+					<strong>Sync engine</strong>
+					<small>OAuth, status, retries, cadence</small>
+				</div>
+				<div class="sync-rail" aria-hidden="true">
+					<span></span>
+				</div>
+				<div class="sync-row">
+					<span></span>
+					<strong>TickTick</strong>
+					<small>External task continuity</small>
+				</div>
+			</div>
+			<div class="section-copy" data-reveal>
+				<h2>TickTick sync when you need work outside the vault</h2>
+				<p>
+					Connect TickTick from plugin settings, set an automatic sync cadence, and
+					keep status visible while Neseser handles retries and token state.
+				</p>
+				<div class="note-box">
+					<strong>Security note</strong>
+					<span>
+						TickTick credentials are configured locally in Obsidian plugin settings.
+						Keep your vault private and avoid publishing plugin data files.
+					</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="section-shell install-section" id="install">
+			<div class="section-heading" data-reveal>
+				<h2>Install from this repository</h2>
+				<p>
+					Use BRAT for the fastest beta install path, or download the latest release
+					and place the plugin folder in your vault manually.
+				</p>
+			</div>
+			<div class="install-grid">
+				<article class="install-card" data-reveal>
+					<h3>BRAT install</h3>
+					<ol>
+						<li>Open Obsidian42 BRAT settings.</li>
+						<li>Select Add Beta plugin.</li>
+						<li>Paste the Neseser repository URL.</li>
+						<li>Enable Neseser in Community plugins.</li>
+					</ol>
+					<div class="repo-strip">
+						<code id="repo-url">https://github.com/Czarnak/neseser</code>
+						<button class="copy-button" type="button" data-copy="#repo-url">
+							Copy
+						</button>
+					</div>
+					<p class="copy-status" role="status" aria-live="polite"></p>
+				</article>
+				<article class="install-card install-card-quiet" data-reveal>
+					<h3>Manual install</h3>
+					<ol>
+						<li>Download the latest release archive.</li>
+						<li>Extract it into your vault plugin directory.</li>
+						<li>Use <code>.obsidian/plugins/neseser/</code> as the folder path.</li>
+						<li>Enable the plugin in Obsidian Community plugins.</li>
+					</ol>
+					<a class="button button-secondary" href="https://github.com/Czarnak/neseser/releases">
+						View releases
+					</a>
+				</article>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div>
+			<strong>Neseser</strong>
+			<span>Obsidian multi-project manager by LCZ.</span>
+		</div>
+		<a href="https://github.com/Czarnak/neseser/blob/main/LICENSE">MIT license</a>
+	</footer>
+</body>
+
+</html>

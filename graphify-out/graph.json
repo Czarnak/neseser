@@ -22,12 +22,21 @@
       "norm_label": "vitest.config.ts"
     },
     {
+      "label": "site.js",
+      "file_type": "code",
+      "source_file": "docs/site.js",
+      "source_location": "L1",
+      "id": "docs_site_js",
+      "community": 17,
+      "norm_label": "site.js"
+    },
+    {
       "label": "deploy-test-vault.mjs",
       "file_type": "code",
       "source_file": "scripts/deploy-test-vault.mjs",
       "source_location": "L1",
       "id": "scripts_deploy_test_vault_mjs",
-      "community": 17,
+      "community": 18,
       "norm_label": "deploy-test-vault.mjs"
     },
     {
@@ -2862,7 +2871,7 @@
       "source_file": "tests/styles-encoding.test.ts",
       "source_location": "L1",
       "id": "tests_styles_encoding_test_ts",
-      "community": 18,
+      "community": 19,
       "norm_label": "styles-encoding.test.ts"
     },
     {
@@ -3621,9 +3630,9 @@
       "source_file": "src/main.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_main_ts",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -4400,9 +4409,9 @@
       "source_file": "src/settings.ts",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab_renderticktick",
-      "target": "src_settings_isticktickconnected",
-      "confidence_score": 1.0
+      "target": "src_settings_isticktickconnected"
     },
     {
       "relation": "calls",
@@ -4441,9 +4450,9 @@
       "source_file": "src/settings.ts",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab",
-      "target": "src_settings_nesesersettingtab_rendercategories",
-      "confidence_score": 1.0
+      "target": "src_settings_nesesersettingtab_rendercategories"
     },
     {
       "relation": "method",
@@ -4451,9 +4460,9 @@
       "source_file": "src/settings.ts",
       "source_location": "L179",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab",
-      "target": "src_settings_nesesersettingtab_renderticktick",
-      "confidence_score": 1.0
+      "target": "src_settings_nesesersettingtab_renderticktick"
     },
     {
       "relation": "calls",
@@ -4462,9 +4471,9 @@
       "source_file": "src/settings.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab_display",
-      "target": "src_settings_nesesersettingtab_rendercategories",
-      "confidence_score": 1.0
+      "target": "src_settings_nesesersettingtab_rendercategories"
     },
     {
       "relation": "calls",
@@ -4473,9 +4482,9 @@
       "source_file": "src/settings.ts",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab_display",
-      "target": "src_settings_nesesersettingtab_renderticktick",
-      "confidence_score": 1.0
+      "target": "src_settings_nesesersettingtab_renderticktick"
     },
     {
       "relation": "imports",
@@ -5197,9 +5206,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_categoryof",
-      "confidence_score": 1.0
+      "target": "core_category_data_categoryof"
     },
     {
       "relation": "contains",
@@ -5207,9 +5216,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_fallbackcolor",
-      "confidence_score": 1.0
+      "target": "core_category_data_fallbackcolor"
     },
     {
       "relation": "contains",
@@ -5217,9 +5226,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_colorforcategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_colorforcategory"
     },
     {
       "relation": "contains",
@@ -5227,9 +5236,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "contains",
@@ -5237,9 +5246,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_matchesactive",
-      "confidence_score": 1.0
+      "target": "core_category_data_matchesactive"
     },
     {
       "relation": "contains",
@@ -5247,9 +5256,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "contains",
@@ -5257,9 +5266,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_allowedprojectnames",
-      "confidence_score": 1.0
+      "target": "core_category_data_allowedprojectnames"
     },
     {
       "relation": "contains",
@@ -5267,9 +5276,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_data_ts",
-      "target": "core_category_data_filtertasksbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filtertasksbycategory"
     },
     {
       "relation": "imports",
@@ -5278,9 +5287,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_data_categoryof",
-      "confidence_score": 1.0
+      "target": "core_category_data_categoryof"
     },
     {
       "relation": "imports",
@@ -5289,9 +5298,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "core_category_data_categoryof",
-      "confidence_score": 1.0
+      "target": "core_category_data_categoryof"
     },
     {
       "relation": "imports",
@@ -5300,9 +5309,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_categoryof",
-      "confidence_score": 1.0
+      "target": "core_category_data_categoryof"
     },
     {
       "relation": "calls",
@@ -5322,9 +5331,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_category_data_colorforcategory",
-      "target": "core_category_data_fallbackcolor",
-      "confidence_score": 1.0
+      "target": "core_category_data_fallbackcolor"
     },
     {
       "relation": "calls",
@@ -5333,9 +5342,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_category_data_availablecategories",
-      "target": "core_category_data_fallbackcolor",
-      "confidence_score": 1.0
+      "target": "core_category_data_fallbackcolor"
     },
     {
       "relation": "imports",
@@ -5344,9 +5353,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_data_colorforcategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_colorforcategory"
     },
     {
       "relation": "imports",
@@ -5355,9 +5364,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "core_category_data_colorforcategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_colorforcategory"
     },
     {
       "relation": "imports",
@@ -5366,9 +5375,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_colorforcategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_colorforcategory"
     },
     {
       "relation": "imports",
@@ -5377,9 +5386,9 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_calendarapp_tsx",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5388,9 +5397,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5399,9 +5408,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5410,9 +5419,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5421,9 +5430,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5432,9 +5441,9 @@
       "source_file": "src/ui/TodayApp.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_todayapp_tsx",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5443,9 +5452,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_availablecategories",
-      "confidence_score": 1.0
+      "target": "core_category_data_availablecategories"
     },
     {
       "relation": "imports",
@@ -5454,9 +5463,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_matchesactive",
-      "confidence_score": 1.0
+      "target": "core_category_data_matchesactive"
     },
     {
       "relation": "calls",
@@ -5465,9 +5474,9 @@
       "source_file": "src/core/category-data.ts",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_category_data_allowedprojectnames",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "imports",
@@ -5476,9 +5485,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "imports",
@@ -5487,9 +5496,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "imports",
@@ -5498,9 +5507,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "imports",
@@ -5509,9 +5518,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "imports",
@@ -5520,9 +5529,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_filterprojectsbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filterprojectsbycategory"
     },
     {
       "relation": "imports",
@@ -5531,9 +5540,9 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_calendarapp_tsx",
-      "target": "core_category_data_allowedprojectnames",
-      "confidence_score": 1.0
+      "target": "core_category_data_allowedprojectnames"
     },
     {
       "relation": "imports",
@@ -5542,9 +5551,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_data_allowedprojectnames",
-      "confidence_score": 1.0
+      "target": "core_category_data_allowedprojectnames"
     },
     {
       "relation": "imports",
@@ -5553,9 +5562,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "core_category_data_allowedprojectnames",
-      "confidence_score": 1.0
+      "target": "core_category_data_allowedprojectnames"
     },
     {
       "relation": "imports",
@@ -5564,9 +5573,9 @@
       "source_file": "src/ui/TodayApp.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_todayapp_tsx",
-      "target": "core_category_data_allowedprojectnames",
-      "confidence_score": 1.0
+      "target": "core_category_data_allowedprojectnames"
     },
     {
       "relation": "imports",
@@ -5575,9 +5584,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_allowedprojectnames",
-      "confidence_score": 1.0
+      "target": "core_category_data_allowedprojectnames"
     },
     {
       "relation": "imports",
@@ -5586,9 +5595,9 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_calendarapp_tsx",
-      "target": "core_category_data_filtertasksbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filtertasksbycategory"
     },
     {
       "relation": "imports",
@@ -5597,9 +5606,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_data_filtertasksbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filtertasksbycategory"
     },
     {
       "relation": "imports",
@@ -5608,9 +5617,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "core_category_data_filtertasksbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filtertasksbycategory"
     },
     {
       "relation": "imports",
@@ -5619,9 +5628,9 @@
       "source_file": "src/ui/TodayApp.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_todayapp_tsx",
-      "target": "core_category_data_filtertasksbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filtertasksbycategory"
     },
     {
       "relation": "imports",
@@ -5630,9 +5639,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_filtertasksbycategory",
-      "confidence_score": 1.0
+      "target": "core_category_data_filtertasksbycategory"
     },
     {
       "relation": "contains",
@@ -5640,9 +5649,9 @@
       "source_file": "src/core/category-filter.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_core_category_filter_ts",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "method",
@@ -5650,9 +5659,9 @@
       "source_file": "src/core/category-filter.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_category_filter_categoryfilterstore",
-      "target": "core_category_filter_categoryfilterstore_get",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore_get"
     },
     {
       "relation": "method",
@@ -5660,9 +5669,9 @@
       "source_file": "src/core/category-filter.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_category_filter_categoryfilterstore",
-      "target": "core_category_filter_categoryfilterstore_set",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore_set"
     },
     {
       "relation": "method",
@@ -5670,9 +5679,9 @@
       "source_file": "src/core/category-filter.ts",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_category_filter_categoryfilterstore",
-      "target": "core_category_filter_categoryfilterstore_subscribe",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore_subscribe"
     },
     {
       "relation": "imports",
@@ -5681,9 +5690,9 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_calendarapp_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5692,9 +5701,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5703,9 +5712,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5714,9 +5723,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5725,9 +5734,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5736,9 +5745,9 @@
       "source_file": "src/ui/TodayApp.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_todayapp_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5747,9 +5756,9 @@
       "source_file": "src/ui/use-category-filter.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_use_category_filter_ts",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5758,9 +5767,9 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_views_calendar_view_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5769,9 +5778,9 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_views_dashboard_view_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5780,9 +5789,9 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_views_gantt_view_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5791,9 +5800,9 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_views_kanban_view_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5802,9 +5811,9 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_views_navigation_view_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5813,9 +5822,9 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_views_today_view_tsx",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -5824,9 +5833,9 @@
       "source_file": "tests/core/category-filter.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_filter_test_ts",
-      "target": "core_category_filter_categoryfilterstore",
-      "confidence_score": 1.0
+      "target": "core_category_filter_categoryfilterstore"
     },
     {
       "relation": "imports",
@@ -10363,9 +10372,9 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_calendarapp_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10374,9 +10383,9 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_calendarapp_tsx",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "imports",
@@ -10446,9 +10455,9 @@
       "source_file": "src/ui/CategoryFilterBar.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_categoryfilterbar_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10457,9 +10466,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10468,9 +10477,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10479,9 +10488,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10490,9 +10499,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10501,9 +10510,9 @@
       "source_file": "src/ui/TodayApp.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_todayapp_tsx",
-      "target": "ui_categoryfilterbar_categoryfilterbar",
-      "confidence_score": 1.0
+      "target": "ui_categoryfilterbar_categoryfilterbar"
     },
     {
       "relation": "imports",
@@ -10512,9 +10521,9 @@
       "source_file": "src/ui/DashboardApp.tsx",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_dashboardapp_tsx",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "imports",
@@ -10555,9 +10564,9 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_ganttapp_tsx",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "imports",
@@ -10638,9 +10647,9 @@
       "source_file": "src/ui/KanbanApp.tsx",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_kanbanapp_tsx",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "imports",
@@ -10814,9 +10823,9 @@
       "source_file": "src/ui/NavigationApp.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_navigationapp_tsx",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "imports",
@@ -10857,9 +10866,9 @@
       "source_file": "src/ui/TodayApp.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_todayapp_tsx",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "imports",
@@ -10898,9 +10907,9 @@
       "source_file": "src/ui/use-category-filter.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_ui_use_category_filter_ts",
-      "target": "ui_use_category_filter_usecategoryfilter",
-      "confidence_score": 1.0
+      "target": "ui_use_category_filter_usecategoryfilter"
     },
     {
       "relation": "contains",
@@ -11348,9 +11357,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_test_project",
-      "confidence_score": 1.0
+      "target": "core_category_data_test_project"
     },
     {
       "relation": "contains",
@@ -11358,9 +11367,9 @@
       "source_file": "tests/core/category-data.test.ts",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_core_category_data_test_ts",
-      "target": "core_category_data_test_projectnameforpath",
-      "confidence_score": 1.0
+      "target": "core_category_data_test_projectnameforpath"
     },
     {
       "relation": "contains",
@@ -12208,5 +12217,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fa5a0afad455bca732e78e2db14dfe78a2134037"
+  "built_at_commit": "61d1b95730fa2810db759ac6912093277ce9c9c6"
 }
