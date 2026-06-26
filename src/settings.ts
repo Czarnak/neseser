@@ -1,11 +1,19 @@
 import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import type { CategoryDef } from './core/category-data';
+import { PRIORITIES, Priority } from './core/models';
+import {
+	ProjectTemplate,
+	cloneProjectTemplates,
+	createProjectTemplateId,
+} from './core/project-templates';
 import type NeseserPlugin from './main';
 
 export interface NeseserSettings {
 	projectsRoot: string;
 	/** User-managed project categories; seeded with defaults, freely editable. */
 	categories: CategoryDef[];
+	/** User-managed project templates; each template creates standard task notes for a new project. */
+	projectTemplates: ProjectTemplate[];
 	ticktickClientId: string;
 	ticktickClientSecret: string;
 	ticktickPort: number;
@@ -27,6 +35,7 @@ export const DEFAULT_CATEGORIES: CategoryDef[] = [
 export const DEFAULT_SETTINGS: NeseserSettings = {
 	projectsRoot: 'Projects',
 	categories: DEFAULT_CATEGORIES,
+	projectTemplates: [],
 	ticktickClientId: 'I46A11I1VbyvgYo5mW',
 	ticktickClientSecret: '',
 	ticktickPort: 42813,
@@ -64,6 +73,7 @@ export class NeseserSettingTab extends PluginSettingTab {
 			);
 
 		this.renderCategories();
+		this.renderProjectTemplates();
 
 		new Setting(this.containerEl).setName('TickTick').setHeading();
 
@@ -171,6 +181,121 @@ export class NeseserSettingTab extends PluginSettingTab {
 		new Setting(listEl).addButton((btn) =>
 			btn.setButtonText('Add category').onClick(() => {
 				applyCategories([...this.plugin.settings.categories, { name: 'New category', color: '#8a8a8a' }]);
+				this.display();
+			}),
+		);
+	}
+
+	private renderProjectTemplates(): void {
+		new Setting(this.containerEl)
+			.setName('Project templates')
+			.setDesc('Standard task lists available when creating a project.')
+			.setHeading();
+
+		const listEl = this.containerEl.createDiv({ cls: 'ns-settings-project-templates' });
+
+		const applyTemplates = (next: ProjectTemplate[]): void => {
+			this.plugin.settings.projectTemplates = cloneProjectTemplates(next);
+			this.plugin
+				.saveSettings()
+				.catch((error: unknown) =>
+					new Notice(`Neseser: could not save project templates — ${error instanceof Error ? error.message : String(error)}`),
+				);
+		};
+
+		const updateTemplate = (templateId: string, updater: (template: ProjectTemplate) => ProjectTemplate): void => {
+			applyTemplates(
+				this.plugin.settings.projectTemplates.map((template) =>
+					template.id === templateId ? updater(template) : template,
+				),
+			);
+		};
+
+		this.plugin.settings.projectTemplates.forEach((template) => {
+			const templateEl = listEl.createDiv({ cls: 'ns-settings-project-template' });
+
+			new Setting(templateEl)
+				.addText((text) =>
+					text
+						.setPlaceholder('Template name')
+						.setValue(template.name)
+						.onChange((value) =>
+							updateTemplate(template.id, (current) => ({ ...current, name: value })),
+						),
+				)
+				.addExtraButton((btn) =>
+					btn
+						.setIcon('trash')
+						.setTooltip('Remove template')
+						.onClick(() => {
+							applyTemplates(this.plugin.settings.projectTemplates.filter((item) => item.id !== template.id));
+							this.display();
+						}),
+				);
+
+			const tasksEl = templateEl.createDiv({ cls: 'ns-settings-template-tasks' });
+			template.tasks.forEach((task, taskIdx) => {
+				new Setting(tasksEl)
+					.addText((text) =>
+						text
+							.setPlaceholder('Task title')
+							.setValue(task.title)
+							.onChange((value) =>
+								updateTemplate(template.id, (current) => ({
+									...current,
+									tasks: current.tasks.map((item, idx) =>
+										idx === taskIdx ? { ...item, title: value } : item,
+									),
+								})),
+							),
+					)
+					.addDropdown((dd) => {
+						for (const priority of PRIORITIES) dd.addOption(priority, priority);
+						dd.setValue(task.priority);
+						dd.onChange((value) =>
+							updateTemplate(template.id, (current) => ({
+								...current,
+								tasks: current.tasks.map((item, idx) =>
+									idx === taskIdx ? { ...item, priority: value as Priority } : item,
+								),
+							})),
+						);
+					})
+					.addExtraButton((btn) =>
+						btn
+							.setIcon('trash')
+							.setTooltip('Remove task')
+							.onClick(() => {
+								updateTemplate(template.id, (current) => ({
+									...current,
+									tasks: current.tasks.filter((_, idx) => idx !== taskIdx),
+								}));
+								this.display();
+							}),
+					);
+			});
+
+			new Setting(tasksEl).addButton((btn) =>
+				btn.setButtonText('Add task').onClick(() => {
+					updateTemplate(template.id, (current) => ({
+						...current,
+						tasks: [...current.tasks, { title: 'New task', priority: 'none' }],
+					}));
+					this.display();
+				}),
+			);
+		});
+
+		new Setting(listEl).addButton((btn) =>
+			btn.setButtonText('Add template').onClick(() => {
+				applyTemplates([
+					...this.plugin.settings.projectTemplates,
+					{
+						id: createProjectTemplateId(this.plugin.settings.projectTemplates),
+						name: 'New template',
+						tasks: [],
+					},
+				]);
 				this.display();
 			}),
 		);

@@ -92,6 +92,75 @@ describe('ProjectManager', () => {
 		});
 	});
 
+	describe('createProjectWithTasks', () => {
+		test('creates a project with multiple generated task notes', async () => {
+			const result = await manager.createProjectWithTasks({
+				name: 'Alpha',
+				tasks: [
+					{ title: 'Kickoff', priority: 'high' },
+					{ title: 'Review notes', priority: 'low' },
+				],
+			});
+
+			expect(result).toEqual({
+				indexPath: 'Projects/Alpha/Alpha.md',
+				projectName: 'Alpha',
+				taskPaths: ['Projects/Alpha/Tasks/Kickoff.md', 'Projects/Alpha/Tasks/Review notes.md'],
+			});
+			expect(vault.notes.get('Projects/Alpha/Tasks/Kickoff.md')).toContain('priority: high');
+			expect(vault.notes.get('Projects/Alpha/Tasks/Review notes.md')).toContain('priority: low');
+		});
+
+		test('creates only the project when no template tasks are selected', async () => {
+			const result = await manager.createProjectWithTasks({ name: 'Alpha' });
+
+			expect(result).toEqual({
+				indexPath: 'Projects/Alpha/Alpha.md',
+				projectName: 'Alpha',
+				taskPaths: [],
+			});
+			expect([...vault.notes.keys()]).toEqual(['Projects/Alpha/Alpha.md']);
+		});
+
+		test('rejects blank generated task titles before writing anything', async () => {
+			await expect(
+				manager.createProjectWithTasks({
+					name: 'Alpha',
+					tasks: [{ title: '???', priority: 'none' }],
+				}),
+			).rejects.toThrow(/task title/i);
+
+			expect(vault.folders.size).toBe(0);
+			expect(vault.notes.size).toBe(0);
+		});
+
+		test('rejects duplicate generated task titles after sanitizing before writing anything', async () => {
+			await expect(
+				manager.createProjectWithTasks({
+					name: 'Alpha',
+					tasks: [
+						{ title: 'Review/docs', priority: 'none' },
+						{ title: 'Review: docs', priority: 'high' },
+					],
+				}),
+			).rejects.toThrow(/duplicate task/i);
+
+			expect(vault.folders.size).toBe(0);
+			expect(vault.notes.size).toBe(0);
+		});
+
+		test('keeps existing duplicate-project behavior', async () => {
+			await manager.createProject({ name: 'Alpha' });
+
+			await expect(
+				manager.createProjectWithTasks({
+					name: 'Alpha',
+					tasks: [{ title: 'Kickoff', priority: 'none' }],
+				}),
+			).rejects.toThrow(/exists/i);
+		});
+	});
+
 	describe('createTask', () => {
 		beforeEach(async () => {
 			await manager.createProject({ name: 'Alpha' });

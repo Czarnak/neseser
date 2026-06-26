@@ -3,6 +3,16 @@ import { PRIORITIES, Priority, RECURRENCES, Recurrence } from '../core/models';
 import type { CreateProjectInput, CreateTaskInput } from '../core/project-manager';
 import type { TaskIndex } from '../core/task-index';
 
+export interface ProjectTemplateOption {
+	id: string;
+	name: string;
+	taskCount: number;
+}
+
+export interface NewProjectModalInput extends CreateProjectInput {
+	templateId?: string;
+}
+
 abstract class SubmitModal extends Modal {
 	protected abstract submit(): Promise<void>;
 
@@ -32,11 +42,13 @@ export class NewProjectModal extends SubmitModal {
 	private name = '';
 	private category = '';
 	private deadline = '';
+	private templateId = '';
 
 	constructor(
 		app: App,
-		private onSubmit: (input: CreateProjectInput) => Promise<void>,
+		private onSubmit: (input: NewProjectModalInput) => Promise<void>,
 		private categories: string[] = [],
+		private templates: ProjectTemplateOption[] = [],
 	) {
 		super(app);
 	}
@@ -61,6 +73,18 @@ export class NewProjectModal extends SubmitModal {
 			.setDesc('Optional, YYYY-MM-DD')
 			.addText((text) => text.setPlaceholder('2026-12-31').onChange((value) => (this.deadline = value)));
 
+		if (this.templates.length > 0) {
+			new Setting(this.contentEl).setName('Template').addDropdown((dd) => {
+				dd.addOption('', '(none)');
+				for (const template of this.templates) {
+					const count = template.taskCount === 1 ? '1 task' : `${template.taskCount} tasks`;
+					dd.addOption(template.id, `${template.name} (${count})`);
+				}
+				dd.setValue(this.templateId);
+				dd.onChange((value) => (this.templateId = value));
+			});
+		}
+
 		this.addSubmitButton('Create project');
 	}
 
@@ -69,6 +93,7 @@ export class NewProjectModal extends SubmitModal {
 			name: this.name,
 			category: this.category.trim() || undefined,
 			deadline: this.deadline.trim() || undefined,
+			templateId: this.templateId || undefined,
 		});
 	}
 }

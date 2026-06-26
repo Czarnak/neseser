@@ -10,6 +10,7 @@ import { SyncSnapshot, emptySnapshot } from './sync/sync-state';
 import { SyncStatus, SyncStatusStore, formatSyncStatus } from './sync/sync-status';
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
+import { normalizeProjectTemplates } from './core/project-templates';
 import { NewProjectModal, NewTaskModal } from './ui/modals';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
@@ -196,6 +197,7 @@ export default class NeseserPlugin extends Plugin {
 		// Defensive copy: when no categories were persisted the spread aliases the
 		// shared DEFAULT_CATEGORIES array; clone so edits never mutate the default.
 		this.settings.categories = this.settings.categories.map((category) => ({ ...category }));
+		this.settings.projectTemplates = normalizeProjectTemplates(this.settings.projectTemplates);
 		this.syncState = raw.syncState ?? emptySnapshot();
 	}
 
@@ -419,11 +421,27 @@ export default class NeseserPlugin extends Plugin {
 		new NewProjectModal(
 			this.app,
 			async (input) => {
-				const { indexPath } = await this.manager.createProject(input);
-				new Notice(`Project created: ${input.name}`);
+				const template = input.templateId
+					? this.settings.projectTemplates.find((item) => item.id === input.templateId)
+					: undefined;
+				if (input.templateId && !template) throw new Error('Selected project template no longer exists');
+
+				const { indexPath, projectName, taskPaths } = await this.manager.createProjectWithTasks({
+					name: input.name,
+					category: input.category,
+					deadline: input.deadline,
+					tasks: template?.tasks ?? [],
+				});
+				const taskText = taskPaths.length === 1 ? ' with 1 task' : taskPaths.length > 1 ? ` with ${taskPaths.length} tasks` : '';
+				new Notice(`Project created: ${projectName}${taskText}`);
 				await this.app.workspace.openLinkText(indexPath, '', false);
 			},
 			this.settings.categories.map((category) => category.name),
+			this.settings.projectTemplates.map((template) => ({
+				id: template.id,
+				name: template.name.trim() || 'Untitled template',
+				taskCount: template.tasks.length,
+			})),
 		).open();
 	}
 

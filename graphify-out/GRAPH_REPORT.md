@@ -1,16 +1,16 @@
-# Graph Report - neseser  (2026-06-25)
+# Graph Report - neseser  (2026-06-26)
 
 ## Corpus Check
-- 62 files · ~87,522 words
+- 64 files · ~88,809 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 402 nodes · 812 edges · 20 communities (16 shown, 4 thin omitted)
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 74 edges (avg confidence: 0.8)
+- 412 nodes · 831 edges · 20 communities (18 shown, 2 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 75 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `61d1b957`
+- Built from commit: `1948463d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,7 +37,7 @@
 3. `NeseserPlugin` - 19 edges
 4. `CategoryFilterStore` - 19 edges
 5. `SyncEngine` - 19 edges
-6. `ProjectManager` - 16 edges
+6. `ProjectManager` - 17 edges
 7. `isTaskClosed()` - 15 edges
 8. `FakeClient` - 14 edges
 9. `dayKey()` - 13 edges
@@ -52,72 +52,80 @@
   tests/sync/mapping.test.ts → src/sync/mapping.ts
 - `ProjectCard()` --calls--> `burndownSeries()`  [INFERRED]
   src/ui/DashboardApp.tsx → src/core/burndown-data.ts
-- `nextOccurrence()` --calls--> `rescheduleDue()`  [INFERRED]
-  src/core/recurrence.ts → src/core/calendar-data.ts
+- `shiftAnchor()` --calls--> `addDays()`  [INFERRED]
+  src/core/gantt-data.ts → src/core/calendar-data.ts
 
-## Communities (20 total, 4 thin omitted)
+## Communities (20 total, 2 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.07
-Nodes (44): burndownSeries(), localDayOf(), round2(), sparklineGeometry(), seriesValues(), addDays(), dayKey(), makeDay() (+36 more)
+Cohesion: 0.05
+Nodes (12): cloneProjectTemplates(), createProjectTemplateId(), normalizeProjectTemplates(), NeseserPlugin, ObsidianEngineStore, ObsidianVaultAdapter, isTickTickConnected(), NeseserSettingTab (+4 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.09
-Nodes (20): allowedProjectNames(), availableCategories(), categoryOf(), colorForCategory(), fallbackColor(), filterProjectsByCategory(), filterTasksByCategory(), matchesActive() (+12 more)
-
-### Community 2 - "Community 2"
-Cohesion: 0.05
-Nodes (8): ObsidianEngineStore, ObsidianVaultAdapter, isTickTickConnected(), NeseserSettingTab, ExponentialBackoff, SyncScheduler, FakeTimer, GanttView
-
-### Community 3 - "Community 3"
 Cohesion: 0.13
 Nodes (23): isTaskClosed(), fingerprintDue(), flattenItems(), parseApiDateMs(), parseLocal(), priorityFromTickTick(), priorityToTickTick(), pushDates() (+15 more)
 
+### Community 2 - "Community 2"
+Cohesion: 0.11
+Nodes (21): burndownSeries(), localDayOf(), round2(), sparklineGeometry(), seriesValues(), addDays(), dayKey(), makeDay() (+13 more)
+
+### Community 3 - "Community 3"
+Cohesion: 0.12
+Nodes (18): allowedProjectNames(), availableCategories(), categoryOf(), colorForCategory(), fallbackColor(), filterProjectsByCategory(), filterTasksByCategory(), matchesActive() (+10 more)
+
 ### Community 4 - "Community 4"
-Cohesion: 0.09
-Nodes (10): frontmatterBlock(), isoDate(), ProjectManager, sanitizeName(), nextInstanceTitle(), nextOccurrence(), noteBody(), stripDateSuffix() (+2 more)
+Cohesion: 0.06
+Nodes (5): CategoryFilterStore, CalendarView, DashboardView, KanbanView, TodayView
+
+### Community 5 - "Community 5"
+Cohesion: 0.12
+Nodes (24): rescheduleDue(), barGeometry(), buildSegments(), clampStartKey(), computeMoveResult(), computeResizeResult(), dayDiff(), dayKeyMs() (+16 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.11
-Nodes (4): NeseserPlugin, runOAuthFlow(), startFlow(), emptySnapshot()
+Cohesion: 0.12
+Nodes (9): frontmatterBlock(), isoDate(), ProjectManager, sanitizeName(), FakeVault, nextInstanceTitle(), nextOccurrence(), noteBody() (+1 more)
 
-### Community 7 - "Community 7"
+### Community 8 - "Community 8"
 Cohesion: 0.17
 Nodes (6): buildAuthorizeUrl(), exchangeCode(), fakeHttp(), makeClient(), TickTickApiError, TickTickClient
 
-### Community 8 - "Community 8"
+### Community 9 - "Community 9"
 Cohesion: 0.12
 Nodes (5): formatSyncStatus(), isSameStatus(), SyncStatusStore, useSyncStatus(), NavigationView
 
 ### Community 10 - "Community 10"
+Cohesion: 0.14
+Nodes (3): ExponentialBackoff, SyncScheduler, FakeTimer
+
+### Community 11 - "Community 11"
 Cohesion: 0.18
 Nodes (6): FakeIndex, FakeStore, leaf(), makeProject(), makeTask(), seedSynced()
 
-### Community 11 - "Community 11"
+### Community 13 - "Community 13"
 Cohesion: 0.41
 Nodes (9): optionalString(), parseDate(), parseEnum(), parseOptionalEnum(), parseProject(), parseTask(), parseWikilink(), taskToFrontmatter() (+1 more)
 
-### Community 12 - "Community 12"
+### Community 14 - "Community 14"
 Cohesion: 0.24
 Nodes (4): addSubmitButton(), NewProjectModal, NewTaskModal, trySubmit()
 
 ## Knowledge Gaps
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `TaskIndex` connect `Community 5` to `Community 0`, `Community 1`, `Community 2`, `Community 4`, `Community 8`, `Community 11`, `Community 12`, `Community 13`?**
-  _High betweenness centrality (0.213) - this node is a cross-community bridge._
-- **Why does `SyncEngine` connect `Community 3` to `Community 2`, `Community 10`?**
-  _High betweenness centrality (0.132) - this node is a cross-community bridge._
-- **Why does `ProjectManager` connect `Community 4` to `Community 0`, `Community 2`, `Community 5`, `Community 14`?**
-  _High betweenness centrality (0.125) - this node is a cross-community bridge._
+- **Why does `TaskIndex` connect `Community 7` to `Community 0`, `Community 2`, `Community 3`, `Community 4`, `Community 5`, `Community 9`, `Community 13`, `Community 14`?**
+  _High betweenness centrality (0.211) - this node is a cross-community bridge._
+- **Why does `SyncEngine` connect `Community 1` to `Community 0`, `Community 11`?**
+  _High betweenness centrality (0.130) - this node is a cross-community bridge._
+- **Why does `ProjectManager` connect `Community 6` to `Community 0`, `Community 4`, `Community 5`?**
+  _High betweenness centrality (0.128) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `dueDateKey()` (e.g. with `tasksByDueDay()` and `clampStartKey()`) actually correct?**
   _`dueDateKey()` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.07 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.09 - nodes in this community are weakly interconnected._
-- **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.13 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.11 - nodes in this community are weakly interconnected._

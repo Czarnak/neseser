@@ -1,5 +1,6 @@
 import { Frontmatter, Priority, Recurrence, Task, TaskStatus } from './models';
 import { dayKey } from './calendar-data';
+import type { ProjectTemplateTask } from './project-templates';
 import { nextInstanceTitle, nextOccurrence, noteBody } from './recurrence';
 import { dueDateKey } from './view-data';
 
@@ -20,6 +21,16 @@ export interface CreateProjectInput {
 	name: string;
 	category?: string;
 	deadline?: string;
+}
+
+export interface CreateProjectWithTasksInput extends CreateProjectInput {
+	tasks?: readonly ProjectTemplateTask[];
+}
+
+export interface CreateProjectWithTasksResult {
+	indexPath: string;
+	projectName: string;
+	taskPaths: string[];
 }
 
 export interface CreateTaskInput {
@@ -93,6 +104,37 @@ export class ProjectManager {
 		const indexPath = `${projectDir}/${name}.md`;
 		await this.vault.createNote(indexPath, frontmatterBlock(fm));
 		return { indexPath };
+	}
+
+	async createProjectWithTasks(input: CreateProjectWithTasksInput): Promise<CreateProjectWithTasksResult> {
+		const projectName = sanitizeName(input.name);
+		if (!projectName) throw new Error(`Invalid project name: "${input.name}"`);
+
+		const tasks = (input.tasks ?? []).map((task) => ({
+			title: sanitizeName(task.title),
+			priority: task.priority,
+		}));
+		const seenTaskTitles = new Set<string>();
+		for (const task of tasks) {
+			if (!task.title) throw new Error(`Invalid task title in project template`);
+			if (seenTaskTitles.has(task.title)) {
+				throw new Error(`Duplicate task title in project template: "${task.title}"`);
+			}
+			seenTaskTitles.add(task.title);
+		}
+
+		const { indexPath } = await this.createProject(input);
+		const taskPaths: string[] = [];
+		for (const task of tasks) {
+			const { path } = await this.createTask({
+				projectName,
+				title: task.title,
+				priority: task.priority,
+			});
+			taskPaths.push(path);
+		}
+
+		return { indexPath, projectName, taskPaths };
 	}
 
 	async createTask(input: CreateTaskInput): Promise<{ path: string }> {
