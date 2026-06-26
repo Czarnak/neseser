@@ -1,68 +1,37 @@
-import { PRIORITIES, Priority } from './models';
+export const PROJECT_TEMPLATES_ROOT = 'NeseserTemplates';
 
-export interface ProjectTemplateTask {
-	title: string;
-	priority: Priority;
-}
+export const SYNC_ID_FRONTMATTER_KEYS = ['ticktick-project-id', 'ticktick-id', 'ticktick-etag'] as const;
 
-export interface ProjectTemplate {
-	id: string;
+export interface ProjectTemplateInfo {
 	name: string;
-	tasks: ProjectTemplateTask[];
+	path: string;
+	projectNotePath: string;
 }
 
-const UNTITLED_TEMPLATE = 'Untitled template';
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-	return typeof value === 'object' && value !== null;
+export function isTemplateFolderSegment(value: string): boolean {
+	const trimmed = value.trim();
+	return trimmed.length > 0 && !trimmed.includes('/') && !trimmed.includes('\\');
 }
 
-function cleanString(value: unknown): string | null {
-	if (typeof value !== 'string') return null;
-	const cleaned = value.trim();
-	return cleaned ? cleaned : null;
+export function templateFolderPath(templateName: string): string {
+	return `${PROJECT_TEMPLATES_ROOT}/${templateName}`;
 }
 
-function normalizePriority(value: unknown): Priority {
-	return typeof value === 'string' && (PRIORITIES as readonly string[]).includes(value)
-		? (value as Priority)
-		: 'none';
+export function templateProjectNotePath(templateName: string): string {
+	return `${templateFolderPath(templateName)}/${templateName}.md`;
 }
 
-export function createProjectTemplateId(existing: readonly Pick<ProjectTemplate, 'id'>[]): string {
-	const ids = new Set(existing.map((template) => template.id));
-	let next = 1;
-	while (ids.has(`template-${next}`)) next += 1;
-	return `template-${next}`;
-}
+export function findSyncIdentityKeys(content: string): string[] {
+	const lines = content.split(/\r?\n/);
+	if (lines[0] !== '---') return [];
 
-export function cloneProjectTemplates(templates: readonly ProjectTemplate[]): ProjectTemplate[] {
-	return templates.map((template) => ({
-		...template,
-		tasks: template.tasks.map((task) => ({ ...task })),
-	}));
-}
-
-export function normalizeProjectTemplates(value: unknown): ProjectTemplate[] {
-	if (!Array.isArray(value)) return [];
-
-	return value.reduce<ProjectTemplate[]>((templates, candidate) => {
-		if (!isRecord(candidate)) return templates;
-
-		const requestedId = cleanString(candidate['id']);
-		const id =
-			requestedId && !templates.some((template) => template.id === requestedId)
-				? requestedId
-				: createProjectTemplateId(templates);
-		const name = cleanString(candidate['name']) ?? UNTITLED_TEMPLATE;
-		const rawTasks = Array.isArray(candidate['tasks']) ? candidate['tasks'] : [];
-		const tasks = rawTasks.reduce<ProjectTemplateTask[]>((items, rawTask) => {
-			if (!isRecord(rawTask)) return items;
-			const title = cleanString(rawTask['title']);
-			if (!title) return items;
-			return [...items, { title, priority: normalizePriority(rawTask['priority']) }];
-		}, []);
-
-		return [...templates, { id, name, tasks }];
-	}, []);
+	const found = new Set<string>();
+	for (const line of lines.slice(1)) {
+		if (line === '---') break;
+		const key = line.split(':', 1)[0]?.trim();
+		if (key && (SYNC_ID_FRONTMATTER_KEYS as readonly string[]).includes(key)) {
+			found.add(key);
+		}
+	}
+	return SYNC_ID_FRONTMATTER_KEYS.filter((key) => found.has(key));
 }

@@ -19,6 +19,52 @@ class FakeVault implements VaultAdapter {
 		this.notes.set(path, content);
 	}
 
+	async listFolders(path: string): Promise<string[]> {
+		const prefix = `${path}/`;
+		return [...this.folders]
+			.filter((folder) => folder.startsWith(prefix))
+			.map((folder) => folder.slice(prefix.length))
+			.filter((rest) => rest.length > 0 && !rest.includes('/'))
+			.sort();
+	}
+
+	async listMarkdownFiles(path: string): Promise<string[]> {
+		const prefix = `${path}/`;
+		return [...this.notes.keys()]
+			.filter((notePath) => notePath.startsWith(prefix) && notePath.endsWith('.md'))
+			.sort();
+	}
+
+	async copyFolder(sourcePath: string, destinationPath: string): Promise<void> {
+		if (await this.exists(destinationPath)) throw new Error(`Destination exists: ${destinationPath}`);
+		this.folders.add(destinationPath);
+		for (const folder of [...this.folders]) {
+			if (folder.startsWith(`${sourcePath}/`)) {
+				this.folders.add(`${destinationPath}/${folder.slice(sourcePath.length + 1)}`);
+			}
+		}
+		for (const [notePath, content] of [...this.notes.entries()]) {
+			if (notePath.startsWith(`${sourcePath}/`)) {
+				this.notes.set(`${destinationPath}/${notePath.slice(sourcePath.length + 1)}`, content);
+			}
+		}
+	}
+
+	async renamePath(path: string, newPath: string): Promise<void> {
+		const note = this.notes.get(path);
+		if (note !== undefined) {
+			this.notes.delete(path);
+			this.notes.set(newPath, note);
+			return;
+		}
+		if (this.folders.has(path)) {
+			this.folders.delete(path);
+			this.folders.add(newPath);
+			return;
+		}
+		throw new Error(`Missing path: ${path}`);
+	}
+
 	async readNote(path: string): Promise<string> {
 		const content = this.notes.get(path);
 		if (content === undefined) throw new Error(`Missing note: ${path}`);
@@ -42,6 +88,19 @@ describe('ProjectManager', () => {
 		vault = new FakeVault();
 		manager = new ProjectManager(vault, { projectsRoot: 'Projects' }, () => FIXED_NOW);
 	});
+
+	function addTemplate(name: string, files: Record<string, string>): void {
+		const root = `NeseserTemplates/${name}`;
+		vault.folders.add('NeseserTemplates');
+		vault.folders.add(root);
+		for (const relativePath of Object.keys(files)) {
+			const segments = relativePath.split('/');
+			for (let index = 1; index < segments.length; index += 1) {
+				vault.folders.add(`${root}/${segments.slice(0, index).join('/')}`);
+			}
+			vault.notes.set(`${root}/${relativePath}`, files[relativePath] ?? '');
+		}
+	}
 
 	describe('createProject', () => {
 		test('creates project folder, Tasks subfolder, and index note', async () => {
@@ -92,72 +151,96 @@ describe('ProjectManager', () => {
 		});
 	});
 
-	describe('createProjectWithTasks', () => {
-		test('creates a project with multiple generated task notes', async () => {
-			const result = await manager.createProjectWithTasks({
-				name: 'Alpha',
-				tasks: [
-					{ title: 'Kickoff', priority: 'high' },
-					{ title: 'Review notes', priority: 'low' },
-				],
+	describe('folder project templates', () => {
+		test('lists only direct project-shaped folders from NeseserTemplates', async () => {
+			addTemplate('Launch', { 'Launch.md': '---\ntype: project\n---\n', 'Tasks/Kickoff.md': '---\ntype: task\n---\n' });
+			vault.folders.add('NeseserTemplates/Empty');
+			vault.folders.add('NeseserTemplates/Nested/Child');
+			vault.notes.set('NeseserTemplates/Nested/Child/Child.md', '---\ntype: project\n---\n');
+
+			await expect(manager.listProjectTemplates()).resolves.toEqual([
+				{
+					name: 'Launch',
+					path: 'NeseserTemplates/Launch',
+					projectNotePath: 'NeseserTemplates/Launch/Launch.md',
+				},
+			]);
+		});
+
+		test('returns an empty list when the templates root is missing', async () => {
+			await expect(manager.listProjectTemplates()).resolves.toEqual([]);
+		});
+
+		test('copies full template structure and renames only the copied project note', async () => {
+			addTemplate('Launch', {
+				'Launch.md': '---\ntype: project\ncategory: Research\n---\nTemplate body',
+				'Tasks/Kickoff.md': '---\ntype: task\npriority: high\n---\nTask body',
+				'Notes/Brief.md': 'Brief body with [[Launch]] link left unchanged',
 			});
 
-			expect(result).toEqual({
-				indexPath: 'Projects/Alpha/Alpha.md',
-				projectName: 'Alpha',
-				taskPaths: ['Projects/Alpha/Tasks/Kickoff.md', 'Projects/Alpha/Tasks/Review notes.md'],
-			});
+			const result = await manager.createProjectFromTemplate({ name: 'Alpha', templateName: 'Launch' });
+
+			expect(result).toEqual({ indexPath: 'Projects/Alpha/Alpha.md', projectName: 'Alpha' });
+			expect(vault.folders.has('Projects')).toBe(true);
+			expect(vault.folders.has('Projects/Alpha')).toBe(true);
+			expect(vault.folders.has('Projects/Alpha/Tasks')).toBe(true);
+			expect(vault.folders.has('Projects/Alpha/Notes')).toBe(true);
+			expect(vault.notes.has('Projects/Alpha/Launch.md')).toBe(false);
+			expect(vault.notes.get('Projects/Alpha/Alpha.md')).toBe(
+				'---\ntype: project\ncategory: Research\n---\nTemplate body',
+			);
 			expect(vault.notes.get('Projects/Alpha/Tasks/Kickoff.md')).toContain('priority: high');
-			expect(vault.notes.get('Projects/Alpha/Tasks/Review notes.md')).toContain('priority: low');
+			expect(vault.notes.get('Projects/Alpha/Notes/Brief.md')).toContain('[[Launch]]');
 		});
 
-		test('creates only the project when no template tasks are selected', async () => {
-			const result = await manager.createProjectWithTasks({ name: 'Alpha' });
+		test('rejects invalid template folders before writing anything', async () => {
+			vault.folders.add('NeseserTemplates');
+			vault.folders.add('NeseserTemplates/Launch');
+			vault.notes.set('NeseserTemplates/Launch/Readme.md', 'No project note');
 
-			expect(result).toEqual({
-				indexPath: 'Projects/Alpha/Alpha.md',
-				projectName: 'Alpha',
-				taskPaths: [],
+			await expect(manager.createProjectFromTemplate({ name: 'Alpha', templateName: 'Launch' })).rejects.toThrow(
+				/template/i,
+			);
+
+			expect(vault.folders.has('Projects')).toBe(false);
+			expect(vault.notes.has('Projects/Alpha/Alpha.md')).toBe(false);
+		});
+
+		test('rejects project note rename conflicts before writing anything', async () => {
+			addTemplate('Launch', {
+				'Launch.md': '---\ntype: project\n---\n',
+				'Alpha.md': 'Already present in template',
 			});
-			expect([...vault.notes.keys()]).toEqual(['Projects/Alpha/Alpha.md']);
+
+			await expect(manager.createProjectFromTemplate({ name: 'Alpha', templateName: 'Launch' })).rejects.toThrow(
+				/conflict/i,
+			);
+
+			expect(vault.folders.has('Projects')).toBe(false);
+			expect(vault.notes.has('Projects/Alpha/Launch.md')).toBe(false);
 		});
 
-		test('rejects blank generated task titles before writing anything', async () => {
-			await expect(
-				manager.createProjectWithTasks({
-					name: 'Alpha',
-					tasks: [{ title: '???', priority: 'none' }],
-				}),
-			).rejects.toThrow(/task title/i);
+		test('rejects templates with TickTick sync identity frontmatter before writing anything', async () => {
+			addTemplate('Launch', {
+				'Launch.md': '---\ntype: project\n---\n',
+				'Tasks/Synced.md': '---\ntype: task\nticktick-id: tt-1\n---\n',
+			});
 
-			expect(vault.folders.size).toBe(0);
-			expect(vault.notes.size).toBe(0);
-		});
+			await expect(manager.createProjectFromTemplate({ name: 'Alpha', templateName: 'Launch' })).rejects.toThrow(
+				/TickTick/i,
+			);
 
-		test('rejects duplicate generated task titles after sanitizing before writing anything', async () => {
-			await expect(
-				manager.createProjectWithTasks({
-					name: 'Alpha',
-					tasks: [
-						{ title: 'Review/docs', priority: 'none' },
-						{ title: 'Review: docs', priority: 'high' },
-					],
-				}),
-			).rejects.toThrow(/duplicate task/i);
-
-			expect(vault.folders.size).toBe(0);
-			expect(vault.notes.size).toBe(0);
+			expect(vault.folders.has('Projects')).toBe(false);
+			expect(vault.notes.has('Projects/Alpha/Alpha.md')).toBe(false);
 		});
 
 		test('keeps existing duplicate-project behavior', async () => {
+			addTemplate('Launch', { 'Launch.md': '---\ntype: project\n---\n' });
 			await manager.createProject({ name: 'Alpha' });
 
-			await expect(
-				manager.createProjectWithTasks({
-					name: 'Alpha',
-					tasks: [{ title: 'Kickoff', priority: 'none' }],
-				}),
-			).rejects.toThrow(/exists/i);
+			await expect(manager.createProjectFromTemplate({ name: 'Alpha', templateName: 'Launch' })).rejects.toThrow(
+				/exists/i,
+			);
 		});
 	});
 

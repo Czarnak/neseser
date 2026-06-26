@@ -1,6 +1,13 @@
 import { Frontmatter, Priority, Recurrence, Task, TaskStatus } from './models';
 import { dayKey } from './calendar-data';
-import type { ProjectTemplateTask } from './project-templates';
+import {
+	PROJECT_TEMPLATES_ROOT,
+	ProjectTemplateInfo,
+	findSyncIdentityKeys,
+	isTemplateFolderSegment,
+	templateFolderPath,
+	templateProjectNotePath,
+} from './project-templates';
 import { nextInstanceTitle, nextOccurrence, noteBody } from './recurrence';
 import { dueDateKey } from './view-data';
 
@@ -9,6 +16,10 @@ export interface VaultAdapter {
 	exists(path: string): Promise<boolean>;
 	createFolder(path: string): Promise<void>;
 	createNote(path: string, content: string): Promise<void>;
+	listFolders(path: string): Promise<string[]>;
+	listMarkdownFiles(path: string): Promise<string[]>;
+	copyFolder(sourcePath: string, destinationPath: string): Promise<void>;
+	renamePath(path: string, newPath: string): Promise<void>;
 	readNote(path: string): Promise<string>;
 	updateFrontmatter(path: string, updater: (fm: Frontmatter) => void): Promise<void>;
 }
@@ -23,14 +34,14 @@ export interface CreateProjectInput {
 	deadline?: string;
 }
 
-export interface CreateProjectWithTasksInput extends CreateProjectInput {
-	tasks?: readonly ProjectTemplateTask[];
+export interface CreateProjectFromTemplateInput {
+	name: string;
+	templateName: string;
 }
 
-export interface CreateProjectWithTasksResult {
+export interface CreateProjectFromTemplateResult {
 	indexPath: string;
 	projectName: string;
-	taskPaths: string[];
 }
 
 export interface CreateTaskInput {
@@ -106,35 +117,71 @@ export class ProjectManager {
 		return { indexPath };
 	}
 
-	async createProjectWithTasks(input: CreateProjectWithTasksInput): Promise<CreateProjectWithTasksResult> {
+	async listProjectTemplates(): Promise<ProjectTemplateInfo[]> {
+		if (!(await this.vault.exists(PROJECT_TEMPLATES_ROOT))) return [];
+
+		const folderNames = await this.vault.listFolders(PROJECT_TEMPLATES_ROOT);
+		const templates: ProjectTemplateInfo[] = [];
+		for (const name of folderNames) {
+			if (!isTemplateFolderSegment(name)) continue;
+			const path = templateFolderPath(name);
+			const projectNotePath = templateProjectNotePath(name);
+			if (await this.vault.exists(projectNotePath)) {
+				templates.push({ name, path, projectNotePath });
+			}
+		}
+		return templates.sort((a, b) => a.name.localeCompare(b.name));
+	}
+
+	async createProjectFromTemplate(input: CreateProjectFromTemplateInput): Promise<CreateProjectFromTemplateResult> {
 		const projectName = sanitizeName(input.name);
 		if (!projectName) throw new Error(`Invalid project name: "${input.name}"`);
 
-		const tasks = (input.tasks ?? []).map((task) => ({
-			title: sanitizeName(task.title),
-			priority: task.priority,
-		}));
-		const seenTaskTitles = new Set<string>();
-		for (const task of tasks) {
-			if (!task.title) throw new Error(`Invalid task title in project template`);
-			if (seenTaskTitles.has(task.title)) {
-				throw new Error(`Duplicate task title in project template: "${task.title}"`);
+		const templateName = input.templateName.trim();
+		if (!isTemplateFolderSegment(templateName)) {
+			throw new Error(`Invalid project template: "${input.templateName}"`);
+		}
+
+		const root = this.settings.projectsRoot;
+		const projectDir = `${root}/${projectName}`;
+		if (await this.vault.exists(projectDir)) {
+			throw new Error(`Project "${projectName}" already exists`);
+		}
+
+		const templateDir = templateFolderPath(templateName);
+		const templateNote = templateProjectNotePath(templateName);
+		if (!(await this.vault.exists(templateDir)) || !(await this.vault.exists(templateNote))) {
+			throw new Error(`Project template "${templateName}" is invalid or no longer exists`);
+		}
+
+		const markdownFiles = await this.vault.listMarkdownFiles(templateDir);
+		if (!markdownFiles.includes(templateNote)) {
+			throw new Error(`Project template "${templateName}" is invalid or no longer exists`);
+		}
+
+		const indexPath = `${projectDir}/${projectName}.md`;
+		const copiedTemplateNote = `${projectDir}/${templateName}.md`;
+		if (projectName !== templateName && markdownFiles.includes(`${templateDir}/${projectName}.md`)) {
+			throw new Error(
+				`Project template "${templateName}" has a project note rename conflict with "${projectName}.md"`,
+			);
+		}
+
+		for (const path of markdownFiles) {
+			const keys = findSyncIdentityKeys(await this.vault.readNote(path));
+			if (keys.length > 0) {
+				throw new Error(
+					`Project template "${templateName}" contains TickTick sync metadata in ${path}: ${keys.join(', ')}`,
+				);
 			}
-			seenTaskTitles.add(task.title);
 		}
 
-		const { indexPath } = await this.createProject(input);
-		const taskPaths: string[] = [];
-		for (const task of tasks) {
-			const { path } = await this.createTask({
-				projectName,
-				title: task.title,
-				priority: task.priority,
-			});
-			taskPaths.push(path);
+		if (!(await this.vault.exists(root))) await this.vault.createFolder(root);
+		await this.vault.copyFolder(templateDir, projectDir);
+		if (copiedTemplateNote !== indexPath) {
+			await this.vault.renamePath(copiedTemplateNote, indexPath);
 		}
-
-		return { indexPath, projectName, taskPaths };
+		return { indexPath, projectName };
 	}
 
 	async createTask(input: CreateTaskInput): Promise<{ path: string }> {

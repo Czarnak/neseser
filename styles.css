@@ -700,17 +700,3 @@
 .ns-settings-categories {
 	margin-bottom: 12px;
 }
-
-.ns-settings-project-templates {
-	margin-bottom: 12px;
-}
-
-.ns-settings-project-template {
-	margin: 8px 0 14px;
-	padding-left: 12px;
-	border-left: 2px solid var(--background-modifier-border);
-}
-
-.ns-settings-template-tasks {
-	margin-left: 12px;
-}

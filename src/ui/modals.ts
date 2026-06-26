@@ -4,13 +4,11 @@ import type { CreateProjectInput, CreateTaskInput } from '../core/project-manage
 import type { TaskIndex } from '../core/task-index';
 
 export interface ProjectTemplateOption {
-	id: string;
 	name: string;
-	taskCount: number;
 }
 
 export interface NewProjectModalInput extends CreateProjectInput {
-	templateId?: string;
+	templateName?: string;
 }
 
 abstract class SubmitModal extends Modal {
@@ -42,7 +40,7 @@ export class NewProjectModal extends SubmitModal {
 	private name = '';
 	private category = '';
 	private deadline = '';
-	private templateId = '';
+	private templateName = '';
 
 	constructor(
 		app: App,
@@ -55,6 +53,13 @@ export class NewProjectModal extends SubmitModal {
 
 	override onOpen(): void {
 		this.titleEl.setText('New project');
+		let categoryInput: { setDisabled(disabled: boolean): unknown } | null = null;
+		let deadlineInput: { setDisabled(disabled: boolean): unknown } | null = null;
+		const refreshMetadataInputs = (): void => {
+			const disabled = this.templateName !== '';
+			categoryInput?.setDisabled(disabled);
+			deadlineInput?.setDisabled(disabled);
+		};
 
 		new Setting(this.contentEl).setName('Name').addText((text) => {
 			text.onChange((value) => (this.name = value));
@@ -62,6 +67,7 @@ export class NewProjectModal extends SubmitModal {
 		});
 
 		new Setting(this.contentEl).setName('Category').addDropdown((dd) => {
+			categoryInput = dd;
 			dd.addOption('', '(none)');
 			for (const name of this.categories) dd.addOption(name, name);
 			dd.setValue(this.category);
@@ -71,29 +77,36 @@ export class NewProjectModal extends SubmitModal {
 		new Setting(this.contentEl)
 			.setName('Deadline')
 			.setDesc('Optional, YYYY-MM-DD')
-			.addText((text) => text.setPlaceholder('2026-12-31').onChange((value) => (this.deadline = value)));
+			.addText((text) => {
+				deadlineInput = text;
+				text.setPlaceholder('2026-12-31').onChange((value) => (this.deadline = value));
+			});
 
 		if (this.templates.length > 0) {
 			new Setting(this.contentEl).setName('Template').addDropdown((dd) => {
 				dd.addOption('', '(none)');
 				for (const template of this.templates) {
-					const count = template.taskCount === 1 ? '1 task' : `${template.taskCount} tasks`;
-					dd.addOption(template.id, `${template.name} (${count})`);
+					dd.addOption(template.name, template.name);
 				}
-				dd.setValue(this.templateId);
-				dd.onChange((value) => (this.templateId = value));
+				dd.setValue(this.templateName);
+				dd.onChange((value) => {
+					this.templateName = value;
+					refreshMetadataInputs();
+				});
 			});
 		}
+		refreshMetadataInputs();
 
 		this.addSubmitButton('Create project');
 	}
 
 	protected async submit(): Promise<void> {
+		const usesTemplate = this.templateName !== '';
 		await this.onSubmit({
 			name: this.name,
-			category: this.category.trim() || undefined,
-			deadline: this.deadline.trim() || undefined,
-			templateId: this.templateId || undefined,
+			category: usesTemplate ? undefined : this.category.trim() || undefined,
+			deadline: usesTemplate ? undefined : this.deadline.trim() || undefined,
+			templateName: this.templateName || undefined,
 		});
 	}
 }

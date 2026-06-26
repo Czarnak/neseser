@@ -1,74 +1,45 @@
 import { describe, expect, test } from 'vitest';
 import {
-	cloneProjectTemplates,
-	createProjectTemplateId,
-	normalizeProjectTemplates,
+	PROJECT_TEMPLATES_ROOT,
+	findSyncIdentityKeys,
+	isTemplateFolderSegment,
+	templateFolderPath,
+	templateProjectNotePath,
 } from '../../src/core/project-templates';
 
-describe('project templates', () => {
-	test('normalizes invalid persisted data to an empty template list', () => {
-		expect(normalizeProjectTemplates(null)).toEqual([]);
-		expect(normalizeProjectTemplates({ name: 'Not an array' })).toEqual([]);
+describe('folder project templates', () => {
+	test('uses the fixed vault-root templates folder', () => {
+		expect(PROJECT_TEMPLATES_ROOT).toBe('NeseserTemplates');
 	});
 
-	test('normalizes persisted templates and defaults invalid task priorities to none', () => {
-		const templates = normalizeProjectTemplates([
-			{
-				id: ' discovery ',
-				name: ' Discovery ',
-				tasks: [
-					{ title: ' Kickoff ', priority: 'high' },
-					{ title: 'Plan next steps', priority: 'urgent' },
-					{ title: '   ', priority: 'low' },
-				],
-			},
-			{ id: '', name: '', tasks: 'bad' },
-			'bad',
-		]);
-
-		expect(templates).toEqual([
-			{
-				id: 'discovery',
-				name: 'Discovery',
-				tasks: [
-					{ title: 'Kickoff', priority: 'high' },
-					{ title: 'Plan next steps', priority: 'none' },
-				],
-			},
-			{ id: 'template-1', name: 'Untitled template', tasks: [] },
-		]);
+	test('builds template folder and project note paths from the direct folder name', () => {
+		expect(templateFolderPath('Launch Plan')).toBe('NeseserTemplates/Launch Plan');
+		expect(templateProjectNotePath('Launch Plan')).toBe('NeseserTemplates/Launch Plan/Launch Plan.md');
 	});
 
-	test('assigns a new id when persisted template ids collide', () => {
-		const templates = normalizeProjectTemplates([
-			{ id: 'template-1', name: 'First', tasks: [] },
-			{ id: 'template-1', name: 'Second', tasks: [] },
-		]);
-
-		expect(templates.map((template) => template.id)).toEqual(['template-1', 'template-2']);
+	test('accepts only direct template folder segments', () => {
+		expect(isTemplateFolderSegment('Launch Plan')).toBe(true);
+		expect(isTemplateFolderSegment('Nested/Launch')).toBe(false);
+		expect(isTemplateFolderSegment('Nested\\Launch')).toBe(false);
+		expect(isTemplateFolderSegment('   ')).toBe(false);
 	});
 
-	test('clones template arrays and objects', () => {
-		const templates = [{ id: 't1', name: 'Launch', tasks: [{ title: 'Kickoff', priority: 'low' as const }] }];
+	test('detects TickTick sync identity fields in frontmatter', () => {
+		const content = [
+			'---',
+			'type: task',
+			'ticktick-id: abc',
+			'ticktick-etag: etag-1',
+			'---',
+			'Body with ticktick-id: text outside frontmatter',
+		].join('\n');
 
-		const cloned = cloneProjectTemplates(templates);
-
-		expect(cloned).toEqual(templates);
-		expect(cloned).not.toBe(templates);
-		const clonedTemplate = cloned[0]!;
-		const originalTemplate = templates[0]!;
-		expect(clonedTemplate).not.toBe(originalTemplate);
-		expect(clonedTemplate.tasks).not.toBe(originalTemplate.tasks);
-		expect(clonedTemplate.tasks[0]).not.toBe(originalTemplate.tasks[0]);
+		expect(findSyncIdentityKeys(content)).toEqual(['ticktick-id', 'ticktick-etag']);
 	});
 
-	test('creates stable new ids from the first free template number', () => {
-		expect(createProjectTemplateId([])).toBe('template-1');
-		expect(
-			createProjectTemplateId([
-				{ id: 'template-1' },
-				{ id: 'template-3' },
-			]),
-		).toBe('template-2');
+	test('ignores TickTick sync identity field names outside frontmatter', () => {
+		const content = ['# Notes', '', 'ticktick-project-id: mentioned in body'].join('\n');
+
+		expect(findSyncIdentityKeys(content)).toEqual([]);
 	});
 });
