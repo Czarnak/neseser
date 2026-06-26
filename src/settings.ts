@@ -1,5 +1,6 @@
 import { App, Notice, PluginSettingTab, Setting } from 'obsidian';
 import type { CategoryDef } from './core/category-data';
+import { PROJECT_TEMPLATES_ROOT } from './core/project-templates';
 import type NeseserPlugin from './main';
 
 export interface NeseserSettings {
@@ -64,6 +65,7 @@ export class NeseserSettingTab extends PluginSettingTab {
 			);
 
 		this.renderCategories();
+		this.renderProjectTemplatesInfo();
 
 		new Setting(this.containerEl).setName('TickTick').setHeading();
 
@@ -174,6 +176,15 @@ export class NeseserSettingTab extends PluginSettingTab {
 				this.display();
 			}),
 		);
+	}
+
+	private renderProjectTemplatesInfo(): void {
+		new Setting(this.containerEl)
+			.setName('Project templates')
+			.setDesc(
+				`Manage templates as project-shaped folders in ${PROJECT_TEMPLATES_ROOT}. Each template must contain a matching top-level project note.`,
+			)
+			.setHeading();
 	}
 
 	private renderTickTick(): void {

@@ -1,4 +1,4 @@
-import { App, Notice, Plugin, TFile, WorkspaceLeaf, requestUrl } from 'obsidian';
+import { App, Notice, Plugin, TFile, TFolder, WorkspaceLeaf, requestUrl } from 'obsidian';
 import { CategoryFilterStore } from './core/category-filter';
 import { Frontmatter, Task, titleFromPath } from './core/models';
 import { ProjectManager, VaultAdapter } from './core/project-manager';
@@ -31,6 +31,39 @@ class ObsidianVaultAdapter implements VaultAdapter {
 
 	async createNote(path: string, content: string): Promise<void> {
 		await this.app.vault.create(path, content);
+	}
+
+	async listFolders(path: string): Promise<string[]> {
+		const folder = this.app.vault.getAbstractFileByPath(path);
+		if (!(folder instanceof TFolder)) throw new Error(`Not a folder: ${path}`);
+		return folder.children
+			.filter((child): child is TFolder => child instanceof TFolder)
+			.map((child) => child.name)
+			.sort((a, b) => a.localeCompare(b));
+	}
+
+	async listMarkdownFiles(path: string): Promise<string[]> {
+		const folder = this.app.vault.getAbstractFileByPath(path);
+		if (!(folder instanceof TFolder)) throw new Error(`Not a folder: ${path}`);
+		const prefix = `${folder.path}/`;
+		return this.app.vault
+			.getMarkdownFiles()
+			.filter((file) => file.path.startsWith(prefix))
+			.map((file) => file.path)
+			.sort((a, b) => a.localeCompare(b));
+	}
+
+	async copyFolder(sourcePath: string, destinationPath: string): Promise<void> {
+		const folder = this.app.vault.getAbstractFileByPath(sourcePath);
+		if (!(folder instanceof TFolder)) throw new Error(`Not a folder: ${sourcePath}`);
+		await this.app.vault.copy(folder, destinationPath);
+	}
+
+	async renamePath(path: string, newPath: string): Promise<void> {
+		const file = this.app.vault.getAbstractFileByPath(path);
+		if (!file) throw new Error(`Missing path: ${path}`);
+		// Raw vault rename keeps template note bodies and wikilinks unchanged.
+		await this.app.vault.rename(file, newPath);
 	}
 
 	async readNote(path: string): Promise<string> {
@@ -196,6 +229,7 @@ export default class NeseserPlugin extends Plugin {
 		// Defensive copy: when no categories were persisted the spread aliases the
 		// shared DEFAULT_CATEGORIES array; clone so edits never mutate the default.
 		this.settings.categories = this.settings.categories.map((category) => ({ ...category }));
+		delete (this.settings as NeseserSettings & { projectTemplates?: unknown }).projectTemplates;
 		this.syncState = raw.syncState ?? emptySnapshot();
 	}
 
@@ -416,15 +450,43 @@ export default class NeseserPlugin extends Plugin {
 	}
 
 	private openNewProjectModal(): void {
-		new NewProjectModal(
-			this.app,
-			async (input) => {
-				const { indexPath } = await this.manager.createProject(input);
-				new Notice(`Project created: ${input.name}`);
-				await this.app.workspace.openLinkText(indexPath, '', false);
-			},
-			this.settings.categories.map((category) => category.name),
-		).open();
+		void this.openNewProjectModalAsync();
+	}
+
+	private async openNewProjectModalAsync(): Promise<void> {
+		try {
+			const templates = await this.manager.listProjectTemplates();
+			new NewProjectModal(
+				this.app,
+				async (input) => {
+					const result = input.templateName
+						? await this.manager.createProjectFromTemplate({
+								name: input.name,
+								templateName: input.templateName,
+							})
+						: await this.createPlainProject(input);
+
+					new Notice(`Project created: ${result.projectName}`);
+					await this.app.workspace.openLinkText(result.indexPath, '', false);
+				},
+				this.settings.categories.map((category) => category.name),
+				templates.map((template) => ({ name: template.name })),
+			).open();
+		} catch (error) {
+			new Notice(`Neseser: could not open project modal — ${error instanceof Error ? error.message : String(error)}`);
+		}
+	}
+
+	private async createPlainProject(input: { name: string; category?: string; deadline?: string }): Promise<{
+		indexPath: string;
+		projectName: string;
+	}> {
+		const { indexPath } = await this.manager.createProject({
+			name: input.name,
+			category: input.category,
+			deadline: input.deadline,
+		});
+		return { indexPath, projectName: titleFromPath(indexPath) };
 	}
 
 	private openNewTaskModal(): void {

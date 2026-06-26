@@ -9,7 +9,7 @@
       "source_file": "esbuild.config.mjs",
       "source_location": "L1",
       "id": "esbuild_config_mjs",
-      "community": 15,
+      "community": 17,
       "norm_label": "esbuild.config.mjs"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "vitest.config.ts",
       "source_location": "L1",
       "id": "vitest_config_ts",
-      "community": 16,
+      "community": 18,
       "norm_label": "vitest.config.ts"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "docs/site.js",
       "source_location": "L1",
       "id": "docs_site_js",
-      "community": 17,
+      "community": 19,
       "norm_label": "site.js"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "scripts/deploy-test-vault.mjs",
       "source_location": "L1",
       "id": "scripts_deploy_test_vault_mjs",
-      "community": 18,
+      "community": 20,
       "norm_label": "deploy-test-vault.mjs"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "src/main.ts",
       "source_location": "L1",
       "id": "src_main_ts",
-      "community": 2,
+      "community": 0,
       "norm_label": "main.ts"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "src/main.ts",
       "source_location": "L21",
       "id": "src_main_obsidianvaultadapter",
-      "community": 2,
+      "community": 13,
       "norm_label": "obsidianvaultadapter"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "src/main.ts",
       "source_location": "L22",
       "id": "src_main_obsidianvaultadapter_constructor",
-      "community": 2,
+      "community": 13,
       "norm_label": ".constructor()"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "src/main.ts",
       "source_location": "L24",
       "id": "src_main_obsidianvaultadapter_exists",
-      "community": 2,
+      "community": 13,
       "norm_label": ".exists()"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "src/main.ts",
       "source_location": "L28",
       "id": "src_main_obsidianvaultadapter_createfolder",
-      "community": 2,
+      "community": 13,
       "norm_label": ".createfolder()"
     },
     {
@@ -90,259 +90,313 @@
       "source_file": "src/main.ts",
       "source_location": "L32",
       "id": "src_main_obsidianvaultadapter_createnote",
-      "community": 2,
+      "community": 13,
       "norm_label": ".createnote()"
+    },
+    {
+      "label": ".listFolders()",
+      "file_type": "code",
+      "source_file": "src/main.ts",
+      "source_location": "L36",
+      "id": "src_main_obsidianvaultadapter_listfolders",
+      "community": 13,
+      "norm_label": ".listfolders()"
+    },
+    {
+      "label": ".listMarkdownFiles()",
+      "file_type": "code",
+      "source_file": "src/main.ts",
+      "source_location": "L45",
+      "id": "src_main_obsidianvaultadapter_listmarkdownfiles",
+      "community": 13,
+      "norm_label": ".listmarkdownfiles()"
+    },
+    {
+      "label": ".copyFolder()",
+      "file_type": "code",
+      "source_file": "src/main.ts",
+      "source_location": "L56",
+      "id": "src_main_obsidianvaultadapter_copyfolder",
+      "community": 13,
+      "norm_label": ".copyfolder()"
+    },
+    {
+      "label": ".renamePath()",
+      "file_type": "code",
+      "source_file": "src/main.ts",
+      "source_location": "L62",
+      "id": "src_main_obsidianvaultadapter_renamepath",
+      "community": 13,
+      "norm_label": ".renamepath()"
     },
     {
       "label": ".readNote()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L36",
+      "source_location": "L69",
       "id": "src_main_obsidianvaultadapter_readnote",
-      "community": 2,
+      "community": 13,
       "norm_label": ".readnote()"
     },
     {
       "label": ".updateFrontmatter()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L42",
+      "source_location": "L75",
       "id": "src_main_obsidianvaultadapter_updatefrontmatter",
-      "community": 2,
+      "community": 13,
       "norm_label": ".updatefrontmatter()"
     },
     {
       "label": "ObsidianEngineStore",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L50",
+      "source_location": "L83",
       "id": "src_main_obsidianenginestore",
-      "community": 2,
+      "community": 0,
       "norm_label": "obsidianenginestore"
     },
     {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L51",
+      "source_location": "L84",
       "id": "src_main_obsidianenginestore_constructor",
-      "community": 2,
+      "community": 0,
       "norm_label": ".constructor()"
     },
     {
       "label": ".updateFrontmatter()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L57",
+      "source_location": "L90",
       "id": "src_main_obsidianenginestore_updatefrontmatter",
-      "community": 2,
+      "community": 0,
       "norm_label": ".updatefrontmatter()"
     },
     {
       "label": ".createTaskNote()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L61",
+      "source_location": "L94",
       "id": "src_main_obsidianenginestore_createtasknote",
-      "community": 2,
+      "community": 0,
       "norm_label": ".createtasknote()"
     },
     {
       "label": ".trashNote()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L72",
+      "source_location": "L105",
       "id": "src_main_obsidianenginestore_trashnote",
-      "community": 2,
+      "community": 0,
       "norm_label": ".trashnote()"
     },
     {
       "label": ".getMtime()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L78",
+      "source_location": "L111",
       "id": "src_main_obsidianenginestore_getmtime",
-      "community": 2,
+      "community": 0,
       "norm_label": ".getmtime()"
     },
     {
       "label": "obsidianHttp()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L87",
+      "source_location": "L120",
       "id": "src_main_obsidianhttp",
-      "community": 2,
+      "community": 0,
       "norm_label": "obsidianhttp()"
     },
     {
       "label": "NeseserPlugin",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L109",
+      "source_location": "L142",
       "id": "src_main_neseserplugin",
-      "community": 6,
+      "community": 0,
       "norm_label": "neseserplugin"
     },
     {
       "label": ".onload()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L124",
+      "source_location": "L157",
       "id": "src_main_neseserplugin_onload",
-      "community": 6,
+      "community": 0,
       "norm_label": ".onload()"
     },
     {
       "label": ".onunload()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L185",
+      "source_location": "L218",
       "id": "src_main_neseserplugin_onunload",
-      "community": 6,
+      "community": 0,
       "norm_label": ".onunload()"
     },
     {
       "label": ".loadPersisted()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L191",
+      "source_location": "L224",
       "id": "src_main_neseserplugin_loadpersisted",
-      "community": 6,
+      "community": 0,
       "norm_label": ".loadpersisted()"
     },
     {
       "label": ".saveSettings()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L202",
+      "source_location": "L236",
       "id": "src_main_neseserplugin_savesettings",
-      "community": 6,
+      "community": 0,
       "norm_label": ".savesettings()"
     },
     {
       "label": ".persistAll()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L206",
+      "source_location": "L240",
       "id": "src_main_neseserplugin_persistall",
-      "community": 6,
+      "community": 0,
       "norm_label": ".persistall()"
     },
     {
       "label": ".connectTickTick()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L211",
+      "source_location": "L245",
       "id": "src_main_neseserplugin_connectticktick",
-      "community": 6,
+      "community": 0,
       "norm_label": ".connectticktick()"
     },
     {
       "label": ".syncWithTickTick()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L234",
+      "source_location": "L268",
       "id": "src_main_neseserplugin_syncwithticktick",
-      "community": 6,
+      "community": 0,
       "norm_label": ".syncwithticktick()"
     },
     {
       "label": ".restartSyncScheduler()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L273",
+      "source_location": "L307",
       "id": "src_main_neseserplugin_restartsyncscheduler",
-      "community": 6,
+      "community": 0,
       "norm_label": ".restartsyncscheduler()"
     },
     {
       "label": ".reportSyncResult()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L290",
+      "source_location": "L324",
       "id": "src_main_neseserplugin_reportsyncresult",
-      "community": 6,
+      "community": 0,
       "norm_label": ".reportsyncresult()"
     },
     {
       "label": ".updateSyncStatus()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L325",
+      "source_location": "L359",
       "id": "src_main_neseserplugin_updatesyncstatus",
-      "community": 6,
+      "community": 0,
       "norm_label": ".updatesyncstatus()"
     },
     {
       "label": ".registerCommands()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L330",
+      "source_location": "L364",
       "id": "src_main_neseserplugin_registercommands",
-      "community": 6,
+      "community": 0,
       "norm_label": ".registercommands()"
     },
     {
       "label": ".handleTaskCompleted()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L397",
+      "source_location": "L431",
       "id": "src_main_neseserplugin_handletaskcompleted",
-      "community": 6,
+      "community": 0,
       "norm_label": ".handletaskcompleted()"
     },
     {
       "label": ".openNewProjectModal()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L418",
+      "source_location": "L452",
       "id": "src_main_neseserplugin_opennewprojectmodal",
-      "community": 6,
+      "community": 0,
       "norm_label": ".opennewprojectmodal()"
+    },
+    {
+      "label": ".openNewProjectModalAsync()",
+      "file_type": "code",
+      "source_file": "src/main.ts",
+      "source_location": "L456",
+      "id": "src_main_neseserplugin_opennewprojectmodalasync",
+      "community": 0,
+      "norm_label": ".opennewprojectmodalasync()"
+    },
+    {
+      "label": ".createPlainProject()",
+      "file_type": "code",
+      "source_file": "src/main.ts",
+      "source_location": "L480",
+      "id": "src_main_neseserplugin_createplainproject",
+      "community": 0,
+      "norm_label": ".createplainproject()"
     },
     {
       "label": ".openNewTaskModal()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L430",
+      "source_location": "L492",
       "id": "src_main_neseserplugin_opennewtaskmodal",
-      "community": 6,
+      "community": 0,
       "norm_label": ".opennewtaskmodal()"
     },
     {
       "label": ".connectTickTickInteractive()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L437",
+      "source_location": "L499",
       "id": "src_main_neseserplugin_connectticktickinteractive",
-      "community": 6,
+      "community": 0,
       "norm_label": ".connectticktickinteractive()"
     },
     {
       "label": ".activateView()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L443",
+      "source_location": "L505",
       "id": "src_main_neseserplugin_activateview",
-      "community": 6,
+      "community": 0,
       "norm_label": ".activateview()"
     },
     {
       "label": ".buildInitialIndex()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L456",
+      "source_location": "L518",
       "id": "src_main_neseserplugin_buildinitialindex",
-      "community": 6,
+      "community": 0,
       "norm_label": ".buildinitialindex()"
     },
     {
       "label": ".registerVaultEvents()",
       "file_type": "code",
       "source_file": "src/main.ts",
-      "source_location": "L463",
+      "source_location": "L525",
       "id": "src_main_neseserplugin_registervaultevents",
-      "community": 6,
+      "community": 0,
       "norm_label": ".registervaultevents()"
     },
     {
@@ -351,61 +405,70 @@
       "source_file": "src/settings.ts",
       "source_location": "L1",
       "id": "src_settings_ts",
-      "community": 2,
+      "community": 0,
       "norm_label": "settings.ts"
     },
     {
       "label": "isTickTickConnected()",
       "file_type": "code",
       "source_file": "src/settings.ts",
-      "source_location": "L38",
+      "source_location": "L39",
       "id": "src_settings_isticktickconnected",
-      "community": 2,
+      "community": 0,
       "norm_label": "isticktickconnected()"
     },
     {
       "label": "NeseserSettingTab",
       "file_type": "code",
       "source_file": "src/settings.ts",
-      "source_location": "L42",
+      "source_location": "L43",
       "id": "src_settings_nesesersettingtab",
-      "community": 2,
+      "community": 0,
       "norm_label": "nesesersettingtab"
     },
     {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/settings.ts",
-      "source_location": "L43",
+      "source_location": "L44",
       "id": "src_settings_nesesersettingtab_constructor",
-      "community": 2,
+      "community": 0,
       "norm_label": ".constructor()"
     },
     {
       "label": ".display()",
       "file_type": "code",
       "source_file": "src/settings.ts",
-      "source_location": "L50",
+      "source_location": "L51",
       "id": "src_settings_nesesersettingtab_display",
-      "community": 2,
+      "community": 0,
       "norm_label": ".display()"
     },
     {
       "label": ".renderCategories()",
       "file_type": "code",
       "source_file": "src/settings.ts",
-      "source_location": "L122",
+      "source_location": "L124",
       "id": "src_settings_nesesersettingtab_rendercategories",
-      "community": 2,
+      "community": 0,
       "norm_label": ".rendercategories()"
+    },
+    {
+      "label": ".renderProjectTemplatesInfo()",
+      "file_type": "code",
+      "source_file": "src/settings.ts",
+      "source_location": "L181",
+      "id": "src_settings_nesesersettingtab_renderprojecttemplatesinfo",
+      "community": 0,
+      "norm_label": ".renderprojecttemplatesinfo()"
     },
     {
       "label": ".renderTickTick()",
       "file_type": "code",
       "source_file": "src/settings.ts",
-      "source_location": "L179",
+      "source_location": "L190",
       "id": "src_settings_nesesersettingtab_renderticktick",
-      "community": 2,
+      "community": 0,
       "norm_label": ".renderticktick()"
     },
     {
@@ -414,7 +477,7 @@
       "source_file": "src/core/burndown-data.ts",
       "source_location": "L1",
       "id": "src_core_burndown_data_ts",
-      "community": 0,
+      "community": 10,
       "norm_label": "burndown-data.ts"
     },
     {
@@ -423,7 +486,7 @@
       "source_file": "src/core/burndown-data.ts",
       "source_location": "L42",
       "id": "core_burndown_data_localdayof",
-      "community": 0,
+      "community": 10,
       "norm_label": "localdayof()"
     },
     {
@@ -432,7 +495,7 @@
       "source_file": "src/core/burndown-data.ts",
       "source_location": "L53",
       "id": "core_burndown_data_burndownseries",
-      "community": 0,
+      "community": 10,
       "norm_label": "burndownseries()"
     },
     {
@@ -441,7 +504,7 @@
       "source_file": "src/core/burndown-data.ts",
       "source_location": "L103",
       "id": "core_burndown_data_sparklinegeometry",
-      "community": 0,
+      "community": 10,
       "norm_label": "sparklinegeometry()"
     },
     {
@@ -450,7 +513,7 @@
       "source_file": "src/core/burndown-data.ts",
       "source_location": "L127",
       "id": "core_burndown_data_round2",
-      "community": 0,
+      "community": 10,
       "norm_label": "round2()"
     },
     {
@@ -459,7 +522,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L1",
       "id": "src_core_calendar_data_ts",
-      "community": 0,
+      "community": 2,
       "norm_label": "calendar-data.ts"
     },
     {
@@ -468,7 +531,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L18",
       "id": "core_calendar_data_daykey",
-      "community": 0,
+      "community": 10,
       "norm_label": "daykey()"
     },
     {
@@ -477,7 +540,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L24",
       "id": "core_calendar_data_adddays",
-      "community": 0,
+      "community": 2,
       "norm_label": "adddays()"
     },
     {
@@ -486,7 +549,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L29",
       "id": "core_calendar_data_mondayindex",
-      "community": 0,
+      "community": 2,
       "norm_label": "mondayindex()"
     },
     {
@@ -495,7 +558,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L33",
       "id": "core_calendar_data_makeday",
-      "community": 0,
+      "community": 2,
       "norm_label": "makeday()"
     },
     {
@@ -504,7 +567,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L43",
       "id": "core_calendar_data_monthgrid",
-      "community": 0,
+      "community": 2,
       "norm_label": "monthgrid()"
     },
     {
@@ -513,7 +576,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L59",
       "id": "core_calendar_data_weekrow",
-      "community": 0,
+      "community": 2,
       "norm_label": "weekrow()"
     },
     {
@@ -522,7 +585,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L69",
       "id": "core_calendar_data_tasksbydueday",
-      "community": 0,
+      "community": 2,
       "norm_label": "tasksbydueday()"
     },
     {
@@ -531,7 +594,7 @@
       "source_file": "src/core/calendar-data.ts",
       "source_location": "L86",
       "id": "core_calendar_data_rescheduledue",
-      "community": 0,
+      "community": 2,
       "norm_label": "rescheduledue()"
     },
     {
@@ -666,7 +729,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L1",
       "id": "src_core_gantt_data_ts",
-      "community": 0,
+      "community": 2,
       "norm_label": "gantt-data.ts"
     },
     {
@@ -675,7 +738,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L59",
       "id": "core_gantt_data_daykeyms",
-      "community": 0,
+      "community": 2,
       "norm_label": "daykeyms()"
     },
     {
@@ -684,7 +747,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L64",
       "id": "core_gantt_data_shiftdaykey",
-      "community": 0,
+      "community": 2,
       "norm_label": "shiftdaykey()"
     },
     {
@@ -693,7 +756,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L71",
       "id": "core_gantt_data_daydiff",
-      "community": 0,
+      "community": 2,
       "norm_label": "daydiff()"
     },
     {
@@ -702,7 +765,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L75",
       "id": "core_gantt_data_windowstart",
-      "community": 0,
+      "community": 2,
       "norm_label": "windowstart()"
     },
     {
@@ -711,7 +774,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L81",
       "id": "core_gantt_data_windowlength",
-      "community": 0,
+      "community": 2,
       "norm_label": "windowlength()"
     },
     {
@@ -720,7 +783,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L88",
       "id": "core_gantt_data_ganttwindow",
-      "community": 0,
+      "community": 2,
       "norm_label": "ganttwindow()"
     },
     {
@@ -729,7 +792,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L98",
       "id": "core_gantt_data_shiftanchor",
-      "community": 0,
+      "community": 2,
       "norm_label": "shiftanchor()"
     },
     {
@@ -738,7 +801,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L119",
       "id": "core_gantt_data_isoweeknumber",
-      "community": 0,
+      "community": 2,
       "norm_label": "isoweeknumber()"
     },
     {
@@ -747,7 +810,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L129",
       "id": "core_gantt_data_mondaykey",
-      "community": 0,
+      "community": 2,
       "norm_label": "mondaykey()"
     },
     {
@@ -756,7 +819,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L136",
       "id": "core_gantt_data_buildsegments",
-      "community": 0,
+      "community": 2,
       "norm_label": "buildsegments()"
     },
     {
@@ -765,7 +828,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L157",
       "id": "core_gantt_data_monthsegments",
-      "community": 0,
+      "community": 2,
       "norm_label": "monthsegments()"
     },
     {
@@ -774,7 +837,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L166",
       "id": "core_gantt_data_weeksegments",
-      "community": 0,
+      "community": 2,
       "norm_label": "weeksegments()"
     },
     {
@@ -783,7 +846,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L170",
       "id": "core_gantt_data_clampstartkey",
-      "community": 0,
+      "community": 2,
       "norm_label": "clampstartkey()"
     },
     {
@@ -792,7 +855,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L177",
       "id": "core_gantt_data_ganttrows",
-      "community": 0,
+      "community": 2,
       "norm_label": "ganttrows()"
     },
     {
@@ -801,7 +864,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L194",
       "id": "core_gantt_data_ganttlanes",
-      "community": 0,
+      "community": 2,
       "norm_label": "ganttlanes()"
     },
     {
@@ -810,7 +873,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L205",
       "id": "core_gantt_data_bargeometry",
-      "community": 0,
+      "community": 2,
       "norm_label": "bargeometry()"
     },
     {
@@ -819,7 +882,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L223",
       "id": "core_gantt_data_markeroffset",
-      "community": 0,
+      "community": 2,
       "norm_label": "markeroffset()"
     },
     {
@@ -828,7 +891,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L231",
       "id": "core_gantt_data_daysfrompixels",
-      "community": 0,
+      "community": 2,
       "norm_label": "daysfrompixels()"
     },
     {
@@ -837,7 +900,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L236",
       "id": "core_gantt_data_shiftspan",
-      "community": 0,
+      "community": 2,
       "norm_label": "shiftspan()"
     },
     {
@@ -846,7 +909,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L250",
       "id": "core_gantt_data_resizestart",
-      "community": 0,
+      "community": 2,
       "norm_label": "resizestart()"
     },
     {
@@ -855,7 +918,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L263",
       "id": "core_gantt_data_resizeend",
-      "community": 0,
+      "community": 2,
       "norm_label": "resizeend()"
     },
     {
@@ -864,7 +927,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L278",
       "id": "core_gantt_data_computemoveresult",
-      "community": 0,
+      "community": 2,
       "norm_label": "computemoveresult()"
     },
     {
@@ -873,7 +936,7 @@
       "source_file": "src/core/gantt-data.ts",
       "source_location": "L291",
       "id": "core_gantt_data_computeresizeresult",
-      "community": 0,
+      "community": 2,
       "norm_label": "computeresizeresult()"
     },
     {
@@ -882,7 +945,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L1",
       "id": "src_core_models_ts",
-      "community": 11,
+      "community": 12,
       "norm_label": "models.ts"
     },
     {
@@ -900,7 +963,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L55",
       "id": "core_models_titlefrompath",
-      "community": 11,
+      "community": 12,
       "norm_label": "titlefrompath()"
     },
     {
@@ -909,7 +972,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L60",
       "id": "core_models_parsewikilink",
-      "community": 11,
+      "community": 12,
       "norm_label": "parsewikilink()"
     },
     {
@@ -918,7 +981,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L67",
       "id": "core_models_optionalstring",
-      "community": 11,
+      "community": 12,
       "norm_label": "optionalstring()"
     },
     {
@@ -927,7 +990,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L73",
       "id": "core_models_parseenum",
-      "community": 11,
+      "community": 12,
       "norm_label": "parseenum()"
     },
     {
@@ -936,7 +999,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L88",
       "id": "core_models_parseoptionalenum",
-      "community": 11,
+      "community": 12,
       "norm_label": "parseoptionalenum()"
     },
     {
@@ -945,7 +1008,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L101",
       "id": "core_models_parsedate",
-      "community": 11,
+      "community": 12,
       "norm_label": "parsedate()"
     },
     {
@@ -954,7 +1017,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L110",
       "id": "core_models_parsetask",
-      "community": 11,
+      "community": 12,
       "norm_label": "parsetask()"
     },
     {
@@ -963,7 +1026,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L152",
       "id": "core_models_parseproject",
-      "community": 11,
+      "community": 12,
       "norm_label": "parseproject()"
     },
     {
@@ -972,7 +1035,7 @@
       "source_file": "src/core/models.ts",
       "source_location": "L177",
       "id": "core_models_tasktofrontmatter",
-      "community": 11,
+      "community": 12,
       "norm_label": "tasktofrontmatter()"
     },
     {
@@ -988,7 +1051,7 @@
       "label": "sanitizeName()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L47",
+      "source_location": "L69",
       "id": "core_project_manager_sanitizename",
       "community": 4,
       "norm_label": "sanitizename()"
@@ -997,7 +1060,7 @@
       "label": "yamlValue()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L53",
+      "source_location": "L75",
       "id": "core_project_manager_yamlvalue",
       "community": 4,
       "norm_label": "yamlvalue()"
@@ -1006,7 +1069,7 @@
       "label": "frontmatterBlock()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L58",
+      "source_location": "L80",
       "id": "core_project_manager_frontmatterblock",
       "community": 4,
       "norm_label": "frontmatterblock()"
@@ -1015,7 +1078,7 @@
       "label": "isoDate()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L63",
+      "source_location": "L85",
       "id": "core_project_manager_isodate",
       "community": 4,
       "norm_label": "isodate()"
@@ -1024,7 +1087,7 @@
       "label": "ProjectManager",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L67",
+      "source_location": "L89",
       "id": "core_project_manager_projectmanager",
       "community": 4,
       "norm_label": "projectmanager"
@@ -1033,7 +1096,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L68",
+      "source_location": "L90",
       "id": "core_project_manager_projectmanager_constructor",
       "community": 4,
       "norm_label": ".constructor()"
@@ -1042,16 +1105,34 @@
       "label": ".createProject()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L74",
+      "source_location": "L96",
       "id": "core_project_manager_projectmanager_createproject",
       "community": 4,
       "norm_label": ".createproject()"
     },
     {
+      "label": ".listProjectTemplates()",
+      "file_type": "code",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L120",
+      "id": "core_project_manager_projectmanager_listprojecttemplates",
+      "community": 4,
+      "norm_label": ".listprojecttemplates()"
+    },
+    {
+      "label": ".createProjectFromTemplate()",
+      "file_type": "code",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L136",
+      "id": "core_project_manager_projectmanager_createprojectfromtemplate",
+      "community": 4,
+      "norm_label": ".createprojectfromtemplate()"
+    },
+    {
       "label": ".createTask()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L98",
+      "source_location": "L187",
       "id": "core_project_manager_projectmanager_createtask",
       "community": 4,
       "norm_label": ".createtask()"
@@ -1060,7 +1141,7 @@
       "label": ".regenerateRecurringInstance()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L138",
+      "source_location": "L227",
       "id": "core_project_manager_projectmanager_regeneraterecurringinstance",
       "community": 4,
       "norm_label": ".regeneraterecurringinstance()"
@@ -1069,7 +1150,7 @@
       "label": ".taskPath()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L178",
+      "source_location": "L267",
       "id": "core_project_manager_projectmanager_taskpath",
       "community": 4,
       "norm_label": ".taskpath()"
@@ -1078,7 +1159,7 @@
       "label": ".completeTask()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L182",
+      "source_location": "L271",
       "id": "core_project_manager_projectmanager_completetask",
       "community": 4,
       "norm_label": ".completetask()"
@@ -1087,7 +1168,7 @@
       "label": ".updateTaskStatus()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L186",
+      "source_location": "L275",
       "id": "core_project_manager_projectmanager_updatetaskstatus",
       "community": 4,
       "norm_label": ".updatetaskstatus()"
@@ -1096,7 +1177,7 @@
       "label": ".updateTaskDue()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L197",
+      "source_location": "L286",
       "id": "core_project_manager_projectmanager_updatetaskdue",
       "community": 4,
       "norm_label": ".updatetaskdue()"
@@ -1105,10 +1186,55 @@
       "label": ".updateTaskDates()",
       "file_type": "code",
       "source_file": "src/core/project-manager.ts",
-      "source_location": "L203",
+      "source_location": "L292",
       "id": "core_project_manager_projectmanager_updatetaskdates",
       "community": 4,
       "norm_label": ".updatetaskdates()"
+    },
+    {
+      "label": "project-templates.ts",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L1",
+      "id": "src_core_project_templates_ts",
+      "community": 4,
+      "norm_label": "project-templates.ts"
+    },
+    {
+      "label": "isTemplateFolderSegment()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L11",
+      "id": "core_project_templates_istemplatefoldersegment",
+      "community": 4,
+      "norm_label": "istemplatefoldersegment()"
+    },
+    {
+      "label": "templateFolderPath()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L16",
+      "id": "core_project_templates_templatefolderpath",
+      "community": 4,
+      "norm_label": "templatefolderpath()"
+    },
+    {
+      "label": "templateProjectNotePath()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L20",
+      "id": "core_project_templates_templateprojectnotepath",
+      "community": 4,
+      "norm_label": "templateprojectnotepath()"
+    },
+    {
+      "label": "findSyncIdentityKeys()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L24",
+      "id": "core_project_templates_findsyncidentitykeys",
+      "community": 4,
+      "norm_label": "findsyncidentitykeys()"
     },
     {
       "label": "recurrence.ts",
@@ -1161,7 +1287,7 @@
       "source_file": "src/core/task-index.ts",
       "source_location": "L1",
       "id": "src_core_task_index_ts",
-      "community": 11,
+      "community": 12,
       "norm_label": "task-index.ts"
     },
     {
@@ -1341,7 +1467,7 @@
       "source_file": "src/core/today-data.ts",
       "source_location": "L1",
       "id": "src_core_today_data_ts",
-      "community": 0,
+      "community": 10,
       "norm_label": "today-data.ts"
     },
     {
@@ -1350,7 +1476,7 @@
       "source_file": "src/core/today-data.ts",
       "source_location": "L17",
       "id": "core_today_data_todaygroups",
-      "community": 0,
+      "community": 10,
       "norm_label": "todaygroups()"
     },
     {
@@ -1359,7 +1485,7 @@
       "source_file": "src/core/today-data.ts",
       "source_location": "L43",
       "id": "core_today_data_overduedays",
-      "community": 0,
+      "community": 10,
       "norm_label": "overduedays()"
     },
     {
@@ -1413,7 +1539,7 @@
       "source_file": "src/core/view-data.ts",
       "source_location": "L58",
       "id": "core_view_data_duedatekey",
-      "community": 0,
+      "community": 4,
       "norm_label": "duedatekey()"
     },
     {
@@ -1593,7 +1719,7 @@
       "source_file": "src/sync/oauth-flow.ts",
       "source_location": "L25",
       "id": "sync_oauth_flow_runoauthflow",
-      "community": 6,
+      "community": 0,
       "norm_label": "runoauthflow()"
     },
     {
@@ -1602,7 +1728,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L1",
       "id": "src_sync_scheduler_ts",
-      "community": 2,
+      "community": 8,
       "norm_label": "scheduler.ts"
     },
     {
@@ -1611,7 +1737,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L2",
       "id": "sync_scheduler_exponentialbackoff",
-      "community": 2,
+      "community": 8,
       "norm_label": "exponentialbackoff"
     },
     {
@@ -1620,7 +1746,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L5",
       "id": "sync_scheduler_exponentialbackoff_constructor",
-      "community": 2,
+      "community": 8,
       "norm_label": ".constructor()"
     },
     {
@@ -1629,7 +1755,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L10",
       "id": "sync_scheduler_exponentialbackoff_nextdelay",
-      "community": 2,
+      "community": 8,
       "norm_label": ".nextdelay()"
     },
     {
@@ -1638,7 +1764,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L16",
       "id": "sync_scheduler_exponentialbackoff_reset",
-      "community": 2,
+      "community": 8,
       "norm_label": ".reset()"
     },
     {
@@ -1647,7 +1773,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L31",
       "id": "sync_scheduler_syncscheduler",
-      "community": 2,
+      "community": 8,
       "norm_label": "syncscheduler"
     },
     {
@@ -1656,7 +1782,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L35",
       "id": "sync_scheduler_syncscheduler_constructor",
-      "community": 2,
+      "community": 8,
       "norm_label": ".constructor()"
     },
     {
@@ -1665,7 +1791,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L42",
       "id": "sync_scheduler_syncscheduler_start",
-      "community": 2,
+      "community": 8,
       "norm_label": ".start()"
     },
     {
@@ -1674,7 +1800,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L48",
       "id": "sync_scheduler_syncscheduler_stop",
-      "community": 2,
+      "community": 8,
       "norm_label": ".stop()"
     },
     {
@@ -1683,7 +1809,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L56",
       "id": "sync_scheduler_syncscheduler_schedule",
-      "community": 2,
+      "community": 8,
       "norm_label": ".schedule()"
     },
     {
@@ -1692,7 +1818,7 @@
       "source_file": "src/sync/scheduler.ts",
       "source_location": "L60",
       "id": "sync_scheduler_syncscheduler_tick",
-      "community": 2,
+      "community": 8,
       "norm_label": ".tick()"
     },
     {
@@ -1881,7 +2007,7 @@
       "source_file": "src/sync/sync-state.ts",
       "source_location": "L1",
       "id": "src_sync_sync_state_ts",
-      "community": 6,
+      "community": 0,
       "norm_label": "sync-state.ts"
     },
     {
@@ -1890,7 +2016,7 @@
       "source_file": "src/sync/sync-state.ts",
       "source_location": "L18",
       "id": "sync_sync_state_emptysnapshot",
-      "community": 6,
+      "community": 0,
       "norm_label": "emptysnapshot()"
     },
     {
@@ -1899,7 +2025,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L1",
       "id": "src_sync_sync_status_ts",
-      "community": 8,
+      "community": 9,
       "norm_label": "sync-status.ts"
     },
     {
@@ -1908,7 +2034,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L14",
       "id": "sync_sync_status_syncstatusstore",
-      "community": 8,
+      "community": 9,
       "norm_label": "syncstatusstore"
     },
     {
@@ -1917,7 +2043,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L18",
       "id": "sync_sync_status_syncstatusstore_get",
-      "community": 8,
+      "community": 9,
       "norm_label": ".get()"
     },
     {
@@ -1926,7 +2052,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L22",
       "id": "sync_sync_status_syncstatusstore_set",
-      "community": 8,
+      "community": 9,
       "norm_label": ".set()"
     },
     {
@@ -1935,7 +2061,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L29",
       "id": "sync_sync_status_syncstatusstore_update",
-      "community": 8,
+      "community": 9,
       "norm_label": ".update()"
     },
     {
@@ -1944,7 +2070,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L33",
       "id": "sync_sync_status_syncstatusstore_subscribe",
-      "community": 8,
+      "community": 9,
       "norm_label": ".subscribe()"
     },
     {
@@ -1953,7 +2079,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L39",
       "id": "sync_sync_status_issamestatus",
-      "community": 8,
+      "community": 9,
       "norm_label": "issamestatus()"
     },
     {
@@ -1962,7 +2088,7 @@
       "source_file": "src/sync/sync-status.ts",
       "source_location": "L44",
       "id": "sync_sync_status_formatsyncstatus",
-      "community": 8,
+      "community": 9,
       "norm_label": "formatsyncstatus()"
     },
     {
@@ -2142,7 +2268,7 @@
       "source_file": "src/ui/CalendarApp.tsx",
       "source_location": "L127",
       "id": "ui_calendarapp_handledragend",
-      "community": 0,
+      "community": 1,
       "norm_label": "handledragend()"
     },
     {
@@ -2196,7 +2322,7 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L1",
       "id": "src_ui_ganttapp_tsx",
-      "community": 0,
+      "community": 2,
       "norm_label": "ganttapp.tsx"
     },
     {
@@ -2205,7 +2331,7 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L48",
       "id": "ui_ganttapp_ganttbar",
-      "community": 0,
+      "community": 2,
       "norm_label": "ganttbar()"
     },
     {
@@ -2214,7 +2340,7 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L193",
       "id": "ui_ganttapp_step",
-      "community": 0,
+      "community": 2,
       "norm_label": "step()"
     },
     {
@@ -2223,7 +2349,7 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L195",
       "id": "ui_ganttapp_handledragend",
-      "community": 0,
+      "community": 2,
       "norm_label": "handledragend()"
     },
     {
@@ -2232,7 +2358,7 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L217",
       "id": "ui_ganttapp_opentask",
-      "community": 0,
+      "community": 2,
       "norm_label": "opentask()"
     },
     {
@@ -2241,7 +2367,7 @@
       "source_file": "src/ui/GanttApp.tsx",
       "source_location": "L221",
       "id": "ui_ganttapp_toggleproject",
-      "community": 0,
+      "community": 2,
       "norm_label": "toggleproject()"
     },
     {
@@ -2268,97 +2394,97 @@
       "source_file": "src/ui/modals.ts",
       "source_location": "L1",
       "id": "src_ui_modals_ts",
-      "community": 12,
+      "community": 14,
       "norm_label": "modals.ts"
     },
     {
       "label": "addSubmitButton()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L9",
+      "source_location": "L17",
       "id": "ui_modals_addsubmitbutton",
-      "community": 12,
+      "community": 14,
       "norm_label": "addsubmitbutton()"
     },
     {
       "label": "trySubmit()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L21",
+      "source_location": "L29",
       "id": "ui_modals_trysubmit",
-      "community": 12,
+      "community": 14,
       "norm_label": "trysubmit()"
     },
     {
       "label": "NewProjectModal",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L31",
+      "source_location": "L39",
       "id": "ui_modals_newprojectmodal",
-      "community": 12,
+      "community": 14,
       "norm_label": "newprojectmodal"
     },
     {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L36",
+      "source_location": "L45",
       "id": "ui_modals_newprojectmodal_constructor",
-      "community": 12,
+      "community": 14,
       "norm_label": ".constructor()"
     },
     {
       "label": ".onOpen()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L44",
+      "source_location": "L54",
       "id": "ui_modals_newprojectmodal_onopen",
-      "community": 12,
+      "community": 14,
       "norm_label": ".onopen()"
     },
     {
       "label": ".submit()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L67",
+      "source_location": "L103",
       "id": "ui_modals_newprojectmodal_submit",
-      "community": 12,
+      "community": 14,
       "norm_label": ".submit()"
     },
     {
       "label": "NewTaskModal",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L76",
+      "source_location": "L114",
       "id": "ui_modals_newtaskmodal",
-      "community": 12,
+      "community": 14,
       "norm_label": "newtaskmodal"
     },
     {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L84",
+      "source_location": "L122",
       "id": "ui_modals_newtaskmodal_constructor",
-      "community": 12,
+      "community": 14,
       "norm_label": ".constructor()"
     },
     {
       "label": ".onOpen()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L94",
+      "source_location": "L132",
       "id": "ui_modals_newtaskmodal_onopen",
-      "community": 12,
+      "community": 14,
       "norm_label": ".onopen()"
     },
     {
       "label": ".submit()",
       "file_type": "code",
       "source_file": "src/ui/modals.ts",
-      "source_location": "L151",
+      "source_location": "L189",
       "id": "ui_modals_newtaskmodal_submit",
-      "community": 12,
+      "community": 14,
       "norm_label": ".submit()"
     },
     {
@@ -2376,7 +2502,7 @@
       "source_file": "src/ui/Sparkline.tsx",
       "source_location": "L1",
       "id": "src_ui_sparkline_tsx",
-      "community": 0,
+      "community": 10,
       "norm_label": "sparkline.tsx"
     },
     {
@@ -2385,7 +2511,7 @@
       "source_file": "src/ui/Sparkline.tsx",
       "source_location": "L9",
       "id": "ui_sparkline_sparkline",
-      "community": 0,
+      "community": 10,
       "norm_label": "sparkline()"
     },
     {
@@ -2457,7 +2583,7 @@
       "source_file": "src/ui/use-index-refresh.ts",
       "source_location": "L1",
       "id": "src_ui_use_index_refresh_ts",
-      "community": 5,
+      "community": 1,
       "norm_label": "use-index-refresh.ts"
     },
     {
@@ -2475,7 +2601,7 @@
       "source_file": "src/ui/use-sync-status.ts",
       "source_location": "L1",
       "id": "src_ui_use_sync_status_ts",
-      "community": 8,
+      "community": 9,
       "norm_label": "use-sync-status.ts"
     },
     {
@@ -2484,7 +2610,7 @@
       "source_file": "src/ui/use-sync-status.ts",
       "source_location": "L5",
       "id": "ui_use_sync_status_usesyncstatus",
-      "community": 8,
+      "community": 1,
       "norm_label": "usesyncstatus()"
     },
     {
@@ -2493,7 +2619,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L1",
       "id": "src_views_calendar_view_tsx",
-      "community": 5,
+      "community": 16,
       "norm_label": "calendar-view.tsx"
     },
     {
@@ -2502,7 +2628,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L13",
       "id": "views_calendar_view_calendarview",
-      "community": 5,
+      "community": 16,
       "norm_label": "calendarview"
     },
     {
@@ -2511,7 +2637,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L16",
       "id": "views_calendar_view_calendarview_constructor",
-      "community": 5,
+      "community": 16,
       "norm_label": ".constructor()"
     },
     {
@@ -2520,7 +2646,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L26",
       "id": "views_calendar_view_calendarview_getviewtype",
-      "community": 5,
+      "community": 16,
       "norm_label": ".getviewtype()"
     },
     {
@@ -2529,7 +2655,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L30",
       "id": "views_calendar_view_calendarview_getdisplaytext",
-      "community": 5,
+      "community": 16,
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -2538,7 +2664,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L34",
       "id": "views_calendar_view_calendarview_geticon",
-      "community": 5,
+      "community": 16,
       "norm_label": ".geticon()"
     },
     {
@@ -2547,7 +2673,7 @@
       "source_file": "src/views/calendar-view.tsx",
       "source_location": "L38",
       "id": "views_calendar_view_calendarview_onopen",
-      "community": 5,
+      "community": 16,
       "norm_label": ".onopen()"
     },
     {
@@ -2556,7 +2682,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L1",
       "id": "src_views_dashboard_view_tsx",
-      "community": 13,
+      "community": 5,
       "norm_label": "dashboard-view.tsx"
     },
     {
@@ -2565,7 +2691,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L10",
       "id": "views_dashboard_view_dashboardview",
-      "community": 13,
+      "community": 5,
       "norm_label": "dashboardview"
     },
     {
@@ -2574,7 +2700,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L13",
       "id": "views_dashboard_view_dashboardview_constructor",
-      "community": 13,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -2583,7 +2709,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L22",
       "id": "views_dashboard_view_dashboardview_getviewtype",
-      "community": 13,
+      "community": 5,
       "norm_label": ".getviewtype()"
     },
     {
@@ -2592,7 +2718,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L26",
       "id": "views_dashboard_view_dashboardview_getdisplaytext",
-      "community": 13,
+      "community": 5,
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -2601,7 +2727,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L30",
       "id": "views_dashboard_view_dashboardview_geticon",
-      "community": 13,
+      "community": 5,
       "norm_label": ".geticon()"
     },
     {
@@ -2610,7 +2736,7 @@
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L34",
       "id": "views_dashboard_view_dashboardview_onopen",
-      "community": 13,
+      "community": 5,
       "norm_label": ".onopen()"
     },
     {
@@ -2619,7 +2745,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L1",
       "id": "src_views_gantt_view_tsx",
-      "community": 0,
+      "community": 2,
       "norm_label": "gantt-view.tsx"
     },
     {
@@ -2628,7 +2754,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L13",
       "id": "views_gantt_view_ganttview",
-      "community": 2,
+      "community": 0,
       "norm_label": "ganttview"
     },
     {
@@ -2637,7 +2763,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L16",
       "id": "views_gantt_view_ganttview_constructor",
-      "community": 2,
+      "community": 0,
       "norm_label": ".constructor()"
     },
     {
@@ -2646,7 +2772,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L26",
       "id": "views_gantt_view_ganttview_getviewtype",
-      "community": 2,
+      "community": 0,
       "norm_label": ".getviewtype()"
     },
     {
@@ -2655,7 +2781,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L30",
       "id": "views_gantt_view_ganttview_getdisplaytext",
-      "community": 2,
+      "community": 0,
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -2664,7 +2790,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L34",
       "id": "views_gantt_view_ganttview_geticon",
-      "community": 2,
+      "community": 0,
       "norm_label": ".geticon()"
     },
     {
@@ -2673,7 +2799,7 @@
       "source_file": "src/views/gantt-view.tsx",
       "source_location": "L38",
       "id": "views_gantt_view_ganttview_onopen",
-      "community": 2,
+      "community": 0,
       "norm_label": ".onopen()"
     },
     {
@@ -2682,7 +2808,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L1",
       "id": "src_views_kanban_view_tsx",
-      "community": 4,
+      "community": 5,
       "norm_label": "kanban-view.tsx"
     },
     {
@@ -2691,7 +2817,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L12",
       "id": "views_kanban_view_kanbanview",
-      "community": 4,
+      "community": 5,
       "norm_label": "kanbanview"
     },
     {
@@ -2700,7 +2826,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L15",
       "id": "views_kanban_view_kanbanview_constructor",
-      "community": 4,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -2709,7 +2835,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L25",
       "id": "views_kanban_view_kanbanview_getviewtype",
-      "community": 4,
+      "community": 5,
       "norm_label": ".getviewtype()"
     },
     {
@@ -2718,7 +2844,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L29",
       "id": "views_kanban_view_kanbanview_getdisplaytext",
-      "community": 4,
+      "community": 5,
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -2727,7 +2853,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L33",
       "id": "views_kanban_view_kanbanview_geticon",
-      "community": 4,
+      "community": 5,
       "norm_label": ".geticon()"
     },
     {
@@ -2736,7 +2862,7 @@
       "source_file": "src/views/kanban-view.tsx",
       "source_location": "L37",
       "id": "views_kanban_view_kanbanview_onopen",
-      "community": 4,
+      "community": 5,
       "norm_label": ".onopen()"
     },
     {
@@ -2745,7 +2871,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L1",
       "id": "src_views_navigation_view_tsx",
-      "community": 8,
+      "community": 9,
       "norm_label": "navigation-view.tsx"
     },
     {
@@ -2754,7 +2880,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L14",
       "id": "views_navigation_view_navigationview",
-      "community": 8,
+      "community": 9,
       "norm_label": "navigationview"
     },
     {
@@ -2763,7 +2889,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L17",
       "id": "views_navigation_view_navigationview_constructor",
-      "community": 8,
+      "community": 9,
       "norm_label": ".constructor()"
     },
     {
@@ -2772,7 +2898,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L28",
       "id": "views_navigation_view_navigationview_getviewtype",
-      "community": 8,
+      "community": 9,
       "norm_label": ".getviewtype()"
     },
     {
@@ -2781,7 +2907,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L32",
       "id": "views_navigation_view_navigationview_getdisplaytext",
-      "community": 8,
+      "community": 9,
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -2790,7 +2916,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L36",
       "id": "views_navigation_view_navigationview_geticon",
-      "community": 8,
+      "community": 9,
       "norm_label": ".geticon()"
     },
     {
@@ -2799,7 +2925,7 @@
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L40",
       "id": "views_navigation_view_navigationview_onopen",
-      "community": 8,
+      "community": 9,
       "norm_label": ".onopen()"
     },
     {
@@ -2808,7 +2934,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L1",
       "id": "src_views_today_view_tsx",
-      "community": 4,
+      "community": 15,
       "norm_label": "today-view.tsx"
     },
     {
@@ -2817,7 +2943,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L12",
       "id": "views_today_view_todayview",
-      "community": 4,
+      "community": 15,
       "norm_label": "todayview"
     },
     {
@@ -2826,7 +2952,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L15",
       "id": "views_today_view_todayview_constructor",
-      "community": 4,
+      "community": 15,
       "norm_label": ".constructor()"
     },
     {
@@ -2835,7 +2961,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L25",
       "id": "views_today_view_todayview_getviewtype",
-      "community": 4,
+      "community": 15,
       "norm_label": ".getviewtype()"
     },
     {
@@ -2844,7 +2970,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L29",
       "id": "views_today_view_todayview_getdisplaytext",
-      "community": 4,
+      "community": 15,
       "norm_label": ".getdisplaytext()"
     },
     {
@@ -2853,7 +2979,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L33",
       "id": "views_today_view_todayview_geticon",
-      "community": 4,
+      "community": 15,
       "norm_label": ".geticon()"
     },
     {
@@ -2862,7 +2988,7 @@
       "source_file": "src/views/today-view.tsx",
       "source_location": "L37",
       "id": "views_today_view_todayview_onopen",
-      "community": 4,
+      "community": 15,
       "norm_label": ".onopen()"
     },
     {
@@ -2871,7 +2997,7 @@
       "source_file": "tests/styles-encoding.test.ts",
       "source_location": "L1",
       "id": "tests_styles_encoding_test_ts",
-      "community": 19,
+      "community": 21,
       "norm_label": "styles-encoding.test.ts"
     },
     {
@@ -2880,7 +3006,7 @@
       "source_file": "tests/core/burndown-data.test.ts",
       "source_location": "L1",
       "id": "tests_core_burndown_data_test_ts",
-      "community": 0,
+      "community": 10,
       "norm_label": "burndown-data.test.ts"
     },
     {
@@ -2889,7 +3015,7 @@
       "source_file": "tests/core/burndown-data.test.ts",
       "source_location": "L15",
       "id": "core_burndown_data_test_task",
-      "community": 0,
+      "community": 10,
       "norm_label": "task()"
     },
     {
@@ -2898,7 +3024,7 @@
       "source_file": "tests/core/burndown-data.test.ts",
       "source_location": "L25",
       "id": "core_burndown_data_test_seriesvalues",
-      "community": 0,
+      "community": 10,
       "norm_label": "seriesvalues()"
     },
     {
@@ -2907,7 +3033,7 @@
       "source_file": "tests/core/calendar-data.test.ts",
       "source_location": "L1",
       "id": "tests_core_calendar_data_test_ts",
-      "community": 0,
+      "community": 2,
       "norm_label": "calendar-data.test.ts"
     },
     {
@@ -2916,7 +3042,7 @@
       "source_file": "tests/core/calendar-data.test.ts",
       "source_location": "L5",
       "id": "core_calendar_data_test_task",
-      "community": 0,
+      "community": 2,
       "norm_label": "task()"
     },
     {
@@ -2961,7 +3087,7 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L1",
       "id": "tests_core_gantt_data_test_ts",
-      "community": 0,
+      "community": 2,
       "norm_label": "gantt-data.test.ts"
     },
     {
@@ -2970,7 +3096,7 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L21",
       "id": "core_gantt_data_test_task",
-      "community": 0,
+      "community": 2,
       "norm_label": "task()"
     },
     {
@@ -2979,7 +3105,7 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L31",
       "id": "core_gantt_data_test_project",
-      "community": 0,
+      "community": 2,
       "norm_label": "project()"
     },
     {
@@ -2988,7 +3114,7 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L88",
       "id": "core_gantt_data_test_totalspan",
-      "community": 0,
+      "community": 2,
       "norm_label": "totalspan()"
     },
     {
@@ -2997,7 +3123,7 @@
       "source_file": "tests/core/gantt-data.test.ts",
       "source_location": "L272",
       "id": "core_gantt_data_test_row",
-      "community": 0,
+      "community": 2,
       "norm_label": "row()"
     },
     {
@@ -3006,7 +3132,7 @@
       "source_file": "tests/core/models.test.ts",
       "source_location": "L1",
       "id": "tests_core_models_test_ts",
-      "community": 11,
+      "community": 12,
       "norm_label": "models.test.ts"
     },
     {
@@ -3015,7 +3141,7 @@
       "source_file": "tests/core/project-manager.test.ts",
       "source_location": "L1",
       "id": "tests_core_project_manager_test_ts",
-      "community": 14,
+      "community": 11,
       "norm_label": "project-manager.test.ts"
     },
     {
@@ -3024,7 +3150,7 @@
       "source_file": "tests/core/project-manager.test.ts",
       "source_location": "L5",
       "id": "core_project_manager_test_fakevault",
-      "community": 14,
+      "community": 11,
       "norm_label": "fakevault"
     },
     {
@@ -3033,7 +3159,7 @@
       "source_file": "tests/core/project-manager.test.ts",
       "source_location": "L10",
       "id": "core_project_manager_test_fakevault_exists",
-      "community": 14,
+      "community": 11,
       "norm_label": ".exists()"
     },
     {
@@ -3042,7 +3168,7 @@
       "source_file": "tests/core/project-manager.test.ts",
       "source_location": "L14",
       "id": "core_project_manager_test_fakevault_createfolder",
-      "community": 14,
+      "community": 11,
       "norm_label": ".createfolder()"
     },
     {
@@ -3051,35 +3177,89 @@
       "source_file": "tests/core/project-manager.test.ts",
       "source_location": "L18",
       "id": "core_project_manager_test_fakevault_createnote",
-      "community": 14,
+      "community": 11,
       "norm_label": ".createnote()"
+    },
+    {
+      "label": ".listFolders()",
+      "file_type": "code",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L22",
+      "id": "core_project_manager_test_fakevault_listfolders",
+      "community": 11,
+      "norm_label": ".listfolders()"
+    },
+    {
+      "label": ".listMarkdownFiles()",
+      "file_type": "code",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L31",
+      "id": "core_project_manager_test_fakevault_listmarkdownfiles",
+      "community": 11,
+      "norm_label": ".listmarkdownfiles()"
+    },
+    {
+      "label": ".copyFolder()",
+      "file_type": "code",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L38",
+      "id": "core_project_manager_test_fakevault_copyfolder",
+      "community": 11,
+      "norm_label": ".copyfolder()"
+    },
+    {
+      "label": ".renamePath()",
+      "file_type": "code",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L53",
+      "id": "core_project_manager_test_fakevault_renamepath",
+      "community": 11,
+      "norm_label": ".renamepath()"
     },
     {
       "label": ".readNote()",
       "file_type": "code",
       "source_file": "tests/core/project-manager.test.ts",
-      "source_location": "L22",
+      "source_location": "L68",
       "id": "core_project_manager_test_fakevault_readnote",
-      "community": 14,
+      "community": 11,
       "norm_label": ".readnote()"
     },
     {
       "label": ".updateFrontmatter()",
       "file_type": "code",
       "source_file": "tests/core/project-manager.test.ts",
-      "source_location": "L28",
+      "source_location": "L74",
       "id": "core_project_manager_test_fakevault_updatefrontmatter",
-      "community": 14,
+      "community": 11,
       "norm_label": ".updatefrontmatter()"
+    },
+    {
+      "label": "addTemplate()",
+      "file_type": "code",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L92",
+      "id": "core_project_manager_test_addtemplate",
+      "community": 11,
+      "norm_label": "addtemplate()"
     },
     {
       "label": "recurringTask()",
       "file_type": "code",
       "source_file": "tests/core/project-manager.test.ts",
-      "source_location": "L249",
+      "source_location": "L401",
       "id": "core_project_manager_test_recurringtask",
-      "community": 14,
+      "community": 11,
       "norm_label": "recurringtask()"
+    },
+    {
+      "label": "project-templates.test.ts",
+      "file_type": "code",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L1",
+      "id": "tests_core_project_templates_test_ts",
+      "community": 4,
+      "norm_label": "project-templates.test.ts"
     },
     {
       "label": "recurrence.test.ts",
@@ -3114,7 +3294,7 @@
       "source_file": "tests/core/today-data.test.ts",
       "source_location": "L1",
       "id": "tests_core_today_data_test_ts",
-      "community": 0,
+      "community": 10,
       "norm_label": "today-data.test.ts"
     },
     {
@@ -3123,7 +3303,7 @@
       "source_file": "tests/core/today-data.test.ts",
       "source_location": "L5",
       "id": "core_today_data_test_maketask",
-      "community": 0,
+      "community": 10,
       "norm_label": "maketask()"
     },
     {
@@ -3213,7 +3393,7 @@
       "source_file": "tests/sync/oauth-flow.test.ts",
       "source_location": "L1",
       "id": "tests_sync_oauth_flow_test_ts",
-      "community": 6,
+      "community": 0,
       "norm_label": "oauth-flow.test.ts"
     },
     {
@@ -3222,7 +3402,7 @@
       "source_file": "tests/sync/oauth-flow.test.ts",
       "source_location": "L5",
       "id": "sync_oauth_flow_test_tokenhttp",
-      "community": 6,
+      "community": 0,
       "norm_label": "tokenhttp()"
     },
     {
@@ -3231,7 +3411,7 @@
       "source_file": "tests/sync/oauth-flow.test.ts",
       "source_location": "L15",
       "id": "sync_oauth_flow_test_startflow",
-      "community": 6,
+      "community": 0,
       "norm_label": "startflow()"
     },
     {
@@ -3240,7 +3420,7 @@
       "source_file": "tests/sync/oauth-flow.test.ts",
       "source_location": "L30",
       "id": "sync_oauth_flow_test_callbackbase",
-      "community": 6,
+      "community": 0,
       "norm_label": "callbackbase()"
     },
     {
@@ -3249,7 +3429,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L1",
       "id": "tests_sync_scheduler_test_ts",
-      "community": 2,
+      "community": 8,
       "norm_label": "scheduler.test.ts"
     },
     {
@@ -3258,7 +3438,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L31",
       "id": "sync_scheduler_test_faketimer",
-      "community": 2,
+      "community": 8,
       "norm_label": "faketimer"
     },
     {
@@ -3267,7 +3447,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L36",
       "id": "sync_scheduler_test_faketimer_set",
-      "community": 2,
+      "community": 8,
       "norm_label": ".set()"
     },
     {
@@ -3276,7 +3456,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L42",
       "id": "sync_scheduler_test_faketimer_clear",
-      "community": 2,
+      "community": 8,
       "norm_label": ".clear()"
     },
     {
@@ -3285,7 +3465,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L47",
       "id": "sync_scheduler_test_faketimer_firelast",
-      "community": 2,
+      "community": 8,
       "norm_label": ".firelast()"
     },
     {
@@ -3294,7 +3474,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L54",
       "id": "sync_scheduler_test_faketimer_lastdelay",
-      "community": 2,
+      "community": 8,
       "norm_label": ".lastdelay()"
     },
     {
@@ -3303,7 +3483,7 @@
       "source_file": "tests/sync/scheduler.test.ts",
       "source_location": "L61",
       "id": "sync_scheduler_test_makescheduler",
-      "community": 2,
+      "community": 8,
       "norm_label": "makescheduler()"
     },
     {
@@ -3312,7 +3492,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L1",
       "id": "tests_sync_sync_engine_test_ts",
-      "community": 10,
+      "community": 6,
       "norm_label": "sync-engine.test.ts"
     },
     {
@@ -3321,7 +3501,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L10",
       "id": "sync_sync_engine_test_fakeclient",
-      "community": 9,
+      "community": 6,
       "norm_label": "fakeclient"
     },
     {
@@ -3330,7 +3510,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L16",
       "id": "sync_sync_engine_test_fakeclient_createproject",
-      "community": 9,
+      "community": 6,
       "norm_label": ".createproject()"
     },
     {
@@ -3339,7 +3519,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L23",
       "id": "sync_sync_engine_test_fakeclient_createtask",
-      "community": 9,
+      "community": 6,
       "norm_label": ".createtask()"
     },
     {
@@ -3348,7 +3528,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L30",
       "id": "sync_sync_engine_test_fakeclient_updatetask",
-      "community": 9,
+      "community": 6,
       "norm_label": ".updatetask()"
     },
     {
@@ -3357,7 +3537,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L37",
       "id": "sync_sync_engine_test_fakeclient_completetask",
-      "community": 9,
+      "community": 6,
       "norm_label": ".completetask()"
     },
     {
@@ -3366,7 +3546,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L43",
       "id": "sync_sync_engine_test_fakeclient_deletetask",
-      "community": 9,
+      "community": 6,
       "norm_label": ".deletetask()"
     },
     {
@@ -3375,7 +3555,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L48",
       "id": "sync_sync_engine_test_fakeclient_getprojectdata",
-      "community": 9,
+      "community": 6,
       "norm_label": ".getprojectdata()"
     },
     {
@@ -3384,7 +3564,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L57",
       "id": "sync_sync_engine_test_fakeclient_gettask",
-      "community": 9,
+      "community": 6,
       "norm_label": ".gettask()"
     },
     {
@@ -3393,7 +3573,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L65",
       "id": "sync_sync_engine_test_fakeclient_editremote",
-      "community": 9,
+      "community": 6,
       "norm_label": ".editremote()"
     },
     {
@@ -3402,7 +3582,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L71",
       "id": "sync_sync_engine_test_fakeclient_seedremote",
-      "community": 9,
+      "community": 6,
       "norm_label": ".seedremote()"
     },
     {
@@ -3411,7 +3591,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L83",
       "id": "sync_sync_engine_test_fakeclient_remotetask",
-      "community": 9,
+      "community": 6,
       "norm_label": ".remotetask()"
     },
     {
@@ -3420,7 +3600,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L87",
       "id": "sync_sync_engine_test_fakeclient_callsof",
-      "community": 9,
+      "community": 6,
       "norm_label": ".callsof()"
     },
     {
@@ -3429,7 +3609,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L91",
       "id": "sync_sync_engine_test_fakeclient_project",
-      "community": 9,
+      "community": 6,
       "norm_label": ".project()"
     },
     {
@@ -3438,7 +3618,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L100",
       "id": "sync_sync_engine_test_fakeclient_record",
-      "community": 9,
+      "community": 6,
       "norm_label": ".record()"
     },
     {
@@ -3447,7 +3627,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L106",
       "id": "sync_sync_engine_test_fakestore",
-      "community": 10,
+      "community": 6,
       "norm_label": "fakestore"
     },
     {
@@ -3456,7 +3636,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L112",
       "id": "sync_sync_engine_test_fakestore_updatefrontmatter",
-      "community": 10,
+      "community": 6,
       "norm_label": ".updatefrontmatter()"
     },
     {
@@ -3465,7 +3645,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L118",
       "id": "sync_sync_engine_test_fakestore_createtasknote",
-      "community": 10,
+      "community": 6,
       "norm_label": ".createtasknote()"
     },
     {
@@ -3474,7 +3654,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L123",
       "id": "sync_sync_engine_test_fakestore_trashnote",
-      "community": 10,
+      "community": 6,
       "norm_label": ".trashnote()"
     },
     {
@@ -3483,7 +3663,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L127",
       "id": "sync_sync_engine_test_fakestore_getmtime",
-      "community": 10,
+      "community": 6,
       "norm_label": ".getmtime()"
     },
     {
@@ -3492,7 +3672,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L132",
       "id": "sync_sync_engine_test_fakeindex",
-      "community": 10,
+      "community": 6,
       "norm_label": "fakeindex"
     },
     {
@@ -3501,7 +3681,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L137",
       "id": "sync_sync_engine_test_fakeindex_getallprojects",
-      "community": 10,
+      "community": 6,
       "norm_label": ".getallprojects()"
     },
     {
@@ -3510,7 +3690,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L141",
       "id": "sync_sync_engine_test_fakeindex_gettasktree",
-      "community": 10,
+      "community": 6,
       "norm_label": ".gettasktree()"
     },
     {
@@ -3519,7 +3699,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L145",
       "id": "sync_sync_engine_test_fakeindex_getinvalid",
-      "community": 10,
+      "community": 6,
       "norm_label": ".getinvalid()"
     },
     {
@@ -3528,7 +3708,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L150",
       "id": "sync_sync_engine_test_makeproject",
-      "community": 10,
+      "community": 6,
       "norm_label": "makeproject()"
     },
     {
@@ -3537,7 +3717,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L154",
       "id": "sync_sync_engine_test_maketask",
-      "community": 10,
+      "community": 6,
       "norm_label": "maketask()"
     },
     {
@@ -3546,7 +3726,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L164",
       "id": "sync_sync_engine_test_leaf",
-      "community": 10,
+      "community": 6,
       "norm_label": "leaf()"
     },
     {
@@ -3555,7 +3735,7 @@
       "source_file": "tests/sync/sync-engine.test.ts",
       "source_location": "L393",
       "id": "sync_sync_engine_test_seedsynced",
-      "community": 10,
+      "community": 6,
       "norm_label": "seedsynced()"
     },
     {
@@ -3564,7 +3744,7 @@
       "source_file": "tests/sync/sync-status.test.ts",
       "source_location": "L1",
       "id": "tests_sync_sync_status_test_ts",
-      "community": 8,
+      "community": 9,
       "norm_label": "sync-status.test.ts"
     },
     {
@@ -3600,15 +3780,87 @@
       "source_file": "tests/views/gantt-view.test.ts",
       "source_location": "L1",
       "id": "tests_views_gantt_view_test_ts",
-      "community": 0,
+      "community": 2,
       "norm_label": "gantt-view.test.ts"
+    },
+    {
+      "label": ".renderProjectTemplates()",
+      "file_type": "code",
+      "source_file": "src/settings.ts",
+      "source_location": "L189",
+      "community": 0,
+      "norm_label": ".renderprojecttemplates()",
+      "id": "src_settings_nesesersettingtab_renderprojecttemplates"
+    },
+    {
+      "label": ".createProjectWithTasks()",
+      "file_type": "code",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L109",
+      "community": 4,
+      "norm_label": ".createprojectwithtasks()",
+      "id": "core_project_manager_projectmanager_createprojectwithtasks"
+    },
+    {
+      "label": "isRecord()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L16",
+      "community": 4,
+      "norm_label": "isrecord()",
+      "id": "core_project_templates_isrecord"
+    },
+    {
+      "label": "cleanString()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L20",
+      "community": 4,
+      "norm_label": "cleanstring()",
+      "id": "core_project_templates_cleanstring"
+    },
+    {
+      "label": "normalizePriority()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L26",
+      "community": 4,
+      "norm_label": "normalizepriority()",
+      "id": "core_project_templates_normalizepriority"
+    },
+    {
+      "label": "createProjectTemplateId()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L32",
+      "community": 4,
+      "norm_label": "createprojecttemplateid()",
+      "id": "core_project_templates_createprojecttemplateid"
+    },
+    {
+      "label": "cloneProjectTemplates()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L39",
+      "community": 4,
+      "norm_label": "cloneprojecttemplates()",
+      "id": "core_project_templates_cloneprojecttemplates"
+    },
+    {
+      "label": "normalizeProjectTemplates()",
+      "file_type": "code",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L46",
+      "community": 4,
+      "norm_label": "normalizeprojecttemplates()",
+      "id": "core_project_templates_normalizeprojecttemplates"
     },
     {
       "label": ".onClose()",
       "file_type": "code",
       "source_file": "src/views/dashboard-view.tsx",
       "source_location": "L46",
-      "community": 13,
+      "community": 5,
       "norm_label": ".onclose()",
       "id": "views_dashboard_view_dashboardview_onclose"
     },
@@ -3617,7 +3869,7 @@
       "file_type": "code",
       "source_file": "src/views/navigation-view.tsx",
       "source_location": "L54",
-      "community": 8,
+      "community": 9,
       "norm_label": ".onclose()",
       "id": "views_navigation_view_navigationview_onclose"
     }
@@ -3917,6 +4169,17 @@
       "target": "src_main_neseserplugin"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_ts",
+      "target": "core_project_templates_normalizeprojecttemplates"
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/main.ts",
@@ -3955,6 +4218,46 @@
       "confidence_score": 1.0,
       "source": "src_main_obsidianvaultadapter",
       "target": "src_main_obsidianvaultadapter_createnote"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_obsidianvaultadapter",
+      "target": "src_main_obsidianvaultadapter_listfolders"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_obsidianvaultadapter",
+      "target": "src_main_obsidianvaultadapter_listmarkdownfiles"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_obsidianvaultadapter",
+      "target": "src_main_obsidianvaultadapter_copyfolder"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_obsidianvaultadapter",
+      "target": "src_main_obsidianvaultadapter_renamepath"
     },
     {
       "relation": "method",
@@ -4160,6 +4463,26 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/main.ts",
+      "source_location": "L455",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_neseserplugin",
+      "target": "src_main_neseserplugin_opennewprojectmodalasync"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L479",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_neseserplugin",
+      "target": "src_main_neseserplugin_createplainproject"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
       "source_location": "L404",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -4260,6 +4583,17 @@
       "weight": 1.0,
       "source": "src_main_neseserplugin_loadpersisted",
       "target": "sync_sync_state_emptysnapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/main.ts",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "src_main_neseserplugin_loadpersisted",
+      "target": "core_project_templates_normalizeprojecttemplates"
     },
     {
       "relation": "calls",
@@ -4383,6 +4717,28 @@
       "target": "core_models_titlefrompath"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L452",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_neseserplugin_opennewprojectmodal",
+      "target": "src_main_neseserplugin_opennewprojectmodalasync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/main.ts",
+      "source_location": "L488",
+      "weight": 1.0,
+      "source": "src_main_neseserplugin_createplainproject",
+      "target": "core_models_titlefrompath"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/settings.ts",
@@ -4401,6 +4757,28 @@
       "confidence_score": 1.0,
       "source": "src_settings_ts",
       "target": "src_settings_nesesersettingtab"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/settings.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_settings_ts",
+      "target": "core_project_templates_cloneprojecttemplates"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/settings.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_settings_ts",
+      "target": "core_project_templates_createprojecttemplateid"
     },
     {
       "relation": "calls",
@@ -4458,11 +4836,31 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/settings.ts",
+      "source_location": "L181",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_settings_nesesersettingtab",
+      "target": "src_settings_nesesersettingtab_renderprojecttemplatesinfo"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/settings.ts",
       "source_location": "L179",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab",
       "target": "src_settings_nesesersettingtab_renderticktick"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/settings.ts",
+      "source_location": "L189",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_settings_nesesersettingtab",
+      "target": "src_settings_nesesersettingtab_renderprojecttemplates"
     },
     {
       "relation": "calls",
@@ -4480,11 +4878,33 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/settings.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_settings_nesesersettingtab_display",
+      "target": "src_settings_nesesersettingtab_renderprojecttemplatesinfo"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/settings.ts",
       "source_location": "L118",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_settings_nesesersettingtab_display",
       "target": "src_settings_nesesersettingtab_renderticktick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/settings.ts",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_settings_nesesersettingtab_display",
+      "target": "src_settings_nesesersettingtab_renderprojecttemplates"
     },
     {
       "relation": "imports",
@@ -7221,6 +7641,50 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_core_project_manager_ts",
+      "target": "core_project_templates_findsyncidentitykeys"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_manager_ts",
+      "target": "core_project_templates_istemplatefoldersegment"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_manager_ts",
+      "target": "core_project_templates_templatefolderpath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_manager_ts",
+      "target": "core_project_templates_templateprojectnotepath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_manager_ts",
       "target": "core_recurrence_nextinstancetitle"
     },
     {
@@ -7322,6 +7786,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/core/project-manager.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectfromtemplate",
+      "target": "core_project_manager_sanitizename"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
       "source_location": "L96",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -7337,6 +7812,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "core_project_manager_projectmanager_taskpath",
+      "target": "core_project_manager_sanitizename"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectwithtasks",
       "target": "core_project_manager_sanitizename"
     },
     {
@@ -7391,6 +7877,26 @@
       "confidence_score": 1.0,
       "source": "core_project_manager_projectmanager",
       "target": "core_project_manager_projectmanager_createproject"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L120",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager",
+      "target": "core_project_manager_projectmanager_listprojecttemplates"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L136",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager",
+      "target": "core_project_manager_projectmanager_createprojectfromtemplate"
     },
     {
       "relation": "method",
@@ -7518,6 +8024,104 @@
       "target": "core_project_manager_projectmanager"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L109",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager",
+      "target": "core_project_manager_projectmanager_createprojectwithtasks"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectwithtasks",
+      "target": "core_project_manager_projectmanager_createproject"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_listprojecttemplates",
+      "target": "core_project_templates_istemplatefoldersegment"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_listprojecttemplates",
+      "target": "core_project_templates_templatefolderpath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_listprojecttemplates",
+      "target": "core_project_templates_templateprojectnotepath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectfromtemplate",
+      "target": "core_project_templates_istemplatefoldersegment"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectfromtemplate",
+      "target": "core_project_templates_templatefolderpath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectfromtemplate",
+      "target": "core_project_templates_templateprojectnotepath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectfromtemplate",
+      "target": "core_project_templates_findsyncidentitykeys"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -7537,6 +8141,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "core_project_manager_projectmanager_regeneraterecurringinstance",
+      "target": "core_project_manager_projectmanager_createtask"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-manager.ts",
+      "source_location": "L129",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_projectmanager_createprojectwithtasks",
       "target": "core_project_manager_projectmanager_createtask"
     },
     {
@@ -7604,6 +8219,161 @@
       "confidence_score": 1.0,
       "source": "core_project_manager_projectmanager_completetask",
       "target": "core_project_manager_projectmanager_updatetaskstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_istemplatefoldersegment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_templatefolderpath"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_templateprojectnotepath"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_findsyncidentitykeys"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_isrecord"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_cleanstring"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_normalizepriority"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_createprojecttemplateid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_cloneprojecttemplates"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_core_project_templates_ts",
+      "target": "core_project_templates_normalizeprojecttemplates"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_istemplatefoldersegment"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/project-templates.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_templates_templateprojectnotepath",
+      "target": "core_project_templates_templatefolderpath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_templatefolderpath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_templateprojectnotepath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_findsyncidentitykeys"
     },
     {
       "relation": "imports",
@@ -11436,6 +12206,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_manager_test_ts",
+      "target": "core_project_manager_test_addtemplate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-manager.test.ts",
       "source_location": "L235",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -11480,6 +12260,46 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "core_project_manager_test_fakevault",
+      "target": "core_project_manager_test_fakevault_listfolders"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_test_fakevault",
+      "target": "core_project_manager_test_fakevault_listmarkdownfiles"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_test_fakevault",
+      "target": "core_project_manager_test_fakevault_copyfolder"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_test_fakevault",
+      "target": "core_project_manager_test_fakevault_renamepath"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_test_fakevault",
       "target": "core_project_manager_test_fakevault_readnote"
     },
     {
@@ -11491,6 +12311,50 @@
       "confidence_score": 1.0,
       "source": "core_project_manager_test_fakevault",
       "target": "core_project_manager_test_fakevault_updatefrontmatter"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-manager.test.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_project_manager_test_fakevault_copyfolder",
+      "target": "core_project_manager_test_fakevault_exists"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_createprojecttemplateid"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_cloneprojecttemplates"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/core/project-templates.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_core_project_templates_test_ts",
+      "target": "core_project_templates_normalizeprojecttemplates"
     },
     {
       "relation": "contains",
@@ -12217,5 +13081,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "61d1b95730fa2810db759ac6912093277ce9c9c6"
+  "built_at_commit": "6fc56786638dac3c50bce649416c4d34ad7dbb1b"
 }
