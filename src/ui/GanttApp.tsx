@@ -15,7 +15,7 @@ import {
 	daysFromPixels,
 	ganttLanes,
 	ganttWindow,
-	markerOffset,
+	markerGeometry,
 	monthSegments,
 	shiftAnchor,
 	weekSegments,
@@ -188,7 +188,7 @@ export function GanttApp({ index, categoryFilter, getCategories, callbacks }: Pr
 	}
 
 	const lanes = ganttLanes([...projects], tasksByProject);
-	const todayOffset = markerOffset(new Date().toISOString().slice(0, 10), windowData);
+	const todayGeometry = markerGeometry(new Date().toISOString().slice(0, 10), windowData);
 
 	const step = (direction: 1 | -1) => setAnchor((a) => shiftAnchor(a, zoom, direction));
 
@@ -256,8 +256,13 @@ export function GanttApp({ index, categoryFilter, getCategories, callbacks }: Pr
 						    The today marker lives on the bottom-most tier so its line
 						    starts at the header's foot and extends down over the lanes. */}
 						{(() => {
-							const todayMarker = todayOffset !== null && (
-								<div className="ns-gantt-today-marker" style={{ gridColumn: todayOffset + 1 }} />
+							const todayMarker = todayGeometry !== null && (
+								<div
+									className="ns-gantt-today-marker"
+									style={{
+										gridColumn: `${todayGeometry.offset + 1} / span ${todayGeometry.span}`,
+									}}
+								/>
 							);
 							return (
 								<>
@@ -292,7 +297,7 @@ export function GanttApp({ index, categoryFilter, getCategories, callbacks }: Pr
 						{/* Lanes */}
 						{lanes.map((lane) => {
 							const isCollapsed = collapsedProjects.has(lane.project.name);
-							const deadlineOffset = markerOffset(lane.project.deadline ?? null, windowData);
+							const deadlineGeometry = markerGeometry(lane.project.deadline ?? null, windowData);
 							return (
 								<div key={lane.project.path} className="ns-gantt-lane-group">
 									<div className="ns-gantt-row ns-gantt-project-row">
@@ -311,10 +316,12 @@ export function GanttApp({ index, categoryFilter, getCategories, callbacks }: Pr
 												gridTemplateColumns: `repeat(${windowData.days.length}, ${windowData.dayWidthPx}px)`,
 											}}
 										>
-											{deadlineOffset !== null && (
+											{deadlineGeometry !== null && (
 												<div
 													className="ns-gantt-deadline-marker"
-													style={{ gridColumn: deadlineOffset + 1 }}
+													style={{
+														gridColumn: `${deadlineGeometry.offset + 1} / span ${deadlineGeometry.span}`,
+													}}
 												/>
 											)}
 										</div>

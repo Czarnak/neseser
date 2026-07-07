@@ -8,6 +8,7 @@ import {
 	ganttRows,
 	ganttWindow,
 	isoWeekNumber,
+	markerGeometry,
 	markerOffset,
 	monthSegments,
 	resizeEnd,
@@ -338,6 +339,20 @@ describe('markerOffset', () => {
 		expect(markerOffset('2026-05-31', JUNE)).toBeNull();
 		expect(markerOffset('2026-07-01', JUNE)).toBeNull();
 		expect(markerOffset(null, JUNE)).toBeNull();
+	});
+});
+
+describe('markerGeometry', () => {
+	const JUNE = ganttWindow(ANCHOR, 'month');
+
+	test('places a day marker in exactly one grid column', () => {
+		expect(markerGeometry('2026-06-11', JUNE)).toEqual({ offset: 10, span: 1 });
+	});
+
+	test('returns null for days outside the window and for null keys', () => {
+		expect(markerGeometry('2026-05-31', JUNE)).toBeNull();
+		expect(markerGeometry('2026-07-01', JUNE)).toBeNull();
+		expect(markerGeometry(null, JUNE)).toBeNull();
 	});
 });
 

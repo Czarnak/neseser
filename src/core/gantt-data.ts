@@ -47,6 +47,13 @@ export interface BarGeometry {
 	clippedEnd: boolean;
 }
 
+export interface MarkerGeometry {
+	/** 0-based column index of the marker's day. */
+	offset: number;
+	/** Marker grid width; kept at one day so absolute positioning centers in the day cell. */
+	span: number;
+}
+
 export interface SpanDates {
 	start?: string;
 	due: string;
@@ -225,6 +232,12 @@ export function markerOffset(key: string | null, window: GanttWindow): number | 
 	if (key === null || first === undefined) return null;
 	const index = dayDiff(first, key);
 	return index >= 0 && index < window.days.length ? index : null;
+}
+
+/** Grid geometry of a day marker; null when outside the window. */
+export function markerGeometry(key: string | null, window: GanttWindow): MarkerGeometry | null {
+	const offset = markerOffset(key, window);
+	return offset === null ? null : { offset, span: 1 };
 }
 
 /** Drag delta in whole days for a horizontal pixel delta. */
