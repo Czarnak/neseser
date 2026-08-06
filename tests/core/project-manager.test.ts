@@ -134,6 +134,34 @@ describe('ProjectManager', () => {
 			expect(vault.notes.get('Projects/Beta/Beta.md')).not.toContain('category:');
 		});
 
+		test('escapes backslashes in quoted YAML values so a trailing backslash cannot swallow the closing quote', async () => {
+			// A naive `replace(/"/g, '\\"')` leaves a lone trailing backslash untouched, so
+			// wrapping "Foo\" in quotes yields `"Foo\"` — the backslash escapes the closing
+			// quote instead of ending the string, leaving the frontmatter YAML unterminated
+			// and any content that follows swallowed into the same scalar.
+			await manager.createProject({ name: 'Alpha', category: 'Foo\\' });
+
+			const content = vault.notes.get('Projects/Alpha/Alpha.md') ?? '';
+			const line = content.split('\n').find((l) => l.startsWith('category:'));
+			expect(line).toBe('category: "Foo\\\\"');
+		});
+
+		test('escapes an injected quote+key sequence so it cannot add a bogus frontmatter field', async () => {
+			// Without escaping the backslash first, a value like `x\", evil: "y` turns the
+			// preceding backslash + added escape backslash into `\\"`, which YAML reads as an
+			// escaped backslash followed by a real closing quote — breaking out of the string
+			// and injecting an arbitrary `evil:` key into the frontmatter. Correctly escaped,
+			// `evil:` still appears in the file, but only as inert data inside one quoted YAML
+			// scalar — never as a sibling key parseable on its own line.
+			await manager.createProject({ name: 'Alpha', category: 'x\\", evil: "y' });
+
+			const content = vault.notes.get('Projects/Alpha/Alpha.md') ?? '';
+			const lines = content.split('\n');
+			expect(lines).not.toContain('evil: "y"');
+			const line = lines.find((l) => l.startsWith('category:'));
+			expect(line).toBe('category: "x\\\\\\", evil: \\"y"');
+		});
+
 		test('sanitizes characters that are illegal in file names', async () => {
 			const { indexPath } = await manager.createProject({ name: 'Ship/it: now?' });
 

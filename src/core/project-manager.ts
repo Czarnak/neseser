@@ -71,10 +71,27 @@ function sanitizeName(raw: string): string {
 	return cleaned.replace(/[. ]+$/, '');
 }
 
-/** YAML needs quotes around values like wikilinks; bare enum/date tokens stay unquoted. */
+/** Characters that are meaningful inside a YAML double-quoted scalar and must be escaped. */
+const YAML_QUOTED_ESCAPES: Record<string, string> = {
+	'\\': '\\\\',
+	'"': '\\"',
+	'\n': '\\n',
+	'\r': '\\r',
+	'\t': '\\t',
+};
+
+/**
+ * YAML needs quotes around values like wikilinks; bare enum/date tokens stay unquoted.
+ *
+ * Escaping runs as a single pass over one combined character class so backslashes are always
+ * escaped together with (and before) the characters that introduce new backslashes — a
+ * two-step `replace(quote)` then `replace(backslash)` (or the reverse, done wrong) can leave a
+ * value like `x\"` re-opening the string it's meant to be contained in.
+ */
 function yamlValue(value: string): string {
 	if (/^[A-Za-z0-9][A-Za-z0-9 _\-.:]*$/.test(value) && !/:\s/.test(value)) return value;
-	return `"${value.replace(/"/g, '\\"')}"`;
+	const escaped = value.replace(/[\\"\n\r\t]/g, (char) => YAML_QUOTED_ESCAPES[char] ?? char);
+	return `"${escaped}"`;
 }
 
 function frontmatterBlock(fm: Record<string, string>): string {
