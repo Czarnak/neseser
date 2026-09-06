@@ -20,6 +20,7 @@ import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-cl
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
 import { NewProjectModal, NewTaskModal, OptionPickerModal } from './ui/modals';
 import { registerPriorityWidget } from './ui/priority-property';
+import { registerStatusWidget } from './ui/status-property';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
 import { GanttView, VIEW_TYPE_GANTT } from './views/gantt-view';
@@ -161,6 +162,7 @@ export default class NeseserPlugin extends Plugin {
 	private syncInFlight = false;
 	private scheduler: SyncScheduler | null = null;
 	private releasePriorityWidget: (() => void) | null = null;
+	private releaseStatusWidget: (() => void) | null = null;
 	/** Category registry read live, so a settings edit lands on the next view render. */
 	private readonly getCategories = () => this.settings.categories;
 
@@ -211,6 +213,7 @@ export default class NeseserPlugin extends Plugin {
 				}),
 		);
 		this.releasePriorityWidget = registerPriorityWidget(this.app);
+		this.releaseStatusWidget = registerStatusWidget(this.app);
 		this.addSettingTab(new NeseserSettingTab(this.app, this));
 		this.statusBar = this.addStatusBarItem();
 		this.updateSyncStatus({ state: isTickTickConnected(this.settings) ? 'idle' : 'disconnected' });
@@ -231,6 +234,8 @@ export default class NeseserPlugin extends Plugin {
 		// widget lives in a global registry it does not manage for us.
 		this.releasePriorityWidget?.();
 		this.releasePriorityWidget = null;
+		this.releaseStatusWidget?.();
+		this.releaseStatusWidget = null;
 		this.scheduler?.stop();
 		this.scheduler = null;
 	}
