@@ -114,6 +114,7 @@ export class NewProjectModal extends SubmitModal {
 export class NewTaskModal extends SubmitModal {
 	private projectName = '';
 	private taskTitle = '';
+	private start = '';
 	private due = '';
 	private priority: Priority = 'none';
 	private recurrence: Recurrence | '' = '';
@@ -161,6 +162,11 @@ export class NewTaskModal extends SubmitModal {
 		});
 
 		new Setting(this.contentEl)
+			.setName('Start')
+			.setDesc('Optional, YYYY-MM-DD')
+			.addText((text) => text.setPlaceholder('2026-06-10').onChange((value) => (this.start = value)));
+
+		new Setting(this.contentEl)
 			.setName('Due')
 			.setDesc('Optional, YYYY-MM-DD')
 			.addText((text) => text.setPlaceholder('2026-06-15').onChange((value) => (this.due = value)));
@@ -192,6 +198,7 @@ export class NewTaskModal extends SubmitModal {
 		await this.onSubmit({
 			projectName: this.projectName,
 			title: this.taskTitle,
+			start: this.start.trim() || undefined,
 			due: this.due.trim() || undefined,
 			priority: this.priority,
 			recurrence: this.recurrence || undefined,
