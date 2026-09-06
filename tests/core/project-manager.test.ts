@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
+import { parseTask } from '../../src/core/models';
 import type { Frontmatter, Task } from '../../src/core/models';
 import { ProjectManager, VaultAdapter } from '../../src/core/project-manager';
 
@@ -76,6 +77,29 @@ class FakeVault implements VaultAdapter {
 		updater(fm);
 		this.frontmatters.set(path, fm);
 	}
+}
+
+/**
+ * Stand-in for Obsidian's frontmatter reader, covering the shapes frontmatterBlock
+ * emits: bare scalars, double-quoted scalars, and null (a key with no value). Lets a
+ * test assert that what createTask writes is what parseTask can read back.
+ */
+function parseFrontmatter(content: string): Frontmatter {
+	const body = /^---\n([\s\S]*?)\n---\n/.exec(content)?.[1];
+	if (body === undefined) return {};
+
+	const fm: Frontmatter = {};
+	for (const line of body.split('\n')) {
+		const pair = /^([^:]+):(.*)$/.exec(line);
+		const key = pair?.[1];
+		const rest = pair?.[2];
+		if (key === undefined || rest === undefined) continue;
+
+		const raw = rest.trim();
+		const quoted = raw.length > 1 && raw.startsWith('"') && raw.endsWith('"');
+		fm[key] = raw === '' ? null : quoted ? JSON.parse(raw) : raw;
+	}
+	return fm;
 }
 
 const FIXED_NOW = new Date('2026-06-10T12:00:00.000Z');
@@ -300,6 +324,35 @@ describe('ProjectManager', () => {
 			expect(content).toContain('due: 2026-06-15');
 			expect(content).toContain('priority: high');
 			expect(content).toContain('parent: "[[Build parser]]"');
+		});
+
+		test('emits start and due keys even when no dates are given', async () => {
+			const { path } = await manager.createTask({ projectName: 'Alpha', title: 'Dateless' });
+
+			const content = vault.notes.get(path) ?? '';
+			expect(content).toContain('\nstart:\n');
+			expect(content).toContain('\ndue:\n');
+		});
+
+		// The keys exist so they are clickable in Obsidian's Properties panel, but a
+		// quoted empty string is not a parseable date -- writing `start: ""` would make
+		// every dateless task invalid. This round-trip is what catches that.
+		test('a dateless task round-trips through parseTask as a valid task', async () => {
+			const { path } = await manager.createTask({ projectName: 'Alpha', title: 'Dateless' });
+
+			const content = vault.notes.get(path) ?? '';
+			expect(content).not.toContain('start: ""');
+			expect(content).not.toContain('due: ""');
+
+			const fm = parseFrontmatter(content);
+			expect(Object.keys(fm)).toContain('start');
+			expect(Object.keys(fm)).toContain('due');
+
+			const result = parseTask(path, fm);
+			expect(result.kind).toBe('task');
+			if (result.kind !== 'task') return;
+			expect(result.task.start).toBeUndefined();
+			expect(result.task.due).toBeUndefined();
 		});
 
 		test('quotes frontmatter values containing colon-space to keep YAML valid', async () => {

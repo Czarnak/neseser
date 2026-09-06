@@ -94,8 +94,15 @@ function yamlValue(value: string): string {
 	return `"${escaped}"`;
 }
 
-function frontmatterBlock(fm: Record<string, string>): string {
-	const lines = Object.entries(fm).map(([key, value]) => `${key}: ${yamlValue(value)}`);
+/**
+ * A `null` value emits a bare `key:` (YAML null) rather than an empty scalar. It must
+ * bypass yamlValue: that would render `""`, and a quoted empty string is not a parseable
+ * date, so every guaranteed-but-unset `start`/`due` would make its task invalid.
+ */
+function frontmatterBlock(fm: Record<string, string | null>): string {
+	const lines = Object.entries(fm).map(([key, value]) =>
+		value === null ? `${key}:` : `${key}: ${yamlValue(value)}`,
+	);
 	return `---\n${lines.join('\n')}\n---\n`;
 }
 
@@ -218,14 +225,16 @@ export class ProjectManager {
 			throw new Error(`Task "${title}" already exists in ${input.projectName}`);
 		}
 
-		const fm: Record<string, string> = {
+		// start/due are always written, null when unset, so both are present to click in
+		// Obsidian's Properties panel without the user adding the property first.
+		const fm: Record<string, string | null> = {
 			type: 'task',
 			status: 'todo',
 			priority: input.priority ?? 'none',
+			start: input.start ?? null,
+			due: input.due ?? null,
 			created: isoDate(this.now()),
 		};
-		if (input.start) fm['start'] = input.start;
-		if (input.due) fm['due'] = input.due;
 		if (input.parent) fm['parent'] = `[[${input.parent}]]`;
 		if (input.recurrence) fm['recurrence'] = input.recurrence;
 		if (input.reminder) fm['reminder'] = input.reminder;
