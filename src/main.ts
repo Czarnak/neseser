@@ -1,6 +1,14 @@
 import { App, Notice, Plugin, TFile, TFolder, WorkspaceLeaf, requestUrl } from 'obsidian';
 import { CategoryFilterStore } from './core/category-filter';
-import { PRIORITIES, Frontmatter, Task, titleFromPath } from './core/models';
+import {
+	PRIORITIES,
+	PROJECT_STATUSES,
+	TASK_STATUSES,
+	Frontmatter,
+	Project,
+	Task,
+	titleFromPath,
+} from './core/models';
 import { ProjectManager, VaultAdapter } from './core/project-manager';
 import { TaskIndex } from './core/task-index';
 import { runOAuthFlow } from './sync/oauth-flow';
@@ -432,6 +440,28 @@ export default class NeseserPlugin extends Plugin {
 		});
 
 		this.addCommand({
+			id: 'set-task-status',
+			name: 'Set task status',
+			checkCallback: (checking) => {
+				const task = this.activeTask();
+				if (!task) return false;
+				if (!checking) this.openTaskStatusPicker(task);
+				return true;
+			},
+		});
+
+		this.addCommand({
+			id: 'set-project-status',
+			name: 'Set project status',
+			checkCallback: (checking) => {
+				const project = this.activeProject();
+				if (!project) return false;
+				if (!checking) this.openProjectStatusPicker(project);
+				return true;
+			},
+		});
+
+		this.addCommand({
 			id: 'connect-ticktick',
 			name: 'Connect TickTick',
 			callback: () => this.connectTickTickInteractive(),
@@ -451,20 +481,53 @@ export default class NeseserPlugin extends Plugin {
 		return this.index.getTaskByPath(file.path) ?? null;
 	}
 
-	private openPriorityPicker(task: Task): void {
+	/** The project index note in the active editor, or null when the active file is not one. */
+	private activeProject(): Project | null {
+		const file = this.app.workspace.getActiveFile();
+		if (!file) return null;
+		return this.index.getProjectByPath(file.path) ?? null;
+	}
+
+	/** Opens a single-choice picker and surfaces any write failure as a notice. */
+	private pickOption<T extends string>(
+		options: readonly T[],
+		current: T,
+		placeholder: string,
+		apply: (value: T) => Promise<void>,
+	): void {
 		new OptionPickerModal(
 			this.app,
-			PRIORITIES,
-			task.priority,
-			async (priority) => {
+			options,
+			current,
+			async (value) => {
 				try {
-					await this.manager.updateTaskPriority(task.path, priority);
+					await apply(value);
 				} catch (error) {
 					new Notice(error instanceof Error ? error.message : String(error));
 				}
 			},
-			'Set task priority',
+			placeholder,
 		).open();
+	}
+
+	private openPriorityPicker(task: Task): void {
+		this.pickOption(PRIORITIES, task.priority, 'Set task priority', (priority) =>
+			this.manager.updateTaskPriority(task.path, priority),
+		);
+	}
+
+	// Routed through updateTaskStatus rather than a raw frontmatter write so completing a
+	// task here still stamps completed-at and spawns the next recurring instance.
+	private openTaskStatusPicker(task: Task): void {
+		this.pickOption(TASK_STATUSES, task.status, 'Set task status', (status) =>
+			this.manager.updateTaskStatus(task.path, status),
+		);
+	}
+
+	private openProjectStatusPicker(project: Project): void {
+		this.pickOption(PROJECT_STATUSES, project.status, 'Set project status', (status) =>
+			this.manager.updateProjectStatus(project.path, status),
+		);
 	}
 
 	/** Spawns the next instance of a recurring task whenever one transitions to done. */
@@ -565,13 +628,32 @@ export default class NeseserPlugin extends Plugin {
 	private registerVaultEvents(): void {
 		this.registerEvent(
 			this.app.workspace.on('file-menu', (menu, file) => {
-				const task = file instanceof TFile ? this.index.getTaskByPath(file.path) : undefined;
-				if (!task) return;
+				if (!(file instanceof TFile)) return;
+
+				const task = this.index.getTaskByPath(file.path);
+				if (task) {
+					menu.addItem((item) =>
+						item
+							.setTitle('Set task status')
+							.setIcon('check-circle')
+							.onClick(() => this.openTaskStatusPicker(task)),
+					);
+					menu.addItem((item) =>
+						item
+							.setTitle('Set task priority')
+							.setIcon('signal')
+							.onClick(() => this.openPriorityPicker(task)),
+					);
+					return;
+				}
+
+				const project = this.index.getProjectByPath(file.path);
+				if (!project) return;
 				menu.addItem((item) =>
 					item
-						.setTitle('Set task priority')
-						.setIcon('signal')
-						.onClick(() => this.openPriorityPicker(task)),
+						.setTitle('Set project status')
+						.setIcon('folder')
+						.onClick(() => this.openProjectStatusPicker(project)),
 				);
 			}),
 		);
