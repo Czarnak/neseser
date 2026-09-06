@@ -1,7 +1,7 @@
 # Guaranteed Start/Due fields and a Priority picker
 
 Date: 2026-09-06
-Status: approved, not yet implemented
+Status: implemented (commits 0bdd79e..2df4a91)
 
 ## Problem
 
@@ -119,8 +119,13 @@ has manually typed in Obsidian is left alone.
 - `addCommand({ id: 'set-task-priority', name: 'Set task priority', checkCallback })`.
   The `checkCallback` returns true only when the active file parses as a task, so the
   command stays out of the palette on other notes.
-- `app.workspace.on('file-menu')` adds a **Set task priority** submenu on task notes,
-  with the current value check-marked.
+- `app.workspace.on('file-menu')` adds a **Set task priority** entry on task notes.
+
+**Deviation from this design, as built:** the entry opens a picker modal rather than a
+Menu submenu. `MenuItem.setSubmenu` is not in Obsidian's public typings, so a submenu
+would have meant a second undocumented dependency in the mechanism whose whole purpose
+is to keep working when the undocumented one breaks. The picker lists the four
+priorities with the current value check-marked, and the palette command reuses it.
 
 ### Shared write path
 
