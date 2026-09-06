@@ -1,4 +1,4 @@
-import { App, Modal, Notice, Setting } from 'obsidian';
+import { App, Modal, Notice, Setting, SuggestModal } from 'obsidian';
 import { PRIORITIES, Priority, RECURRENCES, Recurrence } from '../core/models';
 import type { CreateProjectInput, CreateTaskInput } from '../core/project-manager';
 import type { TaskIndex } from '../core/task-index';
@@ -204,5 +204,34 @@ export class NewTaskModal extends SubmitModal {
 			recurrence: this.recurrence || undefined,
 			parent: this.parent || undefined,
 		});
+	}
+}
+
+/**
+ * Priority picker used by the "Set task priority" command and the file-menu entry.
+ * Obsidian's public Menu API has no setSubmenu, so the menu opens this instead of
+ * nesting the choices inline.
+ */
+export class PriorityPickerModal extends SuggestModal<Priority> {
+	constructor(
+		app: App,
+		private current: Priority,
+		private onChoose: (priority: Priority) => Promise<void>,
+	) {
+		super(app);
+		this.setPlaceholder('Set task priority');
+	}
+
+	getSuggestions(query: string): Priority[] {
+		const needle = query.trim().toLowerCase();
+		return PRIORITIES.filter((priority) => priority.includes(needle));
+	}
+
+	renderSuggestion(value: Priority, el: HTMLElement): void {
+		el.setText(value === this.current ? `${value}  ✓` : value);
+	}
+
+	onChooseSuggestion(item: Priority): void {
+		void this.onChoose(item);
 	}
 }

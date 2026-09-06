@@ -309,6 +309,12 @@ export class ProjectManager {
 		});
 	}
 
+	async updateTaskPriority(path: string, priority: Priority): Promise<void> {
+		await this.vault.updateFrontmatter(path, (fm) => {
+			fm['priority'] = priority;
+		});
+	}
+
 	async updateTaskDue(path: string, due: string): Promise<void> {
 		await this.vault.updateFrontmatter(path, (fm) => {
 			fm['due'] = due;

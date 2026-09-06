@@ -10,7 +10,7 @@ import { SyncSnapshot, emptySnapshot } from './sync/sync-state';
 import { SyncStatus, SyncStatusStore, formatSyncStatus } from './sync/sync-status';
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
-import { NewProjectModal, NewTaskModal } from './ui/modals';
+import { NewProjectModal, NewTaskModal, PriorityPickerModal } from './ui/modals';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
 import { GanttView, VIEW_TYPE_GANTT } from './views/gantt-view';
@@ -415,6 +415,17 @@ export default class NeseserPlugin extends Plugin {
 		});
 
 		this.addCommand({
+			id: 'set-task-priority',
+			name: 'Set task priority',
+			checkCallback: (checking) => {
+				const task = this.activeTask();
+				if (!task) return false;
+				if (!checking) this.openPriorityPicker(task);
+				return true;
+			},
+		});
+
+		this.addCommand({
 			id: 'connect-ticktick',
 			name: 'Connect TickTick',
 			callback: () => this.connectTickTickInteractive(),
@@ -425,6 +436,23 @@ export default class NeseserPlugin extends Plugin {
 			name: 'Sync with TickTick now',
 			callback: () => void this.syncWithTickTick(true),
 		});
+	}
+
+	/** The task note in the active editor, or null when the active file is not one. */
+	private activeTask(): Task | null {
+		const file = this.app.workspace.getActiveFile();
+		if (!file) return null;
+		return this.index.getTaskByPath(file.path) ?? null;
+	}
+
+	private openPriorityPicker(task: Task): void {
+		new PriorityPickerModal(this.app, task.priority, async (priority) => {
+			try {
+				await this.manager.updateTaskPriority(task.path, priority);
+			} catch (error) {
+				new Notice(error instanceof Error ? error.message : String(error));
+			}
+		}).open();
 	}
 
 	/** Spawns the next instance of a recurring task whenever one transitions to done. */
@@ -523,6 +551,18 @@ export default class NeseserPlugin extends Plugin {
 	}
 
 	private registerVaultEvents(): void {
+		this.registerEvent(
+			this.app.workspace.on('file-menu', (menu, file) => {
+				const task = file instanceof TFile ? this.index.getTaskByPath(file.path) : undefined;
+				if (!task) return;
+				menu.addItem((item) =>
+					item
+						.setTitle('Set task priority')
+						.setIcon('signal')
+						.onClick(() => this.openPriorityPicker(task)),
+				);
+			}),
+		);
 		this.registerEvent(
 			this.app.metadataCache.on('changed', (file, _data, cache) => {
 				this.index.onFileChanged(file.path, cache?.frontmatter);

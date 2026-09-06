@@ -443,6 +443,23 @@ describe('ProjectManager', () => {
 			expect(fm['completed-at']).toBeUndefined();
 		});
 
+		test('updateTaskPriority rewrites the priority frontmatter', async () => {
+			await manager.updateTaskPriority('Projects/Alpha/Tasks/T.md', 'high');
+
+			expect(vault.frontmatters.get('Projects/Alpha/Tasks/T.md')).toMatchObject({
+				priority: 'high',
+			});
+		});
+
+		test('updateTaskPriority leaves other frontmatter untouched', async () => {
+			await manager.updateTaskDue('Projects/Alpha/Tasks/T.md', '2026-06-15');
+			await manager.updateTaskPriority('Projects/Alpha/Tasks/T.md', 'low');
+
+			const fm = vault.frontmatters.get('Projects/Alpha/Tasks/T.md') ?? {};
+			expect(fm['priority']).toBe('low');
+			expect(fm['due']).toBe('2026-06-15');
+		});
+
 		test('updateTaskDue rewrites the due frontmatter', async () => {
 			await manager.updateTaskDue('Projects/Alpha/Tasks/T.md', '2026-06-15');
 
