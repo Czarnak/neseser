@@ -1,8 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import {
+	PROJECT_STATUSES,
+	TASK_STATUSES,
 	parseTask,
 	parseProject,
 	parseWikilink,
+	statusOptionsFor,
 	taskToFrontmatter,
 	titleFromPath,
 } from '../../src/core/models';
@@ -325,5 +328,48 @@ describe('taskToFrontmatter', () => {
 describe('titleFromPath', () => {
 	test('strips directories and extension', () => {
 		expect(titleFromPath('Projects/Alpha/Tasks/Build parser.md')).toBe('Build parser');
+	});
+});
+
+describe('statusOptionsFor', () => {
+	test('offers task statuses on a task note', () => {
+		expect(statusOptionsFor('task', 'todo')).toEqual(TASK_STATUSES);
+	});
+
+	test('offers project statuses on a project note', () => {
+		expect(statusOptionsFor('project', 'active')).toEqual(PROJECT_STATUSES);
+	});
+
+	// The note type wins even when the stored value belongs to the other set, so a
+	// project that somehow holds a task status is still offered project statuses.
+	test('trusts the note type over a mismatched current value', () => {
+		expect(statusOptionsFor('project', 'in-progress')).toEqual(PROJECT_STATUSES);
+	});
+
+	test('falls back to the set the current value belongs to', () => {
+		expect(statusOptionsFor(undefined, 'cancelled')).toEqual(TASK_STATUSES);
+		expect(statusOptionsFor(undefined, 'archived')).toEqual(PROJECT_STATUSES);
+	});
+
+	// 'done' is a member of both sets, so it discriminates nothing.
+	test('offers every status when the value is shared by both sets', () => {
+		const options = statusOptionsFor(undefined, 'done');
+
+		expect(options).toContain('todo');
+		expect(options).toContain('archived');
+	});
+
+	test('offers every status when neither type nor value says anything', () => {
+		const options = statusOptionsFor(undefined, undefined);
+
+		for (const status of [...TASK_STATUSES, ...PROJECT_STATUSES]) {
+			expect(options).toContain(status);
+		}
+	});
+
+	test('lists each shared status once', () => {
+		const options = statusOptionsFor(undefined, undefined);
+
+		expect(options.filter((s) => s === 'done')).toHaveLength(1);
 	});
 });

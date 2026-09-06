@@ -28,6 +28,21 @@ describe('TaskIndex', () => {
 		expect(index.getAllProjects()[0]).toMatchObject({ name: 'Alpha', status: 'active' });
 	});
 
+	test('finds an indexed project by its note path', () => {
+		index.onFileChanged('Projects/Alpha/Alpha.md', { type: 'project', status: 'on-hold' });
+
+		expect(index.getProjectByPath('Projects/Alpha/Alpha.md')).toMatchObject({
+			name: 'Alpha',
+			status: 'on-hold',
+		});
+	});
+
+	test('returns undefined for a path that is not a project note', () => {
+		index.onFileChanged('Projects/Alpha/Tasks/Build parser.md', taskFm());
+
+		expect(index.getProjectByPath('Projects/Alpha/Tasks/Build parser.md')).toBeUndefined();
+	});
+
 	test('ignores files outside the projects root', () => {
 		index.onFileChanged('Daily/2026-06-10.md', taskFm());
 

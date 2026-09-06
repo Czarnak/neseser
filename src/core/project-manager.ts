@@ -1,4 +1,4 @@
-import { Frontmatter, Priority, Recurrence, Task, TaskStatus } from './models';
+import { Frontmatter, Priority, ProjectStatus, Recurrence, Task, TaskStatus } from './models';
 import { dayKey } from './calendar-data';
 import {
 	PROJECT_TEMPLATES_ROOT,
@@ -306,6 +306,13 @@ export class ProjectManager {
 			} else {
 				delete fm['completed-at'];
 			}
+		});
+	}
+
+	/** Projects carry no completed-at, so this stays a plain key rewrite. */
+	async updateProjectStatus(path: string, status: ProjectStatus): Promise<void> {
+		await this.vault.updateFrontmatter(path, (fm) => {
+			fm['status'] = status;
 		});
 	}
 

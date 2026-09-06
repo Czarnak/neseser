@@ -460,6 +460,24 @@ describe('ProjectManager', () => {
 			expect(fm['due']).toBe('2026-06-15');
 		});
 
+		test('updateProjectStatus rewrites the project status frontmatter', async () => {
+			await manager.updateProjectStatus('Projects/Alpha/Alpha.md', 'on-hold');
+
+			expect(vault.frontmatters.get('Projects/Alpha/Alpha.md')).toMatchObject({
+				status: 'on-hold',
+			});
+		});
+
+		// Projects have no completed-at field, so finishing one must not invent the key
+		// that updateTaskStatus writes.
+		test('updateProjectStatus to done does not write completed-at', async () => {
+			await manager.updateProjectStatus('Projects/Alpha/Alpha.md', 'done');
+
+			const fm = vault.frontmatters.get('Projects/Alpha/Alpha.md') ?? {};
+			expect(fm['status']).toBe('done');
+			expect('completed-at' in fm).toBe(false);
+		});
+
 		test('updateTaskDue rewrites the due frontmatter', async () => {
 			await manager.updateTaskDue('Projects/Alpha/Tasks/T.md', '2026-06-15');
 

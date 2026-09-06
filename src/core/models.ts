@@ -6,6 +6,34 @@ export type Recurrence = 'daily' | 'weekly';
 export const TASK_STATUSES: readonly TaskStatus[] = ['todo', 'in-progress', 'done', 'cancelled'];
 export const PROJECT_STATUSES: readonly ProjectStatus[] = ['active', 'on-hold', 'done', 'archived'];
 export const PRIORITIES: readonly Priority[] = ['none', 'low', 'medium', 'high'];
+/** Task and project statuses combined, each listed once; 'done' belongs to both. */
+export const ALL_STATUSES: readonly string[] = [
+	...TASK_STATUSES,
+	...PROJECT_STATUSES.filter((status) => !(TASK_STATUSES as readonly string[]).includes(status)),
+];
+
+/**
+ * The statuses a note may legitimately hold. Obsidian assigns property widgets by key
+ * name across the whole vault, so one `status` dropdown serves task and project notes
+ * alike and has to narrow the list itself — offering `active` on a task note would let
+ * the user write a value parseTask rejects, dropping the task out of every view.
+ *
+ * The note's `type` decides it. Failing that, a current value belonging to exactly one
+ * set still identifies the note; `done` sits in both and settles nothing, so the union
+ * is the last resort rather than the default.
+ */
+export function statusOptionsFor(noteType: unknown, currentStatus: unknown): readonly string[] {
+	if (noteType === 'task') return TASK_STATUSES;
+	if (noteType === 'project') return PROJECT_STATUSES;
+
+	const inTask = typeof currentStatus === 'string' && (TASK_STATUSES as readonly string[]).includes(currentStatus);
+	const inProject =
+		typeof currentStatus === 'string' && (PROJECT_STATUSES as readonly string[]).includes(currentStatus);
+	if (inTask && !inProject) return TASK_STATUSES;
+	if (inProject && !inTask) return PROJECT_STATUSES;
+	return ALL_STATUSES;
+}
+
 export const RECURRENCES: readonly Recurrence[] = ['daily', 'weekly'];
 
 export interface Task {

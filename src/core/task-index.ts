@@ -76,6 +76,10 @@ export class TaskIndex {
 		return this.tasks.get(path);
 	}
 
+	getProjectByPath(path: string): Project | undefined {
+		return this.projects.get(path);
+	}
+
 	getTasksForProject(projectName: string): Task[] {
 		return this.getAllTasks().filter((t) => this.projectNameForPath(t.path) === projectName);
 	}
