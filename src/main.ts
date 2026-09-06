@@ -11,6 +11,7 @@ import { SyncStatus, SyncStatusStore, formatSyncStatus } from './sync/sync-statu
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
 import { NewProjectModal, NewTaskModal, PriorityPickerModal } from './ui/modals';
+import { registerPriorityWidget } from './ui/priority-property';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
 import { GanttView, VIEW_TYPE_GANTT } from './views/gantt-view';
@@ -151,6 +152,7 @@ export default class NeseserPlugin extends Plugin {
 	private statusBar!: HTMLElement;
 	private syncInFlight = false;
 	private scheduler: SyncScheduler | null = null;
+	private releasePriorityWidget: (() => void) | null = null;
 	/** Category registry read live, so a settings edit lands on the next view render. */
 	private readonly getCategories = () => this.settings.categories;
 
@@ -200,6 +202,7 @@ export default class NeseserPlugin extends Plugin {
 					onConnect: () => this.connectTickTickInteractive(),
 				}),
 		);
+		this.releasePriorityWidget = registerPriorityWidget(this.app);
 		this.addSettingTab(new NeseserSettingTab(this.app, this));
 		this.statusBar = this.addStatusBarItem();
 		this.updateSyncStatus({ state: isTickTickConnected(this.settings) ? 'idle' : 'disconnected' });
@@ -216,7 +219,10 @@ export default class NeseserPlugin extends Plugin {
 	}
 
 	override onunload(): void {
-		// Obsidian detaches registered views and events automatically.
+		// Obsidian detaches registered views and events automatically, but the property
+		// widget lives in a global registry it does not manage for us.
+		this.releasePriorityWidget?.();
+		this.releasePriorityWidget = null;
 		this.scheduler?.stop();
 		this.scheduler = null;
 	}

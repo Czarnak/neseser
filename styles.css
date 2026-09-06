@@ -40,6 +40,22 @@
 	color: var(--color-red);
 }
 
+/* Priority property widget: blend the select into Obsidian's property value cell. */
+.ns-priority-select {
+	width: 100%;
+	border: none;
+	background: transparent;
+	color: var(--text-normal);
+	font-family: inherit;
+	font-size: inherit;
+	padding: var(--size-2-1) var(--size-2-2);
+}
+
+.ns-priority-select:focus {
+	box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+	border-radius: var(--radius-s);
+}
+
 .ns-priority-medium {
 	background: rgba(var(--color-orange-rgb), 0.2);
 	color: var(--color-orange);
