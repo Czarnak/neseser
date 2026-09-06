@@ -582,7 +582,7 @@ describe('SyncEngine.syncAll', () => {
 			});
 		});
 
-		test('a remote collapse to a single day removes the local start', async () => {
+		test('a remote collapse to a single day clears the local start but keeps the key', async () => {
 			const { projectId, taskId } = await seedSynced();
 			index.trees.set('Alpha', [leaf(makeTask('T', { start: '2026-06-16', due: '2026-06-17' }))]);
 			await engine.syncAll(index); // span pushed; note frontmatter carries start
@@ -603,7 +603,11 @@ describe('SyncEngine.syncAll', () => {
 			expect(summary.pulledUpdated).toBe(1);
 			const fm = store.written.get(TASK_PATH) ?? {};
 			expect(fm['due']).toBe('2026-06-20');
-			expect(fm['start']).toBeUndefined();
+			// Cleared, but the key survives: deleting it would undo the guarantee
+			// createTask establishes, so a phone edit could strip the property off a
+			// note and leave nothing to click in the Properties panel.
+			expect(Object.keys(fm)).toContain('start');
+			expect(fm['start']).toBeNull();
 		});
 
 		test('a new remote span task materializes locally with start and stays quiet', async () => {

@@ -356,10 +356,10 @@ export class SyncEngine {
 		const reopen = isTaskClosed(task); // remote is open whenever we land here
 
 		await this.store.updateFrontmatter(task.path, (fm) => {
-			if (start !== undefined) fm['start'] = start;
-			else delete fm['start'];
-			if (due !== undefined) fm['due'] = due;
-			else delete fm['due'];
+			// Cleared to null rather than deleted: the keys are guaranteed present on
+			// every task note, and a remote edit must not strip them back off.
+			fm['start'] = start ?? null;
+			fm['due'] = due ?? null;
 			fm['priority'] = priority;
 			if (reopen) {
 				fm['status'] = 'todo';
