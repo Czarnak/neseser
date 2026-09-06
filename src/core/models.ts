@@ -101,6 +101,9 @@ function parseOptionalEnum<T extends string>(
 function parseDate(fm: Frontmatter, key: string): { value: string | undefined } | { error: string } {
 	const raw = optionalString(fm, key);
 	if (raw === undefined) return { value: undefined };
+	// Clearing a date in Obsidian's Properties panel writes an empty string rather
+	// than removing the key; that means "unset", not "unparseable".
+	if (raw.trim() === '') return { value: undefined };
 	if (Number.isNaN(Date.parse(raw))) {
 		return { error: `unparseable ${key} date: ${raw}` };
 	}

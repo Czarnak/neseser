@@ -101,6 +101,25 @@ describe('parseTask', () => {
 		expect(result.reason).toContain('start');
 	});
 
+	// Obsidian writes `due: ""` when the user clears a date property in the
+	// Properties panel; treating that as unparseable would drop the note from
+	// every view the moment a date is erased.
+	test('treats a cleared due date as absent rather than invalid', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Cleared.md', { type: 'task', due: '' });
+
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.due).toBeUndefined();
+	});
+
+	test('treats a whitespace-only start date as absent rather than invalid', () => {
+		const result = parseTask('Projects/Alpha/Tasks/Cleared.md', { type: 'task', start: '   ' });
+
+		expect(result.kind).toBe('task');
+		if (result.kind !== 'task') return;
+		expect(result.task.start).toBeUndefined();
+	});
+
 	test('parses daily recurrence', () => {
 		const result = parseTask('Projects/Alpha/Tasks/Water plants.md', {
 			type: 'task',
