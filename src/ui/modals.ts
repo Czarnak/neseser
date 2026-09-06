@@ -208,30 +208,32 @@ export class NewTaskModal extends SubmitModal {
 }
 
 /**
- * Priority picker used by the "Set task priority" command and the file-menu entry.
- * Obsidian's public Menu API has no setSubmenu, so the menu opens this instead of
- * nesting the choices inline.
+ * Single-choice picker backing the "Set task priority" / "Set ... status" commands and
+ * their file-menu entries. Obsidian's public Menu API has no setSubmenu, so the menu
+ * opens this rather than nesting the choices inline.
  */
-export class PriorityPickerModal extends SuggestModal<Priority> {
+export class OptionPickerModal<T extends string> extends SuggestModal<T> {
 	constructor(
 		app: App,
-		private current: Priority,
-		private onChoose: (priority: Priority) => Promise<void>,
+		private options: readonly T[],
+		private current: T,
+		private onChoose: (value: T) => Promise<void>,
+		placeholder: string,
 	) {
 		super(app);
-		this.setPlaceholder('Set task priority');
+		this.setPlaceholder(placeholder);
 	}
 
-	getSuggestions(query: string): Priority[] {
+	getSuggestions(query: string): T[] {
 		const needle = query.trim().toLowerCase();
-		return PRIORITIES.filter((priority) => priority.includes(needle));
+		return this.options.filter((option) => option.includes(needle));
 	}
 
-	renderSuggestion(value: Priority, el: HTMLElement): void {
+	renderSuggestion(value: T, el: HTMLElement): void {
 		el.setText(value === this.current ? `${value}  ✓` : value);
 	}
 
-	onChooseSuggestion(item: Priority): void {
+	onChooseSuggestion(item: T): void {
 		void this.onChoose(item);
 	}
 }

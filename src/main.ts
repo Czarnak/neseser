@@ -1,6 +1,6 @@
 import { App, Notice, Plugin, TFile, TFolder, WorkspaceLeaf, requestUrl } from 'obsidian';
 import { CategoryFilterStore } from './core/category-filter';
-import { Frontmatter, Task, titleFromPath } from './core/models';
+import { PRIORITIES, Frontmatter, Task, titleFromPath } from './core/models';
 import { ProjectManager, VaultAdapter } from './core/project-manager';
 import { TaskIndex } from './core/task-index';
 import { runOAuthFlow } from './sync/oauth-flow';
@@ -10,7 +10,7 @@ import { SyncSnapshot, emptySnapshot } from './sync/sync-state';
 import { SyncStatus, SyncStatusStore, formatSyncStatus } from './sync/sync-status';
 import { HttpClient, TickTickApiError, TickTickClient } from './sync/ticktick-client';
 import { DEFAULT_SETTINGS, NeseserSettingTab, NeseserSettings, isTickTickConnected } from './settings';
-import { NewProjectModal, NewTaskModal, PriorityPickerModal } from './ui/modals';
+import { NewProjectModal, NewTaskModal, OptionPickerModal } from './ui/modals';
 import { registerPriorityWidget } from './ui/priority-property';
 import { CalendarView, VIEW_TYPE_CALENDAR } from './views/calendar-view';
 import { DashboardView, VIEW_TYPE_DASHBOARD } from './views/dashboard-view';
@@ -452,13 +452,19 @@ export default class NeseserPlugin extends Plugin {
 	}
 
 	private openPriorityPicker(task: Task): void {
-		new PriorityPickerModal(this.app, task.priority, async (priority) => {
-			try {
-				await this.manager.updateTaskPriority(task.path, priority);
-			} catch (error) {
-				new Notice(error instanceof Error ? error.message : String(error));
-			}
-		}).open();
+		new OptionPickerModal(
+			this.app,
+			PRIORITIES,
+			task.priority,
+			async (priority) => {
+				try {
+					await this.manager.updateTaskPriority(task.path, priority);
+				} catch (error) {
+					new Notice(error instanceof Error ? error.message : String(error));
+				}
+			},
+			'Set task priority',
+		).open();
 	}
 
 	/** Spawns the next instance of a recurring task whenever one transitions to done. */
